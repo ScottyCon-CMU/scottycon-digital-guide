@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Quicksand } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
 
 const IBMPlexMono = IBM_Plex_Mono({
-  weight: ["300", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex-mono",
+});
+
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
 });
 
 export const metadata: Metadata = {
@@ -19,7 +25,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${IBMPlexMono.className} antialiased`}>{children}</body>
+      <body
+        className={`${IBMPlexMono.variable} ${quicksand.variable} antialiased`}
+      >
+        <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+          <Image
+            src="/images/background.png"
+            alt="Background"
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="fixed top-0 left-0 w-screen h-screen bg-linear-to-b from-white via-black via-75% to-black opacity-50 -z-5" />
+        {children}
+      </body>
     </html>
   );
 }
