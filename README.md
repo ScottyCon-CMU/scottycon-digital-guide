@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ScottyCon Digital Guide
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This repo contains a website serving as a digital guidebook for ScottyCon. As such, the design of the website is meant to be mobile-first.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The website uses the following technologies you may want to familiarize yourselves with:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Next.js
+- TailwindCSS
+- Motion
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Set Up & Work Flow
 
-## Learn More
+As a developer working on the website, you should do the following to set up your environment:
 
-To learn more about Next.js, take a look at the following resources:
+1. Install Node.js (through NVM)
+    - **Node.js** is a _JavaScript runtime environment_, allowing you to run various JavaScript applications, such as this website.
+    - I advise you to install "Node Version Manager", which allows you to easily switch to different versions of Node. You can install it for [Windows](https://github.com/coreybutler/nvm-windows), [MacOS](https://github.com/nvm-sh/nvm), or [Linux](https://github.com/nvm-sh/nvm). The latest version of Node should work.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Install the required libraries
+    - Once you've pulled this repo onto your computer and opened it on your editor, install the required packages by running `npm install` in your terminal. 
+    - You should be at the root of the project, with the `package.json` file in the same directory as the command line. 
+    - This installs all the packages detailed in the `package.json` file, keeping all those packages in the `node_modules` folder.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Once you have done the above, you should follow this workflow when working on the website.
 
-## Deploy on Vercel
+- Runing the website
+    - Run `npm run dev` in the terminal to compile and display the website. React should tell you that you can view the website on `http://localhost:3000/`. This is not the live site, but your own local version of the website, based on the code in your folder.
+    - Any changes you make to the code in the project folder will be live-updated and shown in the above link. Use it to see the results of your code as you work.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Pushing Code
+    - When working on a section or feature, make sure to create a new branch to push your commits to. Do not directly push to the main branch, as the live website will reflect the code on this branch.
+    - Before pushing a new commit, make sure to run `npm run lint`, which will go over the whole repository to see if the code follows ESLint rules. This is important because Vercel, the web hosting server, follows ESLint rules and will not show your changes if it breaks those rules.
