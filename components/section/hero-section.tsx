@@ -32,8 +32,8 @@ export default function HeroSection() {
           <h3 className="font-mono font-light text-xs text-white/50 text-right">
             a student-run anime & games convention
           </h3>
-          <h3 className="font-mono font-light text-xs text-white/50 text-left pt-8">
-            March 28 @ Cohon University Center
+          <h3 className="font-mono font-light text-xs text-white/50 text-right pt-8">
+            March 28, 2026 @ CMU Cohon University Center
           </h3>
         </div>
       </div>
