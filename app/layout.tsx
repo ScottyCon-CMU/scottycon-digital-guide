@@ -35,6 +35,12 @@ export default function RootLayout({
             fill
             className="object-cover"
           />
+          <Image
+            src="/images/background-overlay.png"
+            alt="Background Overlay"
+            fill
+            className="object-cover"
+          />
         </div>
         <div className="fixed top-0 left-0 w-screen h-screen bg-linear-to-b from-white via-black via-75% to-black opacity-50 -z-5" />
         {children}
