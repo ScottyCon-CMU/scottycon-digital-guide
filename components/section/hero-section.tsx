@@ -1,40 +1,81 @@
 import { notices } from "@/lib/data";
-import { GiTwirlyFlower } from "react-icons/gi";
 
 export default function HeroSection() {
   return (
-    <section className="mt-[50vh] flex flex-col px-4">
-      {/* Title */}
-      <div className="flex items-center gap-2 text-3xl pl-1">
-        <GiTwirlyFlower className="align-bottom" />
-        <h1 className="font-sans font-medium">SCOTTYCON</h1>
-      </div>
-      <h2 className="font-sans font-light text-9xl leading-24">2026</h2>
-
-      {/* Notices & Info */}
-      <div className="mt-8 grid grid-cols-2 gap-4">
-        <div className="flex flex-col items-start gap-2 pl-2 h-48 overflow-y-scroll">
-          <div>
-            <h3 className="font-mono font-medium italic">Notices</h3>
-            <div className="w-full h-[1.5px] bg-white" />
+    <section className="relative mt-[45vh] flex flex-col px-6 pb-32">
+      {/* Title Block */}
+      <div className="flex flex-col">
+        <div className="flex items-center gap-3">
+          <div className="bg-red-600 text-black font-mono font-semibold text-xs px-2 py-0.5 rounded-sm">
+            EST. 2019
           </div>
-          {notices.map((notice, index) => (
-            <div key={index} className="flex flex-col gap-1">
-              <p className="font-mono font-thin text-xs">
-                <span className="font-medium">{notice.title}: </span>
-                {notice.message}
-              </p>
-            </div>
-          ))}
+          <div className="h-px w-24 bg-white/50" />
         </div>
 
-        <div className="flex flex-col pt-4">
-          <h3 className="font-mono font-light text-xs text-white/50 text-right">
-            a student-run anime & games convention
-          </h3>
-          <h3 className="font-mono font-light text-xs text-white/50 text-right pt-8">
-            March 28, 2026 @ CMU Cohon University Center
-          </h3>
+        <div className="flex items-baseline gap-4 mt-2">
+          <h1 className="font-sans font-bold text-5xl sm:text-6xl tracking-tighter">
+            SCOTTY<span className="text-red-500">CON</span>
+          </h1>
+        </div>
+
+        <h2 className="font-sans font-black text-8xl sm:text-[9rem] leading-none text-white opacity-75">
+          2026
+        </h2>
+      </div>
+
+      {/* Info Grid */}
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Notices Panel */}
+        <div className="md:col-span-7 bg-black/40 backdrop-blur-sm border border-white/20 p-4 rounded-lg relative overflow-hidden">
+          {/* Decorative Corner */}
+          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-500 rounded-tr-lg" />
+
+          <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+            <h3 className="font-mono text-sm uppercase tracking-widest text-white/70">
+              {"// Latest_Updates"}
+            </h3>
+            <div className="flex gap-1">
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+              <div className="w-2 h-2 rounded-full bg-white/20" />
+            </div>
+          </div>
+
+          <div className="h-40 overflow-y-auto pr-2 space-y-4">
+            {notices.map((notice, index) => (
+              <div key={index} className="flex gap-3 items-start group">
+                <span className="font-mono text-xs text-red-500 pt-1">
+                  0{index + 1}
+                </span>
+                <div>
+                  <p className="font-bold text-sm text-white group-hover:text-red-400 transition-colors">
+                    {notice.title}
+                  </p>
+                  <p className="font-mono text-xs text-white/60 leading-relaxed">
+                    {notice.message}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Location/Date Panel */}
+        <div className="md:col-span-5 flex flex-col justify-start gap-4 text-right">
+          <div className="border-r-2 border-red-500 pr-4 py-1">
+            <p className="font-mono text-xs text-white/50 mb-1">LOCATION</p>
+            <p className="font-mono font-semibold text-lg leading-tight">
+              Cohon University Center
+              <br />
+              <span className="text-sm font-normal text-white/80">
+                Carnegie Mellon University
+              </span>
+            </p>
+          </div>
+
+          <div className="border-r-2 border-white/50 pr-4 py-1">
+            <p className="font-mono text-xs text-white/50 mb-1">DATE</p>
+            <p className="font-mono font-semibold text-lg">March 28, 2026</p>
+          </div>
         </div>
       </div>
     </section>

@@ -4,3 +4,26 @@
   --font-sans: var(--font-quicksand);
   --font-mono: var(--font-ibm-plex-mono);
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
+}
+
+.bg-grid-pattern {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
