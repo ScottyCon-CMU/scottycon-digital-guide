@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${IBMPlexMono.variable} ${quicksand.variable} antialiased bg-black text-white selection:bg-red-500 selection:text-white`}
+        className={`${IBMPlexMono.variable} ${quicksand.variable} antialiased bg-white text-slate-800 selection:bg-primary selection:text-white`}
       >
         {/* Background Image Layer */}
         <div className="fixed top-0 left-0 w-full h-full -z-20">
@@ -35,7 +35,7 @@ export default function RootLayout({
             src="/images/background.png"
             alt="Background"
             fill
-            className="object-cover opacity-60"
+            className="object-cover "
             priority
           />
           <Image
@@ -44,14 +44,14 @@ export default function RootLayout({
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-black/25" />
+          <div className="absolute inset-0 bg-black/10" />
         </div>
 
         {/* Dot Grid Overlay */}
         <div className="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 bg-grid-pattern" />
 
-        {/* Gradient Fade Overlay */}
-        <div className="fixed top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-black -z-5 pointer-events-none" />
+        {/* Gradient Fade */}
+        <div className="fixed top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-secondary-light -z-5 pointer-events-none" />
 
         {children}
         <Footer />

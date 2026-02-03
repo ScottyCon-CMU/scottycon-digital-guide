@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #f39aca;
+  --color-primary-light: #ffcbe7;
+  --color-primary-dark: #d74056;
+  --color-secondary: #a8e3ff;
+  --color-secondary-light: #d0edfb;
+  --color-secondary-dark: #1657bb;
+  --color-accent: #cbe673;
+}
+
 @theme inline {
   --font-sans: var(--font-quicksand);
   --font-mono: var(--font-ibm-plex-mono);
@@ -16,13 +26,13 @@
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ef4444;
+  background: var(--color-primary);
 }
 
 .bg-grid-pattern {
   background-image: radial-gradient(
-    rgba(255, 255, 255, 0.1) 1px,
-    transparent 1px
+    rgba(168, 227, 255, 0.1) 1.5px,
+    /* color-secondary with 10% opacity */ transparent 1.5px
   );
   background-size: 24px 24px;
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
