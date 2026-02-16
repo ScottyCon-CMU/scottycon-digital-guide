@@ -73,4 +73,14 @@ export const events: Event[] = [
     description: "",
     tags: [""],
   },
+  {
+    id: "3",
+    title: "ScottyRest",
+    startTime: "11:00",
+    endTime: "12:00",
+    room: ["Kirr Commons", 1],
+    genre: "Gaming",
+    description: "",
+    tags: [""],
+  },
 ];

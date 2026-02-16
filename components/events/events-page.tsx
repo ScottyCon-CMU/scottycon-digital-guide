@@ -22,20 +22,27 @@ export default function EventsPage() {
           </h1>
           <h1/>
         </div>
-        <div className="flex items-baseline gap-4 mt-2">
+        {/* Toggle Bar */}
+        <div className="flex mt-4 w-full bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden">
           <button
-            className="
-              flex items-center justify-center gap-2
-              w-40 h-12
-              rounded-xl
-              font-bold
-              transition-all duration-300
-              bg-primary text-white-400
-              hover:bg-white hover:text-primary
-            "
-            onClick={() => changeCalView(!calView)}
+            className={`flex-1 py-3 font-mono font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
+              !calView
+                ? "bg-primary text-white shadow-sm"
+                : "text-slate-600 hover:bg-primary/10"
+            }`}
+            onClick={() => changeCalView(false)}
           >
-            {calView ? "LIST VIEW" : "CALENDAR VIEW"}
+            List View
+          </button>
+          <button
+            className={`flex-1 py-3 font-mono font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
+              calView
+                ? "bg-primary text-white shadow-sm"
+                : "text-slate-600 hover:bg-primary/10"
+            }`}
+            onClick={() => changeCalView(true)}
+          >
+            Calendar View
           </button>
         </div>
       </div>

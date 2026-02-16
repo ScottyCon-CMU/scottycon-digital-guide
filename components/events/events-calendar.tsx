@@ -65,21 +65,13 @@ export default function EventsCalendar({ floor }: Props) {
 
   return (
     <div className="mt-8">
-      {floor == 1 ? (
-        <div className="flex items-center gap-3 mb-6">
-          <div className="font-mono text-sm uppercase tracking-widest text-slate-700">
-            {"// Schedule_Grid"}
-          </div>
-          <div className="h-px flex-1 bg-slate-300" />
-        </div>
-      ) : null}
       <h1 className="font-sans font-bold sm:text-4xl tracking-tighter text-slate-900">
         Floor {String(floor)}
       </h1>
 
       <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm">
         {/* Scrollable container */}
-        <div className="overflow-x-auto overflow-y-auto max-h-[600px]">
+        <div className="overflow-x-auto overflow-y-auto max-h-[1000px]">
           <div className="relative" style={{ minWidth: "1440px" }}>
             {/* Time header - sticky */}
             <div className="sticky top-0 z-20 bg-white border-b-2 border-primary/30">
