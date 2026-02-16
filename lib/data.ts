@@ -70,7 +70,7 @@ export const events: Event[] = [
     endTime: "20:00",
     room: ["Danforth Lounge", 2],
     genre: "Gaming",
-    description: "",
+    description: "sdfsdfsdfsdf sdfsdfsdfsdfsdf sdfsdfsdfsdfs sdfsdfsdfsdfsd sdfsdfsdfsdfsd sdfsdfs dfs",
     tags: [""],
   },
   {

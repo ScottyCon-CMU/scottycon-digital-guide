@@ -8,12 +8,13 @@ const formatTime = (time: string) => {
   const [hours, minutes] = time.split(":").map(Number);
   const period = hours >= 12 ? "PM" : "AM";
   const hour12 = hours % 12 || 12;
-  return `${hour12}:${minutes.toString().padStart(2, "0")} ${period}`;
+  return `${hour12}:${minutes.toString().padStart(2, "0")}${period}`;
 };
 
 function EventCard({ event }: { event: Event }) {
+  const [cardOpen, setCardOpen] = useState(false);
   return (
-    <div className="bg-white/50 backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
+    <div onClick={() => setCardOpen(!cardOpen)} className="bg-white/50 backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
       {/* Decorative Corner */}
       <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
 
@@ -38,9 +39,11 @@ function EventCard({ event }: { event: Event }) {
       </div>
 
       {/* Description */}
-      <p className="text-sm text-slate-700 leading-relaxed mb-4">
+      {cardOpen ?
+      <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
         {event.description}
       </p>
+      : null}
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2">
