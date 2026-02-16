@@ -4,7 +4,7 @@ import type { Event } from "@/lib/data";
 import { useMemo } from "react";
 
 interface Props {
-  floor?: Number;
+  floor?: number;
 }
 
 export default function EventsCalendar({ floor }: Props) {
@@ -55,13 +55,13 @@ export default function EventsCalendar({ floor }: Props) {
   const eventsByRoom = useMemo(() => {
     const goodEvents: Record<string, Event[]> = {};
     rooms.forEach((psroom) => {
-      let room = psroom[0];
+      const room = psroom[0];
       goodEvents[room] = events.filter(
         (event) => event.room[1] === floor && event.room[0] === room,
       );
     });
     return goodEvents;
-  }, []);
+  }, [floor, rooms]);
 
   return (
     <div className="mt-8">
