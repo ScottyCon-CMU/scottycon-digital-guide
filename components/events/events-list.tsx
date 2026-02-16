@@ -1,6 +1,6 @@
 "use client";
-import { events } from "@/lib/events";
-import type { Event } from "@/lib/events";
+import { events } from "@/lib/data";
+import type { Event } from "@/lib/data";
 
 function EventCard({ event }: { event: Event }) {
   return (

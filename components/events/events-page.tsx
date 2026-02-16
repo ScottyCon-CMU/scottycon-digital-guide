@@ -18,8 +18,9 @@ export default function EventsPage() {
         </div>
         <div className="flex items-baseline gap-4 mt-2">
           <h1 className="font-sans font-bold text-5xl sm:text-6xl tracking-tighter text-slate-900">
-            EVENTS
+            Events
           </h1>
+          <h1/>
         </div>
         <div className="flex items-baseline gap-4 mt-2">
           <button
@@ -39,7 +40,7 @@ export default function EventsPage() {
         </div>
       </div>
       <div>
-        {calView ? <EventsCalendar/> : <EventsList/>}
+        {calView ? <div><EventsCalendar floor={1}/><EventsCalendar floor={2}/></div> : <EventsList/>}
       </div>
     </section>
   );
