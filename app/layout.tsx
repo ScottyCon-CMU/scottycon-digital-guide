@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { IBM_Plex_Mono, Quicksand } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
+import { ThemeProvider } from "next-themes";
+
 import Footer from "@/components/footer";
-import { ClerkProvider } from "@clerk/nextjs";
-import Header from "@/components/header";
 
 const IBMPlexMono = IBM_Plex_Mono({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -27,18 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`${IBMPlexMono.variable} ${quicksand.variable} antialiased bg-white text-slate-800 selection:bg-primary selection:text-white`}
-        >
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${IBMPlexMono.className} ${quicksand.variable} antialiased bg-white text-black dark:bg-black dark:text-white transition-colors duration-300 ease-in-out selection:bg-primary selection:text-white`}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {/* Background Image Layer */}
-          <div className="fixed top-0 left-0 w-full h-full -z-20">
+          <div className="fixed inset-0 -z-30">
             <Image
               src="/images/background.png"
               alt="Background"
               fill
-              className="object-cover "
+              className="object-cover"
               priority
             />
             <Image
@@ -51,16 +51,15 @@ export default function RootLayout({
           </div>
 
           {/* Dot Grid Overlay */}
-          <div className="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 bg-grid-pattern" />
+          <div className="fixed inset-0 pointer-events-none -z-20 bg-grid-pattern" />
 
           {/* Gradient Fade */}
-          <div className="fixed top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-secondary-light -z-5 pointer-events-none" />
+          <div className="fixed inset-0 bg-linear-to-b from-white to-[#D0EDFB] opacity-30 dark:from-neutral-100 dark:to-black dark:opacity-50 -z-10 pointer-events-none" />
 
-          <Header />
           {children}
           <Footer />
-        </body>
-      </html>
-    </ClerkProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
