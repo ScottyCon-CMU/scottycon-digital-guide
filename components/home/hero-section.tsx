@@ -18,7 +18,7 @@ export default function HeroSection() {
           </h1>
         </div>
 
-        <h2 className="font-sans font-semibold text-8xl md:text-9xl leading-none text-primary">
+        <h2 className="font-sans font-bold text-8xl md:text-9xl leading-none text-primary">
           2026
         </h2>
       </div>
@@ -26,7 +26,7 @@ export default function HeroSection() {
       {/* Info Grid */}
       <div className="mt-[30vh] grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Notices Panel */}
-        <div className="md:col-span-7 bg-surface backdrop-blur-md border border-secondary p-4 rounded-lg shadow-sm">
+        <div className="md:col-span-7 bg-surface backdrop-blur-md border border-secondary p-4 rounded-lg shadow-sm transition-colors">
           <div className="flex items-center justify-between mb-4">
             <h3 className="uppercase tracking-widest text-secondary font-semibold">
               {"// Latest_Updates"}
@@ -36,7 +36,7 @@ export default function HeroSection() {
           <div className="pr-2 space-y-2">
             {notices.map((notice, index) => (
               <div key={index} className="flex gap-3 items-start">
-                <div className="text-xs font-thin">
+                <div className="text-xs font-extralight text-foreground">
                   <span className="text-sm font-semibold">{notice.title}</span>:{" "}
                   {notice.message}
                 </div>
@@ -47,23 +47,27 @@ export default function HeroSection() {
 
         {/* Location/Date Panel */}
         <div className="md:col-span-5 flex flex-col justify-start gap-4 text-right">
-          <div className="border-r-2 border-secondary pr-4 py-1">
-            <h3 className="text-md font-light text-secondary mb-1">LOCATION</h3>
-            <h4 className="font-semibold text-lg leading-tight">
+          <div className="border-r-2 border-secondary pr-4 py-1 transition-colors">
+            <h3 className="text-md text-secondary mb-1">LOCATION</h3>
+            <h4 className="font-semibold text-lg leading-tight text-foreground">
               Jared L. Cohon University Center
             </h4>
-            <p className="font-thin text-sm -mb-1">5032 Forbes Avenue</p>
-            <p className="font-thin text-sm">Pittsburgh, PA 15213</p>
+            <p className="font-extralight text-sm -mb-1 text-foreground">
+              5032 Forbes Avenue
+            </p>
+            <p className="font-extralight text-sm text-foreground">
+              Pittsburgh, PA 15213
+            </p>
           </div>
 
-          <div className="border-r-2 border-secondary pr-4 py-1">
-            <h3 className="text-md font-light text-secondary mb-1">
-              DATE/TIME
-            </h3>
-            <h4 className="font-semibold text-lg leading-tight">
+          <div className="border-r-2 border-secondary pr-4 py-1 transition-colors">
+            <h3 className="text-md text-secondary mb-1">DATE/TIME</h3>
+            <h4 className="font-semibold text-lg leading-tight text-foreground">
               March 28, 2026
             </h4>
-            <p className="font-thin text-sm -mb-1">11:00 AM - 09:00 PM</p>
+            <p className="font-extralight text-sm -mb-1 text-foreground">
+              11:00 AM - 09:00 PM
+            </p>
           </div>
         </div>
       </div>
