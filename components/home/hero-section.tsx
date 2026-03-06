@@ -1,5 +1,50 @@
 import { notices } from "@/lib/data";
 
+const sponsors = [
+  {
+    name: "Sponsor 1",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+  },
+  {
+    name: "Sponsor 2",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+  },
+  {
+    name: "Sponsor 3",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  },
+  {
+    name: "Sponsor 4",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  },
+  {
+    name: "Sponsor 5",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  },
+  {
+    name: "Sponsor 6",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  },
+];
+
 export default function HeroSection() {
   return (
     <section className="relative mt-8 flex flex-col px-6 pb-32">
@@ -71,6 +116,74 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
+
+      {/* Sponsors Section */}
+      <div className="mb-8">
+        <h2 className="font-sans font-bold text-4xl text-slate-900 mb-2">
+          Our Sponsors
+        </h2>
+        <div className="h-1 w-24 bg-secondary-dark" />
+      </div>
+
+      <div className="space-y-4">
+        {sponsors.map((sponsor, index) => (
+          <div
+            key={sponsor.name}
+            className="flex flex-row items-center rounded-lg bg-surface backdrop-blur-md border border-l-12 border-secondary p-4 shadow-sm transition hover:shadow-lg"
+          >
+            {/* Left side - Text */}
+            <div className="flex-1 pr-6">
+              <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
+                {sponsor.name}
+              </h3>
+              <p className="font-mono text-sm text-slate-600 leading-relaxed">
+                {sponsor.description}
+              </p>
+            </div>
+
+            {/* Right side - Logo */}
+            <div className="flex-shrink-0">
+              <img
+                src={sponsor.logo}
+                alt={`${sponsor.name} logo`}
+                className="w-42 h-42 object-contain rounded-md"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Section Header */}
+        <div className="mt-12 mb-8">
+          <h2 className="font-sans font-bold text-4xl text-slate-900 mb-4">
+            Interest Board
+          </h2>
+          <div className="h-1 w-24 bg-primary" />
+        </div>
+
+        {/* Interest Board Card */}
+        <div className="rounded-lg bg-surface backdrop-blur-md border border-secondary p-4 shadow-sm transition hover:shadow-lg">
+          <p className="font-sans font-bold text-2xl text-slate-700 mb-2">
+            ALL A-BOARD!
+          </p>
+          
+          <p className="font-mono font-bold text-sm text-slate-600 leading-relaxed mb-4">
+            Like what you see at ScottyCon and interested in making it better?
+          </p>
+
+          <p className="font-mono text-sm text-slate-600 leading-relaxed mb-4">
+            Apply to be a ScottyCon Officer or general board member! Please fill
+            out the Google form below. We will contact board members in April.
+          </p>
+
+          <div className="flex justify-center">
+            <a href="https://www.cmu.edu/" target="_blank" rel="noopener noreferrer">
+              <button className="bg-primary hover:bg-primary/90 text-white font-mono font-semibold text-lg px-6 py-3 rounded-md transition-all shadow-sm hover:shadow-md">
+                SIGN UP
+              </button>
+            </a>
+          </div>
+        </div>
     </section>
   );
 }
