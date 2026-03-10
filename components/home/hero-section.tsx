@@ -2,7 +2,7 @@ import { notices } from "@/lib/data";
 
 export default function HeroSection() {
   return (
-    <section className="relative mt-8 flex flex-col px-6 pb-32">
+    <section className="relative py-8 flex flex-col px-6">
       {/* Title Block */}
       <div className="flex flex-col w-fit">
         <div className="flex items-center gap-3">
@@ -24,21 +24,26 @@ export default function HeroSection() {
       </div>
 
       {/* Info Grid */}
-      <div className="mt-[30vh] grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="mt-[25vh] grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Notices Panel */}
         <div className="md:col-span-7 bg-surface backdrop-blur-md border border-secondary p-4 rounded-lg shadow-sm transition-colors">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="uppercase tracking-widest text-secondary font-semibold">
+          <div className="flex items-center justify-between mb-4 border-b border-secondary/30 pb-2">
+            <h3 className="font-mono text-sm uppercase tracking-widest text-secondary font-semibold">
               {"// Latest_Updates"}
             </h3>
           </div>
 
-          <div className="pr-2 space-y-2">
+          <div className="h-40 overflow-y-auto pr-2 space-y-4">
             {notices.map((notice, index) => (
-              <div key={index} className="flex gap-3 items-start">
-                <div className="text-xs font-extralight text-foreground">
-                  <span className="text-sm font-semibold">{notice.title}</span>:{" "}
-                  {notice.message}
+              <div key={index} className="flex gap-3 items-start group">
+                <span className="font-mono text-xs text-accent pt-1 font-bold">
+                  0{index + 1}
+                </span>
+                <div className="text-sm font-light text-foreground/90">
+                  <span className="font-bold group-hover:text-primary">
+                    {notice.title}:{" "}
+                  </span>
+                  <span>{notice.message}</span>
                 </div>
               </div>
             ))}
@@ -46,26 +51,27 @@ export default function HeroSection() {
         </div>
 
         {/* Location/Date Panel */}
-        <div className="md:col-span-5 flex flex-col justify-start gap-4 text-right">
+        <div className="md:col-span-5 flex flex-col justify-end gap-6 text-right">
           <div className="border-r-2 border-secondary pr-4 py-1 transition-colors">
-            <h3 className="text-md text-secondary mb-1">LOCATION</h3>
+            <h3 className="font-mono text-xs text-secondary mb-1">LOCATION</h3>
             <h4 className="font-semibold text-lg leading-tight text-foreground">
               Jared L. Cohon University Center
             </h4>
-            <p className="font-extralight text-sm -mb-1 text-foreground">
+            <p className="font-light text-sm text-foreground/80 mt-1">
               5032 Forbes Avenue
-            </p>
-            <p className="font-extralight text-sm text-foreground">
+              <br />
               Pittsburgh, PA 15213
             </p>
           </div>
 
           <div className="border-r-2 border-secondary pr-4 py-1 transition-colors">
-            <h3 className="text-md text-secondary mb-1">DATE/TIME</h3>
+            <h3 className="font-mono text-xs text-secondary mb-1 uppercase tracking-wider">
+              Date/Time
+            </h3>
             <h4 className="font-semibold text-lg leading-tight text-foreground">
               March 28, 2026
             </h4>
-            <p className="font-extralight text-sm -mb-1 text-foreground">
+            <p className="font-light text-sm text-foreground/80 mt-1">
               11:00 AM - 09:00 PM
             </p>
           </div>
