@@ -1,3 +1,5 @@
+"use client";
+import { useState, useRef, useEffect } from "react";
 import { events, rooms1, rooms2 } from "@/lib/data";
 import type { Event } from "@/lib/data";
 
@@ -6,6 +8,26 @@ interface Props {
 }
 
 export default function EventsCalendar({ floor }: Props) {
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedEvent) return;
+    const handleClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setSelectedEvent(null);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedEvent(null);
+    };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [selectedEvent]);
   // Calculate time range (11:00 to 21:00)
   const rooms = floor == 1 ? rooms1 : rooms2;
   const startHour = 11;
@@ -126,8 +148,9 @@ export default function EventsCalendar({ floor }: Props) {
                       return (
                         <div
                           key={event.id}
-                          className="absolute top-2 bottom-2 bg-primary/90 hover:bg-primary text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg group"
+                          className="absolute top-2 bottom-2 bg-primary/90 hover:bg-primary text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg"
                           style={style}
+                          onClick={() => setSelectedEvent(event)}
                         >
                           <div className="font-sans font-bold text-xs leading-tight mb-1 truncate">
                             {event.title}
@@ -138,28 +161,6 @@ export default function EventsCalendar({ floor }: Props) {
                           </div>
                           <div className="font-mono text-[9px] opacity-75 truncate mt-1">
                             {event.genre}
-                          </div>
-
-                          {/* Tooltip on hover */}
-                          <div className="absolute left-0 top-full mt-1 bg-slate-900 text-white p-3 rounded-md shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 w-64 text-xs">
-                            <div className="font-bold mb-1">{event.title}</div>
-                            <div className="font-mono text-[10px] text-slate-300 mb-2">
-                              {formatTime(event.startTime)} -{" "}
-                              {formatTime(event.endTime)} | {event.room}
-                            </div>
-                            <div className="text-xs leading-relaxed mb-2">
-                              {event.description}
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {event.tags.map((tag, idx) => (
-                                <span
-                                  key={idx}
-                                  className="text-[9px] bg-primary/30 px-1 py-0.5 rounded"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
                           </div>
                         </div>
                       );
@@ -180,10 +181,72 @@ export default function EventsCalendar({ floor }: Props) {
             <span className="font-mono text-slate-600">Event</span>
           </div>
           <div className="font-mono text-slate-500">
-            Hover over events for details
+            Click on events for details
           </div>
         </div>
       ) : null}
+
+      {/* Event Detail Modal */}
+      {selectedEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div
+            ref={modalRef}
+            className="bg-white/90 backdrop-blur-md border border-primary/30 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 relative overflow-hidden"
+          >
+            {/* Decorative Corner */}
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedEvent(null)}
+              className="absolute top-3 right-3 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Time Badge */}
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                {formatTime(selectedEvent.startTime)} - {formatTime(selectedEvent.endTime)}
+              </div>
+              <div className="bg-secondary/10 text-primary font-mono text-xs px-2 py-1 rounded-sm">
+                {selectedEvent.room[0]}
+              </div>
+            </div>
+
+            {/* Event Title */}
+            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">
+              {selectedEvent.title}
+            </h3>
+
+            {/* Genre */}
+            <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider">
+              {selectedEvent.genre}
+            </div>
+
+            {/* Description */}
+            {selectedEvent.description !== "" && (
+              <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
+                {selectedEvent.description}
+              </p>
+            )}
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2">
+              {selectedEvent.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="font-mono text-xs text-primary/70 bg-primary/5 px-2 py-1 rounded border border-primary/20"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
