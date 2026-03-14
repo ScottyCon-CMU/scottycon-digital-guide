@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useSyncExternalStore, useCallback } from "react";
 import { events, genre as genres } from "@/lib/data";
+import { formatDescription } from "@/lib/format";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import type { Event } from "@/lib/data";
 
@@ -103,9 +104,9 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
 
       {/* Description */}
       {cardOpen && (event.description !== "") ? (
-        <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
-          {event.description}
-        </p>
+        <div className="text-sm text-slate-700 leading-relaxed mb-4 break-words max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+          {formatDescription(event.description)}
+        </div>
       ) : null}
 
       {/* Tags */}

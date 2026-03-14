@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { events, rooms1, rooms2 } from "@/lib/data";
 import type { Event } from "@/lib/data";
+import { formatDescription } from "@/lib/format";
 
 const genreColors: Record<string, { bg: string; hover: string }> = {
   Specialty:   { bg: "bg-violet-400/90",  hover: "hover:bg-violet-500" },
@@ -198,7 +199,7 @@ export default function EventsCalendar({ floor }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div
             ref={modalRef}
-            className="bg-white/90 backdrop-blur-md border border-primary/30 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 relative overflow-hidden"
+            className="bg-white/90 backdrop-blur-md border border-primary/30 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 relative overflow-hidden max-h-[60vh] flex flex-col"
           >
             {/* Decorative Corner */}
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
@@ -214,7 +215,7 @@ export default function EventsCalendar({ floor }: Props) {
             </button>
 
             {/* Time Badge */}
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3 flex-shrink-0">
               <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
                 {formatTime(selectedEvent.startTime)} - {formatTime(selectedEvent.endTime)}
               </div>
@@ -224,24 +225,24 @@ export default function EventsCalendar({ floor }: Props) {
             </div>
 
             {/* Event Title */}
-            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">
+            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2 flex-shrink-0">
               {selectedEvent.title}
             </h3>
 
             {/* Genre */}
-            <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider">
+            <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider flex-shrink-0">
               {selectedEvent.genre}
             </div>
 
             {/* Description */}
             {selectedEvent.description !== "" && (
-              <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
-                {selectedEvent.description}
-              </p>
+              <div className="text-sm text-slate-700 leading-relaxed mb-4 break-words max-w-none overflow-y-auto overflow-x-hidden min-h-0 whitespace-pre-wrap">
+                {formatDescription(selectedEvent.description)}
+              </div>
             )}
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 flex-shrink-0">
               {selectedEvent.tags.map((tag, index) => (
                 <span
                   key={index}

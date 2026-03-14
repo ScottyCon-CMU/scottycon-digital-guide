@@ -15,7 +15,7 @@ export interface Event {
   id: number;
   title: string;
   startTime: string; // Format: "HH:MM"
-  endTime: string;   // Format: "HH:MM"
+  endTime: string; // Format: "HH:MM"
   room: [string, number];
   genre: string;
   description: string;
@@ -39,17 +39,17 @@ export const rooms2 = [
   ["Peter, Wright, McKenna Rooms", 2],
   ["Dowd Room", 2],
   ["Pake Room", 2],
-  ["Class of '87 Room", 2]
+  ["Class of '87 Room", 2],
 ];
 
 export const genre = [
-    "Specialty",
-    "Performance",
-    "Gaming",
-    "Panels",
-    "Anime",
-    "Crafts",
-    "Food",
+  "Specialty",
+  "Performance",
+  "Gaming",
+  "Panels",
+  "Anime",
+  "Crafts",
+  "Food",
 ];
 
 export const events: Event[] = [
@@ -57,30 +57,71 @@ export const events: Event[] = [
     id: 0,
     title: "ScottyFest",
     startTime: "12:00",
-    endTime: "13:00",
+    endTime: "13:15",
     room: ["Rangos Auditorium", 2],
-    genre: "Specialty",
-    description: "sdfsdfsdf sdfsdfsdf",
-    tags: [""]
+    genre: "Performance",
+    description: `
+Experience a variety of multi-modal performances by talented performers!
+
+**12:00-12:05 PM**
+Gokuraku Jodo (極楽浄土)
+*Performed by Alison Ding, Miffy Liu, and Xue Jiang*
+
+**12:05-12:10 PM**
+Love Language — TXT
+*Performed by Tiffany Ahn, Amanda Kang, Emma Tong, Inara Kardar, and Kathrine Sun*
+
+**12:10-12:15 PM**
+Bii:-p — xLov
+*Performed by Mara Barron, Tiffany Ahn, Colin Hollihan, and Kate Coura Bicalho*
+
+**12:15-12:20 PM**
+Love It — PinocchioP feat. Hatsune Miku
+*Performed by Miffy Liu and Anwei Yan*
+
+**12:20-12:25 PM**
+《うい麦畑でつかまえて》 Dance Performance
+*Performed by Anwei Yan*
+
+**12:25-12:35 PM**
+Super Mario Sunshine (Bowser Junior's Perspective)
+*Performed by Lisa*
+
+**12:35-12:40 PM**
+The Whole Being Dead Thing!
+*Performed by Juliana (Eclipse Arts)*
+
+**12:40-12:45 PM**
+Bulbel — Mili
+*Performed by Merry*
+
+**12:45-12:52 PM**
+Duel of the Fates
+*Performed by Star Wars Club*`,
+    tags: [""],
   },
   {
     id: 1,
-    title: "ScottyFest",
-    startTime: "13:00",
-    endTime: "20:00",
-    room: ["Danforth Lounge", 2],
-    genre: "Gaming",
-    description: "sdfsdfsdfsdf sdfsdfsdfsdfsdf sdfsdfsdfsdfs sdfsdfsdfsdfsd sdfsdfsdfsdfsd sdfsdfs dfs",
-    tags: [""]
+    title: "Guest of Honor",
+    startTime: "13:30",
+    endTime: "14:30",
+    room: ["Rangos Auditorium", 2],
+    genre: "Performance",
+    description:
+      `**Phoebe Chan** is coming to ScottyCon 2026! 
+      Your favorite 2.5D fairytale idol, multi-talented singer-songwriter, 
+      voice actress, and streamer will be 
+      joining us as our Guest of Honor.`,
+    tags: [""],
   },
   {
     id: 2,
-    title: "ScottyRest",
-    startTime: "11:00",
-    endTime: "12:00",
-    room: ["Kirr Commons", 1],
-    genre: "Gaming",
+    title: "CMU Jazz Club",
+    startTime: "15:00",
+    endTime: "15:30",
+    room: ["Rangos Auditorium", 2],
+    genre: "Performance",
     description: "",
-    tags: [""]
+    tags: ["Music"],
   },
 ];
