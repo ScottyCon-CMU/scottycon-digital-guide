@@ -12,7 +12,7 @@ export const notices = [
 ];
 
 export interface Event {
-  id: string;
+  id: number;
   title: string;
   startTime: string; // Format: "HH:MM"
   endTime: string;   // Format: "HH:MM"
@@ -54,33 +54,33 @@ export const genre = [
 
 export const events: Event[] = [
   {
-    id: "1",
+    id: 0,
     title: "ScottyFest",
     startTime: "12:00",
     endTime: "13:00",
     room: ["Rangos Auditorium", 2],
     genre: "Specialty",
     description: "",
-    tags: [""],
+    tags: [""]
   },
   {
-    id: "2",
+    id: 1,
     title: "ScottyFest",
     startTime: "13:00",
     endTime: "20:00",
     room: ["Danforth Lounge", 2],
     genre: "Gaming",
     description: "sdfsdfsdfsdf sdfsdfsdfsdfsdf sdfsdfsdfsdfs sdfsdfsdfsdfsd sdfsdfsdfsdfsd sdfsdfs dfs",
-    tags: [""],
+    tags: [""]
   },
   {
-    id: "3",
+    id: 2,
     title: "ScottyRest",
     startTime: "11:00",
     endTime: "12:00",
     room: ["Kirr Commons", 1],
     genre: "Gaming",
     description: "",
-    tags: [""],
+    tags: [""]
   },
 ];

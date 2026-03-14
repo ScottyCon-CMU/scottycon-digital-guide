@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { events, type Event } from "@/lib/data";
+import { events } from "@/lib/data";
 
 export default function UpcomingEvents() {
   // Track which event ID is currently expanded

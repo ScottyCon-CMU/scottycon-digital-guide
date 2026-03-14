@@ -1,7 +1,5 @@
-"use client";
 import { events, rooms1, rooms2 } from "@/lib/data";
 import type { Event } from "@/lib/data";
-import { useMemo } from "react";
 
 interface Props {
   floor?: number;
@@ -12,13 +10,10 @@ export default function EventsCalendar({ floor }: Props) {
   const rooms = floor == 1 ? rooms1 : rooms2;
   const startHour = 11;
   const endHour = 21;
-  const timeSlots = useMemo(() => {
-    const slots = [];
-    for (let hour = startHour; hour <= endHour; hour++) {
-      slots.push(`${hour.toString().padStart(2, "0")}:00`);
-    }
-    return slots;
-  }, []);
+  const slots: string[] = [];
+  for (let hour = startHour; hour <= endHour; hour++) {
+    slots.push(`${hour.toString().padStart(2, "0")}:00`);
+  }
 
   // Convert 24-hour time to 12-hour AM/PM format
   const formatTime = (time: string) => {
@@ -52,16 +47,13 @@ export default function EventsCalendar({ floor }: Props) {
   };
 
   // Group events by room
-  const eventsByRoom = useMemo(() => {
-    const goodEvents: Record<string, Event[]> = {};
-    rooms.forEach((psroom) => {
-      const room = psroom[0];
-      goodEvents[room] = events.filter(
-        (event) => event.room[1] === floor && event.room[0] === room,
-      );
-    });
-    return goodEvents;
-  }, [floor, rooms]);
+  const eventsByRoom: Record<string, Event[]> = {};
+  rooms.forEach((psroom) => {
+    const room = psroom[0];
+    eventsByRoom[room] = events.filter(
+      (event) => event.room[1] === floor && event.room[0] === room,
+    );
+  });
 
   return (
     <div className="mt-8">
@@ -84,7 +76,7 @@ export default function EventsCalendar({ floor }: Props) {
                 </div>
                 {/* Time slots */}
                 <div className="flex-1 flex">
-                  {timeSlots.map((time) => (
+                  {slots.map((time) => (
                     <div
                       key={time}
                       className="flex-shrink-0 border-r border-slate-200 p-3 text-center bg-white"
@@ -119,7 +111,7 @@ export default function EventsCalendar({ floor }: Props) {
                   <div className="flex-1 relative" style={{ height: "80px" }}>
                     {/* Time grid lines */}
                     <div className="absolute inset-0 flex">
-                      {timeSlots.map((time) => (
+                      {slots.map((time) => (
                         <div
                           key={time}
                           className="flex-shrink-0 border-r border-slate-200"
