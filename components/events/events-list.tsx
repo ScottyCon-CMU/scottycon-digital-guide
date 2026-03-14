@@ -84,8 +84,21 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
       </div>
 
       {/* Genre */}
-      <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider">
-        {event.genre}
+      <div className="relative mb-3">
+        <div className="font-mono text-xs text-slate-600 uppercase tracking-wider">
+          {event.genre}
+        </div>
+        {event.description !== "" && (
+          <svg
+            className={`w-3.5 h-3.5 text-primary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${cardOpen ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        )}
       </div>
 
       {/* Description */}
@@ -106,6 +119,7 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
           </span>
         ))}
       </div>
+
     </div>
   );
 }

@@ -3,6 +3,16 @@ import { useState, useRef, useEffect } from "react";
 import { events, rooms1, rooms2 } from "@/lib/data";
 import type { Event } from "@/lib/data";
 
+const genreColors: Record<string, { bg: string; hover: string }> = {
+  Specialty:   { bg: "bg-violet-400/90",  hover: "hover:bg-violet-500" },
+  Performance: { bg: "bg-rose-400/90",    hover: "hover:bg-rose-500" },
+  Gaming:      { bg: "bg-emerald-400/90", hover: "hover:bg-emerald-500" },
+  Panels:      { bg: "bg-sky-400/90",     hover: "hover:bg-sky-500" },
+  Anime:       { bg: "bg-pink-400/90",    hover: "hover:bg-pink-500" },
+  Crafts:      { bg: "bg-amber-400/90",   hover: "hover:bg-amber-500" },
+  Food:        { bg: "bg-orange-400/90",   hover: "hover:bg-orange-500" },
+};
+
 interface Props {
   floor?: number;
 }
@@ -78,7 +88,17 @@ export default function EventsCalendar({ floor }: Props) {
   });
 
   return (
-    <div className="mt-8">
+    <div className="mt-6">
+      {floor === 1 ? 
+      <div className="mb-4 flex flex-wrap items-center gap-4 text-xs">
+        {Object.entries(genreColors).map(([genre, colors]) => (
+          <div key={genre} className="flex items-center gap-1.5">
+            <div className={`w-3 h-3 ${colors.bg} rounded-sm`} />
+            <span className="font-mono text-foreground">{genre}</span>
+          </div>
+        ))}
+      </div> : null
+      }
       <h1 className="font-sans font-bold sm:text-4xl tracking-tighter text-slate-900">
         Floor {String(floor)}
       </h1>
@@ -148,7 +168,7 @@ export default function EventsCalendar({ floor }: Props) {
                       return (
                         <div
                           key={event.id}
-                          className="absolute top-2 bottom-2 bg-primary/90 hover:bg-primary text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg"
+                          className={`absolute top-2 bottom-2 ${genreColors[event.genre]?.bg ?? "bg-primary/90"} ${genreColors[event.genre]?.hover ?? "hover:bg-primary"} text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg`}
                           style={style}
                           onClick={() => setSelectedEvent(event)}
                         >
@@ -172,19 +192,6 @@ export default function EventsCalendar({ floor }: Props) {
           </div>
         </div>
       </div>
-
-      {/* Legend */}
-      {floor == 2 ? (
-        <div className="mt-4 flex items-center gap-6 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-primary rounded-sm" />
-            <span className="font-mono text-slate-600">Event</span>
-          </div>
-          <div className="font-mono text-slate-500">
-            Click on events for details
-          </div>
-        </div>
-      ) : null}
 
       {/* Event Detail Modal */}
       {selectedEvent && (

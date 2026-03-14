@@ -60,7 +60,7 @@ export const events: Event[] = [
     endTime: "13:00",
     room: ["Rangos Auditorium", 2],
     genre: "Specialty",
-    description: "",
+    description: "sdfsdfsdf sdfsdfsdf",
     tags: [""]
   },
   {
