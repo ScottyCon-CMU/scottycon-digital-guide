@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Map, List } from "lucide-react";
+import ArtistsList from "./artists-list";
 
 type View = "map" | "list";
 
@@ -47,10 +48,11 @@ export default function ArtistsPage() {
                 </div>
             </div>
             <div>
-                {view === "map" ? (
+                {view === "map" && (
                     <div>{/* Map view — coming soon */}</div>
-                ) : (
-                    <div>{/* List view — coming soon */}</div>
+                )}
+                {view === "list" && (
+                    <div><ArtistsList /></div>
                 )}
             </div>
         </section>
