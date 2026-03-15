@@ -19,7 +19,7 @@ export default function Footer() {
 
   return (
     <div className="fixed bottom-4 sm:bottom-6 left-0 w-full flex justify-center z-50 px-2 pointer-events-none">
-      <nav className="pointer-events-auto bg-surface backdrop-blur-xl border border-secondary/30 rounded-2xl p-1.5 flex items-stretch gap-1 shadow-lg shadow-accent/20 max-w-full transition-colors duration-300">
+      <nav data-no-deselect className="pointer-events-auto bg-surface backdrop-blur-xl border border-secondary/30 rounded-2xl p-1.5 flex items-stretch gap-1 shadow-lg shadow-accent/20 max-w-full transition-colors duration-300">
         {/* Nav Items */}
         <div className="flex overflow-x-auto gap-1">
           {navItems.map((item) => {
@@ -31,18 +31,16 @@ export default function Footer() {
                 href={item.href}
                 className={`
                   flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300
-                  ${
-                    isActive
-                      ? "bg-primary text-background"
-                      : "text-secondary opacity-70 hover:opacity-100 hover:bg-secondary/10"
+                  ${isActive
+                    ? "bg-primary text-background"
+                    : "text-secondary opacity-70 hover:opacity-100 hover:bg-secondary/10"
                   }
                 `}
               >
                 <span>{item.icon}</span>
                 <span
-                  className={`font-mono text-xs font-bold tracking-wider hidden md:block ${
-                    isActive ? "block" : ""
-                  }`}
+                  className={`font-mono text-xs font-bold tracking-wider hidden md:block ${isActive ? "block" : ""
+                    }`}
                 >
                   {item.name}
                 </span>

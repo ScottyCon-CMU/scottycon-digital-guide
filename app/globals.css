@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.themed-placeholder::placeholder {
+  color: #1657bb;
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .themed-placeholder::placeholder {
+  color: #d0edfb;
+  opacity: 0.7;
+}
+
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
@@ -20,6 +38,19 @@
   --accent: #f39aca;
 }
 
+@layer base {
+  :root {
+    --table-artist: #4a8fd4;
+    --table-vendor: #f560b5;
+    --table-info: #3db83c;
+  }
+  [data-theme="dark"] {
+    --table-artist: #4e7fbf;
+    --table-vendor: #f39aca;
+    --table-info: #75cb74;
+  }
+}
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -38,22 +69,39 @@
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #73a2db;
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--secondary);
 }
 
 .bg-grid-pattern {
-  background-image: radial-gradient(
-    rgba(168, 227, 255, 0.1) 1.5px,
-    transparent 1.5px
-  );
+  background-image: radial-gradient(rgba(168, 227, 255, 0.1) 1.5px,
+      transparent 1.5px);
   background-size: 24px 24px;
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme {
+  --animate-fade-slide-in: fade-slide-in 0.2s ease-out;
 }
