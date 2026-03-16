@@ -14,56 +14,48 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
     return (
         <div
             onClick={() => setCardOpen(!cardOpen)}
-            className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer"
+            className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer p-4 relative"
         >
-            <div className="flex gap-4 p-4">
-                {/* Left: info */}
-                <div className="flex-1 min-w-0">
-                    {/* Table number badge + type icon */}
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
-                            Table {table.tableNumber}
-                        </div>
-                        <div className="bg-secondary-dark/10 text-secondary-dark font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1">
-                            {table.type === "artist" ? (
-                                <><Users size={10} />Artists</>
-                            ) : (
-                                <><Store size={10} />Vendor</>
-                            )}
-                        </div>
-                    </div>
+            {/* Decorative Corner */}
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
 
-                    {/* Name(s) */}
+            {/* Table number badge + type badge */}
+            <div className="flex items-center gap-3 mb-3">
+                <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                    Table {table.tableNumber}
+                </div>
+                <div className="bg-secondary-dark/10 text-secondary-dark font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1">
                     {table.type === "artist" ? (
-                        <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-                            {table.artists.join(" & ")}
-                        </h3>
+                        <><Users size={10} />Artists</>
                     ) : (
-                        <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-                            {table.vendorName}
-                        </h3>
-                    )}
-
-                    {/* Description (foldable) */}
-                    {cardOpen && table.description && (
-                        <p className="text-sm text-slate-700 leading-relaxed break-words">
-                            {table.description}
-                        </p>
+                        <><Store size={10} />Vendor</>
                     )}
                 </div>
-
-                {/* Optional image */}
-                {table.image && (
-                    <div className="relative w-20 h-20 shrink-0 rounded-md overflow-hidden border border-primary/20">
-                        <Image
-                            src={table.image}
-                            alt={table.type === "artist" ? table.artists.join(" & ") : table.vendorName}
-                            fill
-                            className="object-cover"
-                        />
-                    </div>
-                )}
             </div>
+
+            {/* Name(s) */}
+            <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
+                {table.type === "artist" ? table.artists.join(" & ") : table.vendorName}
+            </h3>
+
+            {/* Description (foldable) */}
+            {cardOpen && table.description && (
+                <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
+                    {table.description}
+                </p>
+            )}
+
+            {/* Optional image */}
+            {table.image && (
+                <div className="relative w-full h-40 mt-2 rounded-md overflow-hidden border border-primary/20">
+                    <Image
+                        src={table.image}
+                        alt={table.type === "artist" ? table.artists.join(" & ") : table.vendorName}
+                        fill
+                        className="object-cover"
+                    />
+                </div>
+            )}
         </div>
     );
 }
@@ -251,7 +243,7 @@ export default function ArtistsList() {
                     No tables matched your search.
                 </p>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                     {filteredTables.map((table) => (
                         <ArtistTableCard key={table.tableNumber} table={table} />
                     ))}
