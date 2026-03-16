@@ -1,4 +1,11 @@
-export default function ArtistsMap() {
+import { tableRects } from "@/lib/data";
+
+interface ArtistsMapProps {
+    selectedTable: number | null;
+    onTableClick: (tableNumber: number) => void;
+}
+
+export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapProps) {
     return (
         <div className="w-full mt-6 rounded-lg overflow-hidden border border-primary/20 shadow-sm bg-white/50 backdrop-blur-md">
             <svg
@@ -29,71 +36,35 @@ export default function ArtistsMap() {
                 <g id="Tables">
                     <rect className="cls-4" x="278.12" y="18.5" width="21.6" height="10.8" />
                     <rect className="cls-4" x="256.52" y="18.5" width="21.6" height="10.8" />
-                    <rect className="cls-5" x="293.9" y="121.1" width="21.6" height="10.8" transform="translate(178.2 431.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="193.1" width="21.6" height="10.8" transform="translate(106.2 503.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="337.1" width="21.6" height="10.8" transform="translate(-37.8 647.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="373.1" width="21.6" height="10.8" transform="translate(-73.8 683.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="409.1" width="21.6" height="10.8" transform="translate(-109.8 719.2) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="193.1" width="21.6" height="10.8" transform="translate(66.6 463.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="229.1" width="21.6" height="10.8" transform="translate(30.6 499.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="337.1" width="21.6" height="10.8" transform="translate(-77.4 607.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="265.1" width="21.6" height="10.8" transform="translate(-5.4 535.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="301.1" width="21.6" height="10.8" transform="translate(-41.4 571.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="373.1" width="21.6" height="10.8" transform="translate(-113.4 643.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="409.1" width="21.6" height="10.8" transform="translate(-149.4 679.6) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="229.1" width="21.6" height="10.8" transform="translate(70.2 539.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="301.1" width="21.6" height="10.8" transform="translate(-1.8 611.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="265.1" width="21.6" height="10.8" transform="translate(34.2 575.2) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="121.1" width="21.6" height="10.8" transform="translate(225 478) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="157.1" width="21.6" height="10.8" transform="translate(189 514) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="121.1" width="21.6" height="10.8" transform="translate(138.6 391.6) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="157.1" width="21.6" height="10.8" transform="translate(102.6 427.6) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="157.1" width="21.6" height="10.8" transform="translate(142.2 467.2) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="193.1" width="21.6" height="10.8" transform="translate(153 550) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="301.1" width="21.6" height="10.8" transform="translate(45 658) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="337.1" width="21.6" height="10.8" transform="translate(9 694) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="373.1" width="21.6" height="10.8" transform="translate(-27 730) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="409.1" width="21.6" height="10.8" transform="translate(-63 766) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="121.1" width="21.6" height="10.8" transform="translate(91.8 344.8) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="193.42" width="21.6" height="10.8" transform="translate(19.48 417.12) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="337.1" width="21.6" height="10.8" transform="translate(-124.2 560.8) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="373.1" width="21.6" height="10.8" transform="translate(-160.2 596.8) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="409.1" width="21.6" height="10.8" transform="translate(-196.2 632.8) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="193.1" width="21.6" height="10.8" transform="translate(-19.8 377.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="229.1" width="21.6" height="10.8" transform="translate(-55.8 413.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="337.1" width="21.6" height="10.8" transform="translate(-163.8 521.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="265.1" width="21.6" height="10.8" transform="translate(-91.8 449.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="301.1" width="21.6" height="10.8" transform="translate(-127.8 485.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="373.1" width="21.6" height="10.8" transform="translate(-199.8 557.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="409.1" width="21.6" height="10.8" transform="translate(-235.8 593.2) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="229.42" width="21.6" height="10.8" transform="translate(-16.52 453.12) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="301.1" width="21.6" height="10.8" transform="translate(-88.2 524.8) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="265.1" width="21.6" height="10.8" transform="translate(-52.2 488.8) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="121.1" width="21.6" height="10.8" transform="translate(52.2 305.2) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="157.1" width="21.6" height="10.8" transform="translate(16.2 341.2) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="157.1" width="21.6" height="10.8" transform="translate(55.8 380.8) rotate(-90)" />
-                    <rect className="cls-3" x="13.1" y="387.5" width="21.6" height="10.8" transform="translate(-369 416.8) rotate(-90)" />
-                    <rect className="cls-5" x="340.7" y="265.1" width="21.6" height="10.8" transform="translate(81 622) rotate(-90)" />
-                    <rect className="cls-5" x="207.5" y="85.1" width="21.6" height="10.8" transform="translate(127.8 308.8) rotate(-90)" />
-                    <rect className="cls-5" x="167.9" y="85.1" width="21.6" height="10.8" transform="translate(88.2 269.2) rotate(-90)" />
-                    <rect className="cls-5" x="293.9" y="85.1" width="21.6" height="10.8" transform="translate(214.2 395.2) rotate(-90)" />
-                    <rect className="cls-5" x="254.3" y="85.1" width="21.6" height="10.8" transform="translate(174.6 355.6) rotate(-90)" />
+                    {/* Numbered table rects */}
+                    {tableRects.map((t) => {
+                        const isSelected = selectedTable === t.tableNumber;
+                        return (
+                            <rect
+                                key={t.tableNumber}
+                                x={t.x}
+                                y={t.y}
+                                width="21.6"
+                                height="10.8"
+                                transform={t.transform}
+                                fill={isSelected ? "#1657bb" : "#2e3192"}
+                                stroke="#231f20"
+                                strokeMiterlimit={10}
+                                opacity={isSelected ? 1 : 0.85}
+                                style={{ cursor: "pointer", transition: "fill 0.2s, opacity 0.2s" }}
+                                onClick={() => onTableClick(t.tableNumber)}
+                            />
+                        );
+                    })}
+
+                    {/* Special non-numbered rects (orange cls-3 and cyan cls-2) */}
                     <rect className="cls-2" x="340.7" y="85.1" width="21.6" height="10.8" transform="translate(261 442) rotate(-90)" />
+                    <rect className="cls-3" x="13.1" y="387.5" width="21.6" height="10.8" transform="translate(-369 416.8) rotate(-90)" />
                     <rect className="cls-3" x="13.1" y="409.1" width="21.6" height="10.8" transform="translate(-390.6 438.4) rotate(-90)" />
                     <rect className="cls-3" x="13.1" y="250.7" width="21.6" height="10.8" transform="translate(-232.2 280) rotate(-90)" />
                     <rect className="cls-3" x="13.1" y="329.9" width="21.6" height="10.8" transform="translate(-311.4 359.2) rotate(-90)" />
                     <rect className="cls-3" x="13.1" y="308.3" width="21.6" height="10.8" transform="translate(-289.8 337.6) rotate(-90)" />
                     <rect className="cls-3" x="74.3" y="409.1" width="21.6" height="10.8" transform="translate(-329.4 499.6) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="121.1" width="21.6" height="10.8" transform="translate(5.4 258.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="193.42" width="21.6" height="10.8" transform="translate(-66.92 330.72) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="337.1" width="21.6" height="10.8" transform="translate(-210.6 474.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="373.1" width="21.6" height="10.8" transform="translate(-246.6 510.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="409.1" width="21.6" height="10.8" transform="translate(-282.6 546.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="229.42" width="21.6" height="10.8" transform="translate(-102.92 366.72) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="301.1" width="21.6" height="10.8" transform="translate(-174.6 438.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="265.1" width="21.6" height="10.8" transform="translate(-138.6 402.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="157.1" width="21.6" height="10.8" transform="translate(-30.6 294.4) rotate(-90)" />
-                    <rect className="cls-5" x="121.1" y="85.1" width="21.6" height="10.8" transform="translate(41.4 222.4) rotate(-90)" />
                     <rect className="cls-3" x="74.3" y="387.5" width="21.6" height="10.8" transform="translate(-307.8 478) rotate(-90)" />
                     <rect className="cls-3" x="74.3" y="329.9" width="21.6" height="10.8" transform="translate(-250.2 420.4) rotate(-90)" />
                     <rect className="cls-3" x="74.3" y="272.3" width="21.6" height="10.8" transform="translate(-192.6 362.8) rotate(-90)" />
