@@ -104,7 +104,7 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
 
       {/* Description */}
       {cardOpen && (event.description !== "") ? (
-        <div className="text-sm text-slate-700 leading-relaxed mb-4 break-words max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+        <div className="text-sm text-slate-700 leading-relaxed mb-4 wrap-break-word max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
           {formatDescription(event.description)}
         </div>
       ) : null}
@@ -253,7 +253,7 @@ export default function EventsList() {
                     }`}
                   >
                     <span
-                      className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                         selectedGenres.includes(g)
                           ? "border-primary bg-primary"
                           : "border-slate-300"

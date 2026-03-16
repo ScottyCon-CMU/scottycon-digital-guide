@@ -5,7 +5,7 @@ import { events } from "@/lib/data";
 
 export default function UpcomingEvents() {
   // Track which event ID is currently expanded
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const now = new Date();
   const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
@@ -22,7 +22,7 @@ export default function UpcomingEvents() {
     })
     .sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
 
-  const toggleExpand = (id: string) => {
+  const toggleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
