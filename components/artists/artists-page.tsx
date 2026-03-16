@@ -12,20 +12,28 @@ type View = "map" | "list";
 export default function ArtistsPage() {
     const [view, setView] = useState<View>("map");
     const [selectedTable, setSelectedTable] = useState<number | null>(null);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
 
     function handleTableClick(tableNumber: number) {
-        if (selectedTable === tableNumber) {
-            setSelectedTable(null);
+        if (isDetailOpen && selectedTable === tableNumber) {
+            handleClose();
             return;
         }
         setSelectedTable(tableNumber);
+        setIsDetailOpen(true);
         // On mobile only — scroll down to the detail panel below the map
         requestAnimationFrame(() => {
             if (window.innerWidth < 1024) {
                 detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
             }
         });
+    }
+
+    function handleClose() {
+        setIsDetailOpen(false);
+        // Clear the table data only after the exit animation finishes
+        setTimeout(() => setSelectedTable(null), 500);
     }
 
     return (
@@ -70,12 +78,10 @@ export default function ArtistsPage() {
                 {view === "map" && (
                     // Clip overflow so the detail doesn't cause a scrollbar while sliding in
                     <div className="lg:overflow-x-hidden">
-                        <div className="lg:flex lg:gap-6 lg:items-start">
-                            {/* Map — always takes the left half on desktop.
-                                When nothing is selected it's visually centred via translate-x-1/2;
-                                on click it slides to translate-x-0 (left side). */}
+                        <div className="lg:flex lg:gap-6 lg:items-center">
+                            {/* Map — slides left when detail is open, back to centre when closed */}
                             <div
-                                className={`lg:w-1/2 lg:flex-shrink-0 transition-transform duration-500 ease-in-out ${selectedTable === null ? "lg:translate-x-1/2" : "lg:translate-x-0"
+                                className={`lg:w-1/2 lg:flex-shrink-0 transition-transform duration-500 ease-in-out ${isDetailOpen ? "lg:translate-x-0" : "lg:translate-x-1/2"
                                     }`}
                             >
                                 <ArtistsMap
@@ -84,12 +90,12 @@ export default function ArtistsPage() {
                                 />
                             </div>
 
-                            {/* Detail — slides in from the right after the map has moved */}
+                            {/* Detail — isDetailOpen drives enter/exit classes */}
                             <div
                                 ref={detailRef}
-                                className={`lg:flex-1 lg:min-w-0 transition-all ease-in-out ${selectedTable !== null
+                                className={`lg:flex-1 lg:min-w-0 transition-all ease-in-out ${isDetailOpen
                                     ? "opacity-100 lg:translate-x-0 duration-500 lg:delay-150"
-                                    : "opacity-0 lg:translate-x-full duration-300 pointer-events-none"
+                                    : "opacity-0 lg:translate-x-full duration-500 pointer-events-none"
                                     }`}
                             >
                                 {selectedTable !== null && (() => {
@@ -97,7 +103,7 @@ export default function ArtistsPage() {
                                     return table ? (
                                         <ArtistTableDetail
                                             table={table}
-                                            onClose={() => setSelectedTable(null)}
+                                            onClose={handleClose}
                                         />
                                     ) : (
                                         <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
