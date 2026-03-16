@@ -20,9 +20,11 @@ export default function ArtistsPage() {
             return;
         }
         setSelectedTable(tableNumber);
-        // Scroll to detail panel after React paints it
+        // On mobile only — scroll down to the detail panel below the map
         requestAnimationFrame(() => {
-            detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            if (window.innerWidth < 1024) {
+                detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
         });
     }
 
@@ -66,26 +68,45 @@ export default function ArtistsPage() {
             </div>
             <div>
                 {view === "map" && (
-                    <div>
-                        <ArtistsMap
-                            selectedTable={selectedTable}
-                            onTableClick={handleTableClick}
-                        />
-                        {selectedTable !== null && (() => {
-                            const table = alleyTables.find(t => t.tableNumber === selectedTable);
-                            return table ? (
-                                <div ref={detailRef}>
-                                    <ArtistTableDetail
-                                        table={table}
-                                        onClose={() => setSelectedTable(null)}
-                                    />
-                                </div>
-                            ) : (
-                                <div ref={detailRef} className="mt-4 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
-                                    Table {selectedTable} — no data yet
-                                </div>
-                            );
-                        })()}
+                    // Clip overflow so the detail doesn't cause a scrollbar while sliding in
+                    <div className="lg:overflow-x-hidden">
+                        <div className="lg:flex lg:gap-6 lg:items-start">
+                            {/* Map — always takes the left half on desktop.
+                                When nothing is selected it's visually centred via translate-x-1/2;
+                                on click it slides to translate-x-0 (left side). */}
+                            <div
+                                className={`lg:w-1/2 lg:flex-shrink-0 transition-transform duration-500 ease-in-out ${selectedTable === null ? "lg:translate-x-1/2" : "lg:translate-x-0"
+                                    }`}
+                            >
+                                <ArtistsMap
+                                    selectedTable={selectedTable}
+                                    onTableClick={handleTableClick}
+                                />
+                            </div>
+
+                            {/* Detail — slides in from the right after the map has moved */}
+                            <div
+                                ref={detailRef}
+                                className={`lg:flex-1 lg:min-w-0 transition-all ease-in-out ${selectedTable !== null
+                                    ? "opacity-100 lg:translate-x-0 duration-500 lg:delay-150"
+                                    : "opacity-0 lg:translate-x-full duration-300 pointer-events-none"
+                                    }`}
+                            >
+                                {selectedTable !== null && (() => {
+                                    const table = alleyTables.find(t => t.tableNumber === selectedTable);
+                                    return table ? (
+                                        <ArtistTableDetail
+                                            table={table}
+                                            onClose={() => setSelectedTable(null)}
+                                        />
+                                    ) : (
+                                        <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
+                                            Table {selectedTable} — no data yet
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+                        </div>
                     </div>
                 )}
                 {view === "list" && (

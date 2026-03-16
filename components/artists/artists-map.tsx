@@ -7,7 +7,13 @@ interface ArtistsMapProps {
 
 export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapProps) {
     return (
-        <div className="w-full mt-6 rounded-lg overflow-hidden border border-primary/20 shadow-sm bg-white/50 backdrop-blur-md">
+        <div
+            className="mt-6 mx-auto rounded-lg overflow-hidden border border-primary/20 shadow-sm bg-white/50 backdrop-blur-md"
+            style={{
+                maxHeight: "calc(95svh - 17.5rem)",
+                width: "min(100%, calc((95svh - 17.5rem) * 375.4 / 469))",
+            }}
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 375.4 469"

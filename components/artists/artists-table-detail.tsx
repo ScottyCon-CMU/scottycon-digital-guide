@@ -13,7 +13,7 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
     const name = table.type === "artist" ? table.artists.join(" & ") : table.vendorName;
 
     return (
-        <div className="mt-4 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
             {/* Decorative corner */}
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
 
