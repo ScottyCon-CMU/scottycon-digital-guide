@@ -1,14 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Map, List } from "lucide-react";
 import ArtistsList from "./artists-list";
 import ArtistsMap from "./artists-map";
+import ArtistTableDetail from "./artists-table-detail";
+import { alleyTables } from "@/lib/data";
 
 type View = "map" | "list";
 
 export default function ArtistsPage() {
     const [view, setView] = useState<View>("map");
+    const [selectedTable, setSelectedTable] = useState<number | null>(null);
+    const detailRef = useRef<HTMLDivElement>(null);
+
+    function handleTableClick(tableNumber: number) {
+        if (selectedTable === tableNumber) {
+            setSelectedTable(null);
+            return;
+        }
+        setSelectedTable(tableNumber);
+        // Scroll to detail panel after React paints it
+        requestAnimationFrame(() => {
+            detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+    }
 
     return (
         <section className="relative mt-[5vh] flex flex-col px-6 pb-32">
@@ -50,7 +66,27 @@ export default function ArtistsPage() {
             </div>
             <div>
                 {view === "map" && (
-                    <div><ArtistsMap /></div>
+                    <div>
+                        <ArtistsMap
+                            selectedTable={selectedTable}
+                            onTableClick={handleTableClick}
+                        />
+                        {selectedTable !== null && (() => {
+                            const table = alleyTables.find(t => t.tableNumber === selectedTable);
+                            return table ? (
+                                <div ref={detailRef}>
+                                    <ArtistTableDetail
+                                        table={table}
+                                        onClose={() => setSelectedTable(null)}
+                                    />
+                                </div>
+                            ) : (
+                                <div ref={detailRef} className="mt-4 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
+                                    Table {selectedTable} — no data yet
+                                </div>
+                            );
+                        })()}
+                    </div>
                 )}
                 {view === "list" && (
                     <div><ArtistsList /></div>
