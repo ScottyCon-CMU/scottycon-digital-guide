@@ -5,7 +5,7 @@ export default function SponsorsSection() {
         <section className="relative mt-8 flex flex-col px-6 pb-32">
             {/* Sponsors Section */}
             <div className="mt-12 mb-8">
-                <h2 className="font-sans font-bold text-4xl text-slate-900 mb-4">
+                <h2 className="font-sans font-bold text-4xl text-foreground/80 mb-4">
                 Our Sponsors
                 </h2>
                 <div className="h-1 w-24 bg-primary" />
@@ -14,6 +14,7 @@ export default function SponsorsSection() {
             <div className="space-y-4">
                 {sponsors.map((sponsor) => (
                 <div
+                    key={sponsor.name}
                     className="flex flex-row items-center rounded-lg bg-surface backdrop-blur-md border border-l-12 border-primary p-4 shadow-sm transition hover:shadow-lg"
                 >
                     {/* Left side - Text */}
@@ -40,7 +41,7 @@ export default function SponsorsSection() {
 
             {/* Section Header */}
             <div className="mt-12 mb-8">
-                <h2 className="font-sans font-bold text-4xl text-slate-900 mb-4">
+                <h2 className="font-sans font-bold text-4xl text-foreground/80 mb-4">
                 Interest Board
                 </h2>
                 <div className="h-1 w-24 bg-primary" />
@@ -72,7 +73,7 @@ export default function SponsorsSection() {
 
             {/* Club Members */}
             <div className="mt-12 mb-8">
-                <h2 className="font-sans font-bold text-4xl text-slate-900 mb-4">
+                <h2 className="font-sans font-bold text-4xl text-foreground/80 mb-4">
                 Club Members
                 </h2>
                 <div className="h-1 w-24 bg-primary" />
@@ -81,7 +82,7 @@ export default function SponsorsSection() {
             <div className="space-y-4">
                 <div className="rounded-lg bg-surface backdrop-blur-md border border-primary p-8 shadow-sm transition hover:shadow-lg">
                 {members.map((member) => (
-                    <div className="flex justify-between items-center">
+                    <div key={member.name} className="flex justify-between items-center">
                         <p className="font-sans text-lg text-foreground/80 leading-relaxed w-1/2 text-right pr-4">
                             {member.name}
                         </p>
