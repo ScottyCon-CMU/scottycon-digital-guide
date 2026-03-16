@@ -1,24 +1,52 @@
 "use client";
+import { useState, useRef, useEffect } from "react";
 import { events, rooms1, rooms2 } from "@/lib/data";
 import type { Event } from "@/lib/data";
-import { useMemo } from "react";
+import { formatDescription } from "@/lib/format";
+
+const genreColors: Record<string, { bg: string; hover: string }> = {
+  Specialty:   { bg: "bg-violet-400/90",  hover: "hover:bg-violet-500" },
+  Performance: { bg: "bg-rose-400/90",    hover: "hover:bg-rose-500" },
+  Gaming:      { bg: "bg-emerald-400/90", hover: "hover:bg-emerald-500" },
+  Panels:      { bg: "bg-sky-400/90",     hover: "hover:bg-sky-500" },
+  Anime:       { bg: "bg-pink-400/90",    hover: "hover:bg-pink-500" },
+  Crafts:      { bg: "bg-amber-400/90",   hover: "hover:bg-amber-500" },
+  Food:        { bg: "bg-orange-400/90",   hover: "hover:bg-orange-500" },
+};
 
 interface Props {
   floor?: number;
 }
 
 export default function EventsCalendar({ floor }: Props) {
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedEvent) return;
+    const handleClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setSelectedEvent(null);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedEvent(null);
+    };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [selectedEvent]);
   // Calculate time range (11:00 to 21:00)
   const rooms = floor == 1 ? rooms1 : rooms2;
   const startHour = 11;
   const endHour = 21;
-  const timeSlots = useMemo(() => {
-    const slots = [];
-    for (let hour = startHour; hour <= endHour; hour++) {
-      slots.push(`${hour.toString().padStart(2, "0")}:00`);
-    }
-    return slots;
-  }, []);
+  const slots: string[] = [];
+  for (let hour = startHour; hour <= endHour; hour++) {
+    slots.push(`${hour.toString().padStart(2, "0")}:00`);
+  }
 
   // Convert 24-hour time to 12-hour AM/PM format
   const formatTime = (time: string) => {
@@ -52,42 +80,49 @@ export default function EventsCalendar({ floor }: Props) {
   };
 
   // Group events by room
-  const eventsByRoom = useMemo(() => {
-    const goodEvents: Record<string, Event[]> = {};
-    rooms.forEach((psroom) => {
-      const room = psroom[0];
-      goodEvents[room] = events.filter(
-        (event) => event.room[1] === floor && event.room[0] === room,
-      );
-    });
-    return goodEvents;
-  }, [floor, rooms]);
+  const eventsByRoom: Record<string, Event[]> = {};
+  rooms.forEach((psroom) => {
+    const room = psroom[0];
+    eventsByRoom[room] = events.filter(
+      (event) => event.room[1] === floor && event.room[0] === room,
+    );
+  });
 
   return (
-    <div className="mt-8">
+    <div className="mt-6">
+      {floor === 1 ? 
+      <div className="mb-4 flex flex-wrap items-center gap-4 text-xs">
+        {Object.entries(genreColors).map(([genre, colors]) => (
+          <div key={genre} className="flex items-center gap-1.5">
+            <div className={`w-3 h-3 ${colors.bg} rounded-sm`} />
+            <span className="font-mono text-foreground">{genre}</span>
+          </div>
+        ))}
+      </div> : null
+      }
       <h1 className="font-sans font-bold sm:text-4xl tracking-tighter text-slate-900">
         Floor {String(floor)}
       </h1>
 
       <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm">
         {/* Scrollable container */}
-        <div className="overflow-x-auto overflow-y-auto max-h-[1000px]">
+        <div className="overflow-x-auto overflow-y-auto max-h-250">
           <div className="relative" style={{ minWidth: "1440px" }}>
             {/* Time header - sticky */}
             <div className="sticky top-0 z-20 bg-white border-b-2 border-primary/30">
               <div className="flex">
                 {/* Empty corner for room labels */}
-                <div className="w-25 flex-shrink-0 border-r-2 border-primary/30 p-3 sticky left-0 z-30 bg-white">
+                <div className="w-25 shrink-0 border-r-2 border-primary/30 p-3 sticky left-0 z-30 bg-white">
                   <span className="font-sans font-bold text-sm text-slate-700 uppercase">
                     Room & Time
                   </span>
                 </div>
                 {/* Time slots */}
                 <div className="flex-1 flex">
-                  {timeSlots.map((time) => (
+                  {slots.map((time) => (
                     <div
                       key={time}
-                      className="flex-shrink-0 border-r border-slate-200 p-3 text-center bg-white"
+                      className="shrink-0 border-r border-slate-200 p-3 text-center bg-white"
                       style={{ width: "120px" }}
                     >
                       <span className="font-sans font-bold text-sm text-slate-700">
@@ -109,7 +144,7 @@ export default function EventsCalendar({ floor }: Props) {
                   }`}
                 >
                   {/* Room label - sticky */}
-                  <div className="w-25 flex-shrink-0 border-r-2 border-primary/30 p-3 bg-white sticky left-0 z-10">
+                  <div className="w-25 shrink-0 border-r-2 border-primary/30 p-3 bg-white sticky left-0 z-10">
                     <span className="font-sans font-semibold text-xs text-slate-900">
                       {room[0]}
                     </span>
@@ -119,10 +154,10 @@ export default function EventsCalendar({ floor }: Props) {
                   <div className="flex-1 relative" style={{ height: "80px" }}>
                     {/* Time grid lines */}
                     <div className="absolute inset-0 flex">
-                      {timeSlots.map((time) => (
+                      {slots.map((time) => (
                         <div
                           key={time}
-                          className="flex-shrink-0 border-r border-slate-200"
+                          className="shrink-0 border-r border-slate-200"
                           style={{ width: "120px" }}
                         />
                       ))}
@@ -134,8 +169,9 @@ export default function EventsCalendar({ floor }: Props) {
                       return (
                         <div
                           key={event.id}
-                          className="absolute top-2 bottom-2 bg-primary/90 hover:bg-primary text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg group"
+                          className={`absolute top-2 bottom-2 ${genreColors[event.genre]?.bg ?? "bg-primary/90"} ${genreColors[event.genre]?.hover ?? "hover:bg-primary"} text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg`}
                           style={style}
+                          onClick={() => setSelectedEvent(event)}
                         >
                           <div className="font-sans font-bold text-xs leading-tight mb-1 truncate">
                             {event.title}
@@ -146,28 +182,6 @@ export default function EventsCalendar({ floor }: Props) {
                           </div>
                           <div className="font-mono text-[9px] opacity-75 truncate mt-1">
                             {event.genre}
-                          </div>
-
-                          {/* Tooltip on hover */}
-                          <div className="absolute left-0 top-full mt-1 bg-slate-900 text-white p-3 rounded-md shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 w-64 text-xs">
-                            <div className="font-bold mb-1">{event.title}</div>
-                            <div className="font-mono text-[10px] text-slate-300 mb-2">
-                              {formatTime(event.startTime)} -{" "}
-                              {formatTime(event.endTime)} | {event.room}
-                            </div>
-                            <div className="text-xs leading-relaxed mb-2">
-                              {event.description}
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {event.tags.map((tag, idx) => (
-                                <span
-                                  key={idx}
-                                  className="text-[9px] bg-primary/30 px-1 py-0.5 rounded"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
                           </div>
                         </div>
                       );
@@ -180,18 +194,67 @@ export default function EventsCalendar({ floor }: Props) {
         </div>
       </div>
 
-      {/* Legend */}
-      {floor == 2 ? (
-        <div className="mt-4 flex items-center gap-6 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-primary rounded-sm" />
-            <span className="font-mono text-slate-600">Event</span>
-          </div>
-          <div className="font-mono text-slate-500">
-            Hover over events for details
+      {/* Event Detail Modal */}
+      {selectedEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div
+            ref={modalRef}
+            className="bg-white/90 backdrop-blur-md border border-primary/30 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 relative overflow-hidden max-h-[60vh] flex flex-col"
+          >
+            {/* Decorative Corner */}
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedEvent(null)}
+              className="absolute top-3 right-3 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Time Badge */}
+            <div className="flex items-center gap-3 mb-3 shrink-0">
+              <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                {formatTime(selectedEvent.startTime)} - {formatTime(selectedEvent.endTime)}
+              </div>
+              <div className="bg-secondary/10 text-primary font-mono text-xs px-2 py-1 rounded-sm">
+                {selectedEvent.room[0]}
+              </div>
+            </div>
+
+            {/* Event Title */}
+            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2 shrink-0">
+              {selectedEvent.title}
+            </h3>
+
+            {/* Genre */}
+            <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider shrink-0">
+              {selectedEvent.genre}
+            </div>
+
+            {/* Description */}
+            {selectedEvent.description !== "" && (
+              <div className="text-sm text-slate-700 leading-relaxed mb-4 wrap-break-word max-w-none overflow-y-auto overflow-x-hidden min-h-0 whitespace-pre-wrap">
+                {formatDescription(selectedEvent.description)}
+              </div>
+            )}
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 shrink-0">
+              {selectedEvent.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="font-mono text-xs text-primary/70 bg-primary/5 px-2 py-1 rounded border border-primary/20"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
