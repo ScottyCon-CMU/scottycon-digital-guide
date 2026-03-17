@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { alleyTables } from "@/lib/data";
+import { alleyTables, tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
-import { Users, Store, Info } from "lucide-react";
+import { Search, SlidersHorizontal, Check, X } from "lucide-react";
+import { TableTypeChip, VendorBadge } from "./table-badges";
 
 const tableTypes = ["Artists", "Vendors", "Info"];
 
@@ -26,27 +27,13 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
                         Table {table.tableNumber}
                     </div>
                 )}
-                {table.type === "vendor" && (
-                    <div className="font-mono font-semibold text-xs px-3 py-1 rounded-sm" style={{ background: "#f39aca", color: "#7a2e52" }}>
-                        Vendor {Math.abs(table.tableNumber)}
-                    </div>
-                )}
-                <div className="bg-secondary-dark/10 text-secondary-dark font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1">
-                    {table.type === "artist" ? (
-                        <><Users size={10} />Artists</>
-                    ) : table.type === "vendor" ? (
-                        <><Store size={10} />Vendor</>
-                    ) : (
-                        <><Info size={10} />Information</>
-                    )}
-                </div>
+                {table.type === "vendor" && <VendorBadge tableNumber={table.tableNumber} />}
+                <TableTypeChip type={table.type} className="bg-secondary-dark/10 text-secondary-dark" />
             </div>
 
             {/* Name(s) */}
             <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-                {table.type === "artist" ? table.artists.join(" & ")
-                    : table.type === "vendor" ? table.vendorName
-                        : table.title}
+                {tableName(table)}
             </h3>
 
             {/* Hours (info tables only) */}
@@ -66,7 +53,7 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
                 <div className="relative w-full h-40 mt-2 rounded-md overflow-hidden border border-primary/20">
                     <Image
                         src={table.image}
-                        alt={table.type === "artist" ? table.artists.join(" & ") : table.type === "vendor" ? table.vendorName : table.title}
+                        alt={tableName(table)}
                         fill
                         className="object-cover"
                     />
@@ -101,10 +88,7 @@ export default function ArtistsList() {
 
     const filteredTables = alleyTables.filter((table) => {
         const query = search.toLowerCase();
-        const name = table.type === "artist" ? table.artists.join(" ")
-            : table.type === "vendor" ? table.vendorName
-                : table.title;
-        const matchesSearch = !query || name.toLowerCase().includes(query);
+        const matchesSearch = !query || tableName(table).toLowerCase().includes(query);
         const matchesType =
             selectedTypes.length === 0 ||
             (selectedTypes.includes("Artists") && table.type === "artist") ||
@@ -119,20 +103,7 @@ export default function ArtistsList() {
             <div className="relative mb-6">
                 <div className="flex items-center gap-0">
                     <div className="relative flex-1">
-                        <svg
-                            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                            />
-                        </svg>
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
                             type="text"
                             value={search}
@@ -149,20 +120,7 @@ export default function ArtistsList() {
                                 : "bg-white/50 backdrop-blur-md text-slate-500 hover:bg-primary/10"
                                 }`}
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2}
-                                stroke="currentColor"
-                                className="w-4 h-4"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-                                />
-                            </svg>
+                            <SlidersHorizontal className="w-4 h-4" />
                             {selectedTypes.length > 0 && (
                                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
                                     {selectedTypes.length}
@@ -201,21 +159,7 @@ export default function ArtistsList() {
                                                 : "border-slate-300"
                                                 }`}
                                         >
-                                            {selectedTypes.includes(t) && (
-                                                <svg
-                                                    className="w-2.5 h-2.5 text-white"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    strokeWidth={3}
-                                                    stroke="currentColor"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M4.5 12.75l6 6 9-13.5"
-                                                    />
-                                                </svg>
-                                            )}
+                                            {selectedTypes.includes(t) && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
                                         </span>
                                         {t}
                                     </button>
@@ -236,19 +180,7 @@ export default function ArtistsList() {
                             className="flex items-center gap-1 font-mono text-xs text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
                         >
                             {t}
-                            <svg
-                                className="w-3 h-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2.5}
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            <X className="w-3 h-3" strokeWidth={2.5} />
                         </button>
                     ))}
                 </div>
