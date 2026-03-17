@@ -33,8 +33,8 @@ const vendorRects = [
 // Info rects (dark blue + green)
 const infoRects = [
     { id: -100, x: 340.7, y: 79.7, className: "cls-2", transform: "translate(261 442) rotate(-90)" },
-    { id: -101, x: 278.12, y: 13.1, className: "cls-4", transform: undefined },
-    { id: -102, x: 256.52, y: 13.1, className: "cls-4", transform: undefined },
+    { id: -101, x: 278.12, y: 30.7, className: "cls-4", transform: undefined },
+    { id: -102, x: 256.52, y: 30.7, className: "cls-4", transform: undefined },
 ];
 
 interface ArtistsMapProps {
@@ -50,12 +50,12 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
             className="mt-6 mx-auto rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-black/50 backdrop-blur-md font-bold"
             style={{
                 maxHeight: "calc(95svh - 13.5rem)",
-                width: "min(100%, calc((95svh - 13.5rem) * 375.4 / 469))",
+                width: "min(100%, calc((95svh - 13.5rem) * 375.4 / 438))",
             }}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 375.4 469"
+                viewBox="0 0 375.4 438"
                 width="100%"
                 height="auto"
             >
@@ -73,6 +73,28 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 {/* Floor Plan */}
                 <g id="Floor_Plan">
                     <rect className="cls-1" x="-46.3" y="47.3" width="468" height="374.4" transform="translate(-46.8 422.2) rotate(-90)" />
+                </g>
+
+                {/* Entrance & Exit — non-interactive indicators at the top of the hall.
+                     Placed at y=13.1 to match the ~12.6-unit inset the side walls use (vendor x=13.1, right edge x=362.3). */}
+                <g id="Entrances_Exits" pointerEvents="none">
+                    {/* Entrance — top-left */}
+                    <rect x="13.1" y="13.1" width="43.2" height="9" rx="1.5"
+                        fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
+                    <text x="34.7" y="17.6" textAnchor="middle" dominantBaseline="central"
+                        fill="#1657bb" fontSize="3.8" fontFamily="MyriadPro-Regular, 'Myriad Pro'" letterSpacing="0.4">
+                        ENTRANCE
+                    </text>
+                    <polygon points="31.7,22.1 34.7,25.6 37.7,22.1" fill="rgba(22, 88, 187, 0.45)" />
+
+                    {/* Exit — top-right */}
+                    <rect x="319.1" y="13.1" width="43.2" height="9" rx="1.5"
+                        fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
+                    <text x="340.7" y="17.6" textAnchor="middle" dominantBaseline="central"
+                        fill="#1657bb" fontSize="3.8" fontFamily="MyriadPro-Regular, 'Myriad Pro'" letterSpacing="0.4">
+                        EXIT
+                    </text>
+                    <polygon points="337.7,22.1 340.7,25.6 343.7,22.1" fill="rgba(22, 88, 187, 0.45)" />
                 </g>
 
                 {/* Tables */}
