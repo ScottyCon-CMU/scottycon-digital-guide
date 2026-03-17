@@ -16,26 +16,26 @@ const labelProps = {
 // Shared interaction styles per category
 const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s" };
 const vendorStyle = { cursor: "pointer" as const, transition: "opacity 0.2s" };
-const infoStyle   = { cursor: "pointer" as const, transition: "opacity 0.2s" };
+const infoStyle = { cursor: "pointer" as const, transition: "opacity 0.2s" };
 
 // Vendor rects with visual-center coords for inline labels
 const vendorRects = [
-    { id: -1, x: 13.1,  y: 382.1, cx: 23.9, cy: 392.9, transform: "translate(-369 416.8) rotate(-90)" },
-    { id: -2, x: 13.1,  y: 403.7, cx: 23.9, cy: 414.5, transform: "translate(-390.6 438.4) rotate(-90)" },
-    { id: -3, x: 13.1,  y: 245.3, cx: 23.9, cy: 256.1, transform: "translate(-232.2 280) rotate(-90)" },
-    { id: -4, x: 13.1,  y: 324.5, cx: 23.9, cy: 335.3, transform: "translate(-311.4 359.2) rotate(-90)" },
-    { id: -5, x: 13.1,  y: 302.9, cx: 23.9, cy: 313.7, transform: "translate(-289.8 337.6) rotate(-90)" },
-    { id: -6, x: 74.3,  y: 403.7, cx: 85.1, cy: 414.5, transform: "translate(-329.4 499.6) rotate(-90)" },
-    { id: -7, x: 74.3,  y: 382.1, cx: 85.1, cy: 392.9, transform: "translate(-307.8 478) rotate(-90)" },
-    { id: -8, x: 74.3,  y: 324.5, cx: 85.1, cy: 335.3, transform: "translate(-250.2 420.4) rotate(-90)" },
-    { id: -9, x: 74.3,  y: 266.9, cx: 85.1, cy: 277.7, transform: "translate(-192.6 362.8) rotate(-90)" },
+    { id: -1, x: 13.1, y: 382.1, cx: 23.9, cy: 392.9, transform: "translate(-369 416.8) rotate(-90)" },
+    { id: -2, x: 13.1, y: 403.7, cx: 23.9, cy: 414.5, transform: "translate(-390.6 438.4) rotate(-90)" },
+    { id: -3, x: 13.1, y: 245.3, cx: 23.9, cy: 256.1, transform: "translate(-232.2 280) rotate(-90)" },
+    { id: -4, x: 13.1, y: 324.5, cx: 23.9, cy: 335.3, transform: "translate(-311.4 359.2) rotate(-90)" },
+    { id: -5, x: 13.1, y: 302.9, cx: 23.9, cy: 313.7, transform: "translate(-289.8 337.6) rotate(-90)" },
+    { id: -6, x: 74.3, y: 403.7, cx: 85.1, cy: 414.5, transform: "translate(-329.4 499.6) rotate(-90)" },
+    { id: -7, x: 74.3, y: 382.1, cx: 85.1, cy: 392.9, transform: "translate(-307.8 478) rotate(-90)" },
+    { id: -8, x: 74.3, y: 324.5, cx: 85.1, cy: 335.3, transform: "translate(-250.2 420.4) rotate(-90)" },
+    { id: -9, x: 74.3, y: 266.9, cx: 85.1, cy: 277.7, transform: "translate(-192.6 362.8) rotate(-90)" },
 ];
 
 // Info rects (dark blue + green)
 const infoRects = [
-    { id: -100, x: 340.7,  y: 79.7,  className: "cls-2", transform: "translate(261 442) rotate(-90)" },
-    { id: -101, x: 278.12, y: 13.1,  className: "cls-4", transform: undefined },
-    { id: -102, x: 256.52, y: 13.1,  className: "cls-4", transform: undefined },
+    { id: -100, x: 340.7, y: 79.7, className: "cls-2", transform: "translate(261 442) rotate(-90)" },
+    { id: -101, x: 278.12, y: 13.1, className: "cls-4", transform: undefined },
+    { id: -102, x: 256.52, y: 13.1, className: "cls-4", transform: undefined },
 ];
 
 interface ArtistsMapProps {

@@ -12,8 +12,8 @@ interface ArtistTableDetailProps {
 export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailProps) {
     const name =
         table.type === "artist" ? table.artists.join(" & ")
-        : table.type === "vendor" ? table.vendorName
-        : table.title;
+            : table.type === "vendor" ? table.vendorName
+                : table.title;
 
     return (
         <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
