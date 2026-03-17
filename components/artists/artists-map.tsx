@@ -47,8 +47,8 @@ export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapPr
         <div
             className="mt-6 mx-auto rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-white/50 backdrop-blur-md font-bold"
             style={{
-                maxHeight: "calc(95svh - 17.5rem)",
-                width: "min(100%, calc((95svh - 17.5rem) * 375.4 / 469))",
+                maxHeight: "calc(95svh - 13.5rem)",
+                width: "min(100%, calc((95svh - 13.5rem) * 375.4 / 469))",
             }}
         >
             <svg
