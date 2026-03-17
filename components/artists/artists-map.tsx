@@ -9,7 +9,7 @@ const labelProps = {
     dominantBaseline: "central" as const,
     fill: "#fff",
     fontSize: 8,
-    fontFamily: "MyriadPro-Regular, 'Myriad Pro'",
+    fontFamily: "var(--font-sans), system-ui, sans-serif",
     pointerEvents: "none" as const,
 };
 
@@ -82,7 +82,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     <rect x="13.1" y="13.1" width="43.2" height="9" rx="1.5"
                         fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
                     <text x="34.7" y="17.6" textAnchor="middle" dominantBaseline="central"
-                        fill="#1657bb" fontSize="3.8" fontFamily="MyriadPro-Regular, 'Myriad Pro'" letterSpacing="0.4">
+                        fill="#1657bb" fontSize="3.8" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.4">
                         ENTRANCE
                     </text>
                     <polygon points="31.7,22.1 34.7,25.6 37.7,22.1" fill="rgba(22, 88, 187, 0.45)" />
@@ -91,7 +91,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     <rect x="319.1" y="13.1" width="43.2" height="9" rx="1.5"
                         fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
                     <text x="340.7" y="17.6" textAnchor="middle" dominantBaseline="central"
-                        fill="#1657bb" fontSize="3.8" fontFamily="MyriadPro-Regular, 'Myriad Pro'" letterSpacing="0.4">
+                        fill="#1657bb" fontSize="3.8" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.4">
                         EXIT
                     </text>
                     <polygon points="337.7,22.1 340.7,25.6 343.7,22.1" fill="rgba(22, 88, 187, 0.45)" />
