@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { alleyTables } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
-import { Users, Store } from "lucide-react";
+import { Users, Store, Info } from "lucide-react";
 
-const tableTypes = ["Artists", "Vendors"];
+const tableTypes = ["Artists", "Vendors", "Info"];
 
 function ArtistTableCard({ table }: { table: AlleyTable }) {
     const [cardOpen, setCardOpen] = useState(false);
@@ -21,22 +21,38 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
 
             {/* Table number badge + type badge */}
             <div className="flex items-center gap-3 mb-3">
-                <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
-                    Table {table.tableNumber}
-                </div>
+                {table.tableNumber > 0 && (
+                    <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                        Table {table.tableNumber}
+                    </div>
+                )}
+                {table.type === "vendor" && (
+                    <div className="font-mono font-semibold text-xs px-3 py-1 rounded-sm" style={{ background: "#f39aca", color: "#7a2e52" }}>
+                        Vendor {Math.abs(table.tableNumber)}
+                    </div>
+                )}
                 <div className="bg-secondary-dark/10 text-secondary-dark font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1">
                     {table.type === "artist" ? (
                         <><Users size={10} />Artists</>
-                    ) : (
+                    ) : table.type === "vendor" ? (
                         <><Store size={10} />Vendor</>
+                    ) : (
+                        <><Info size={10} />Information</>
                     )}
                 </div>
             </div>
 
             {/* Name(s) */}
             <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-                {table.type === "artist" ? table.artists.join(" & ") : table.vendorName}
+                {table.type === "artist" ? table.artists.join(" & ")
+                : table.type === "vendor" ? table.vendorName
+                : table.title}
             </h3>
+
+            {/* Hours (info tables only) */}
+            {table.type === "info" && table.hours && !cardOpen && (
+                <p className="text-xs font-mono text-primary mb-2">🕐 {table.hours}</p>
+            )}
 
             {/* Description (foldable) */}
             {cardOpen && table.description && (
@@ -50,7 +66,7 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
                 <div className="relative w-full h-40 mt-2 rounded-md overflow-hidden border border-primary/20">
                     <Image
                         src={table.image}
-                        alt={table.type === "artist" ? table.artists.join(" & ") : table.vendorName}
+                        alt={table.type === "artist" ? table.artists.join(" & ") : table.type === "vendor" ? table.vendorName : table.title}
                         fill
                         className="object-cover"
                     />
@@ -85,14 +101,15 @@ export default function ArtistsList() {
 
     const filteredTables = alleyTables.filter((table) => {
         const query = search.toLowerCase();
-        const name = table.type === "artist"
-            ? table.artists.join(" ")
-            : table.vendorName;
+        const name = table.type === "artist" ? table.artists.join(" ")
+            : table.type === "vendor" ? table.vendorName
+            : table.title;
         const matchesSearch = !query || name.toLowerCase().includes(query);
         const matchesType =
             selectedTypes.length === 0 ||
             (selectedTypes.includes("Artists") && table.type === "artist") ||
-            (selectedTypes.includes("Vendors") && table.type === "vendor");
+            (selectedTypes.includes("Vendors") && table.type === "vendor") ||
+            (selectedTypes.includes("Info") && table.type === "info");
         return matchesSearch && matchesType;
     });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { X, Users, Store } from "lucide-react";
+import { X, Users, Store, Info } from "lucide-react";
 import type { AlleyTable } from "@/lib/data";
 
 interface ArtistTableDetailProps {
@@ -10,7 +10,10 @@ interface ArtistTableDetailProps {
 }
 
 export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailProps) {
-    const name = table.type === "artist" ? table.artists.join(" & ") : table.vendorName;
+    const name =
+        table.type === "artist" ? table.artists.join(" & ")
+        : table.type === "vendor" ? table.vendorName
+        : table.title;
 
     return (
         <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
@@ -28,14 +31,23 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
 
             {/* Table number + type badges */}
             <div className="flex items-center gap-3 mb-3">
-                <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
-                    Table {table.tableNumber}
-                </div>
+                {table.tableNumber > 0 && (
+                    <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                        Table {table.tableNumber}
+                    </div>
+                )}
+                {table.type === "vendor" && (
+                    <div className="font-mono font-semibold text-xs px-3 py-1 rounded-sm" style={{ background: "#f39aca", color: "#7a2e52" }}>
+                        Vendor {Math.abs(table.tableNumber)}
+                    </div>
+                )}
                 <div className="font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1 bg-primary/10 text-primary">
                     {table.type === "artist" ? (
                         <><Users size={10} />Artists</>
-                    ) : (
+                    ) : table.type === "vendor" ? (
                         <><Store size={10} />Vendor</>
+                    ) : (
+                        <><Info size={10} />Information</>
                     )}
                 </div>
             </div>
@@ -44,6 +56,11 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
             <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
                 {name}
             </h3>
+
+            {/* Hours (info tables only) */}
+            {table.type === "info" && table.hours && (
+                <p className="text-xs font-mono text-primary mb-2">🕐 {table.hours}</p>
+            )}
 
             {/* Description */}
             {table.description && (

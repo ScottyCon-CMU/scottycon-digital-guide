@@ -69,50 +69,167 @@ export interface VendorTable extends TableBase {
   vendorName: string;
 }
 
-export type AlleyTable = ArtistTable | VendorTable;
+export interface InfoTable extends TableBase {
+  type: "info";
+  title: string;
+  hours?: string;
+}
+
+export type AlleyTable = ArtistTable | VendorTable | InfoTable;
 
 export const alleyTables: AlleyTable[] = [
+  // ── Artist tables (light blue, numbered 1–58) ──────────────────────────────
   {
-    type: "artist",
-    tableNumber: 1,
+    type: "artist", tableNumber: 1,
     artists: ["Mika Tanaka", "Sora Inoue"],
     description: "Original character prints, acrylic charms, and sticker sheets. Specializing in soft fantasy and pastel aesthetics.",
   },
   {
-    type: "artist",
-    tableNumber: 2,
+    type: "artist", tableNumber: 2,
     artists: ["Lena Park", "Yuki Flores"],
     description: "Fan art prints of popular shonen anime, enamel pins, and mini zines. Limited edition ScottyCon 2026 exclusive bundles available!",
   },
   {
-    type: "vendor",
-    tableNumber: 3,
-    vendorName: "Pixel Potion Studio",
-    description: "Indie game merchandise, retro pixel art prints, and hand-soldered enamel pins. Cash and card accepted.",
-  },
-  {
-    type: "artist",
-    tableNumber: 4,
+    type: "artist", tableNumber: 3,
     artists: ["Rei Nakamura", "Casey Ohmura"],
     description: "Watercolor illustrations and hand-bound sketchbooks. Commission slots open — bring your OC references!",
   },
   {
-    type: "artist",
-    tableNumber: 5,
+    type: "artist", tableNumber: 4,
     artists: ["Hana Kwon", "Tomás Rivera"],
     description: "Crocheted plushies, keychains, and wearable accessories inspired by classic RPG games and magical girl anime.",
   },
   {
-    type: "vendor",
-    tableNumber: 6,
+    type: "artist", tableNumber: 5,
+    artists: ["Emi Suzuki", "Jin Choi"],
+    description: "Gothic and dark fantasy digital prints, tarot-inspired card sets, and custom bookmarks.",
+  },
+  {
+    type: "artist", tableNumber: 6,
+    artists: ["Yuna Abe"],
+    description: "Ink brush illustrations of Japanese folklore and yokai. Custom name stamps available — get yours carved on-site!",
+  },
+  {
+    type: "artist", tableNumber: 7,
+    artists: ["Devon Clarke", "Priya Nair"],
+    description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last.",
+  },
+  { type: "artist", tableNumber:  8, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber:  9, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 10, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 11, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 12, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 13, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 14, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 15, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 16, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 17, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 18, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 19, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 20, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 21, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 22, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 23, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 24, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 25, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 26, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 27, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 28, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 29, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 30, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 31, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 32, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 33, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 34, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 35, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 36, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 37, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 38, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 39, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 40, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 41, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 42, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 43, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 44, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 45, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 46, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 47, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 48, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 49, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 50, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 51, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 52, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 53, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 54, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 55, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 56, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+  { type: "artist", tableNumber: 57, artists: ["Devon Clarke", "Priya Nair"], description: "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last." },
+
+  // ── Vendor tables (pink, IDs -1 through -10) ──────────────────────────────
+  {
+    type: "vendor", tableNumber: -1,
     vendorName: "Nebula Books & Comics",
     description: "Curated selection of manga, light novels, and indie comics. Buy 3, get 1 free on all used manga this weekend only.",
   },
   {
-    type: "artist",
-    tableNumber: 7,
-    artists: ["Emi Suzuki", "Jin Choi"],
-    description: "Gothic and dark fantasy digital prints, tarot-inspired card sets, and custom bookmarks.",
+    type: "vendor", tableNumber: -2,
+    vendorName: "Pixel Potion Studio",
+    description: "Indie game merchandise, retro pixel art prints, and hand-soldered enamel pins. Cash and card accepted.",
+  },
+  {
+    type: "vendor", tableNumber: -3,
+    vendorName: "Cosplay Kingdom",
+    description: "Costumes, wigs, props, and accessories for all skill levels. Repairs and alterations available on-site.",
+  },
+  {
+    type: "vendor", tableNumber: -4,
+    vendorName: "Galactic Toys & Figures",
+    description: "Import figures, model kits, and collectible blind boxes. Specialty items from Japan and Korea.",
+  },
+  {
+    type: "vendor", tableNumber: -5,
+    vendorName: "Sakura Sweets",
+    description: "Japanese candy, snacks, and drinks. Try our seasonal ScottyCon 2026 mochi sampler box!",
+  },
+  {
+    type: "vendor", tableNumber: -6,
+    vendorName: "The Card Vault",
+    description: "Trading card games — buying, selling, and trading. Pokemon, Yu-Gi-Oh!, and more. Graded slabs available.",
+  },
+  {
+    type: "vendor", tableNumber: -7,
+    vendorName: "Otaku Outfitters",
+    description: "Anime-licensed apparel and accessories. T-shirts, hoodies, and hats for a wide range of series.",
+  },
+  {
+    type: "vendor", tableNumber: -8,
+    vendorName: "Enchanted Realm Games",
+    description: "Tabletop RPG books, dice sets, and accessories. Demo games running throughout the day — drop in any time.",
+  },
+  {
+    type: "vendor", tableNumber: -9,
+    vendorName: "Stardust Jewelry",
+    description: "Handcrafted gemstone and resin jewelry inspired by anime and fantasy themes. Custom order commissions open.",
+  },
+
+  // ── Info tables (dark blue ID -100, green IDs -101 and -102) ──────────────
+  {
+    type: "info", tableNumber: -100,
+    title: "Artist Alley Registration",
+    hours: "10:00 AM – 5:00 PM",
+    description: "Check in here to receive your table badge, tote bag, and exhibitor packet. Have your confirmation email ready. Staff can also help resolve table assignment issues.",
+  },
+  {
+    type: "info", tableNumber: -101,
+    title: "Information Desk",
+    hours: "9:00 AM – 6:00 PM",
+    description: "General convention information, maps, and lost & found. Staff here can direct you to programming rooms, restrooms, first aid, and accessibility services.",
+  },
+  {
+    type: "info", tableNumber: -102,
+    title: "Merchandise & Program Sales",
+    hours: "10:00 AM – 5:00 PM",
+    description: "Pick up your ScottyCon 2026 program booklet, official merchandise, and limited-run souvenir items. Cash and all major cards accepted.",
   },
 ];
 
