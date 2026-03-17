@@ -45,8 +45,8 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
             {/* Name(s) */}
             <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
                 {table.type === "artist" ? table.artists.join(" & ")
-                : table.type === "vendor" ? table.vendorName
-                : table.title}
+                    : table.type === "vendor" ? table.vendorName
+                        : table.title}
             </h3>
 
             {/* Hours (info tables only) */}
@@ -103,7 +103,7 @@ export default function ArtistsList() {
         const query = search.toLowerCase();
         const name = table.type === "artist" ? table.artists.join(" ")
             : table.type === "vendor" ? table.vendorName
-            : table.title;
+                : table.title;
         const matchesSearch = !query || name.toLowerCase().includes(query);
         const matchesType =
             selectedTypes.length === 0 ||
