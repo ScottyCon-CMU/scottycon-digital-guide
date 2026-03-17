@@ -32,7 +32,7 @@ const vendorRects = [
 
 // Info rects (dark blue + green)
 const infoRects = [
-    { id: -100, x: 340.7, y: 79.7, className: "cls-2", transform: "translate(261 442) rotate(-90)" },
+    { id: -100, x: 340.7, y: 79.7, className: "cls-4", transform: "translate(261 442) rotate(-90)" },
     { id: -101, x: 278.12, y: 30.7, className: "cls-4", transform: undefined },
     { id: -102, x: 256.52, y: 30.7, className: "cls-4", transform: undefined },
 ];
