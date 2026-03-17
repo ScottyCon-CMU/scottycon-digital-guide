@@ -9,7 +9,7 @@ export function TableTypeChip({ type, className = "bg-primary/10 text-primary" }
         <div className={`font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1 ${className}`}>
             {type === "artist" ? <><Users size={10} />Artists</>
                 : type === "vendor" ? <><Store size={10} />Vendor</>
-                : <><Info size={10} />Information</>}
+                    : <><Info size={10} />Information</>}
         </div>
     );
 }
