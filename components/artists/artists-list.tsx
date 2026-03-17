@@ -33,7 +33,9 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
 
             {/* Name(s) */}
             <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-                {tableName(table)}
+                {tableName(table) || (
+                    <span className="text-slate-400 italic">Artist TBA</span>
+                )}
             </h3>
 
             {/* Hours (info tables only) */}
@@ -42,10 +44,10 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
             )}
 
             {/* Description (foldable) */}
-            {cardOpen && table.description && (
-                <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
-                    {table.description}
-                </p>
+            {cardOpen && (
+                table.description
+                    ? <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">{table.description}</p>
+                    : <p className="text-sm text-slate-500 italic mb-4">No details yet — check back soon!</p>
             )}
 
             {/* Optional image */}
