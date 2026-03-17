@@ -39,7 +39,9 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
 
             {/* Name */}
             <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
-                {tableName(table)}
+                {tableName(table) || (
+                    <span className="text-slate-500 italic">Artist TBA</span>
+                )}
             </h3>
 
             {/* Hours (info tables only) */}
@@ -48,11 +50,10 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
             )}
 
             {/* Description */}
-            {table.description && (
-                <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
-                    {table.description}
-                </p>
-            )}
+            {table.description
+                ? <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">{table.description}</p>
+                : <p className="text-sm text-slate-500 italic mb-4">No details yet — check back soon!</p>
+            }
 
             {/* Optional image */}
             {table.image && (
