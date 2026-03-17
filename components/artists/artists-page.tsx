@@ -36,6 +36,10 @@ export default function ArtistsPage() {
         setTimeout(() => setSelectedTable(null), 500);
     }
 
+    const selectedTableData = selectedTable !== null
+        ? alleyTables.find(t => t.tableNumber === selectedTable) ?? null
+        : null;
+
     return (
         <section className="relative mt-[5vh] flex flex-col px-6 pb-32">
             {/* Title Block */}
@@ -98,19 +102,16 @@ export default function ArtistsPage() {
                                     : "opacity-0 lg:translate-x-full duration-500 pointer-events-none"
                                     }`}
                             >
-                                {selectedTable !== null && (() => {
-                                    const table = alleyTables.find(t => t.tableNumber === selectedTable);
-                                    return table ? (
-                                        <ArtistTableDetail
-                                            table={table}
+                                {selectedTable !== null && (
+                                    selectedTableData
+                                        ? <ArtistTableDetail
+                                            table={selectedTableData}
                                             onClose={handleClose}
                                         />
-                                    ) : (
-                                        <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
+                                        : <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
                                             Table {selectedTable} — no data yet
                                         </div>
-                                    );
-                                })()}
+                                )}
                             </div>
                         </div>
                     </div>

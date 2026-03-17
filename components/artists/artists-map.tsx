@@ -15,8 +15,7 @@ const labelProps = {
 
 // Shared interaction styles per category
 const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s" };
-const vendorStyle = { cursor: "pointer" as const, transition: "opacity 0.2s" };
-const infoStyle = { cursor: "pointer" as const, transition: "opacity 0.2s" };
+const clickStyle = { cursor: "pointer" as const, transition: "opacity 0.2s" };
 
 // Vendor rects with visual-center coords for inline labels
 const vendorRects = [
@@ -99,7 +98,7 @@ export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapPr
                                 className="cls-3"
                                 x={v.x} y={v.y} {...R}
                                 transform={v.transform}
-                                style={vendorStyle}
+                                style={clickStyle}
                                 opacity={selectedTable === v.id ? 0.6 : 1}
                                 onClick={() => onTableClick(v.id)}
                             />
@@ -114,7 +113,7 @@ export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapPr
                             className={r.className}
                             x={r.x} y={r.y} {...R}
                             transform={r.transform}
-                            style={infoStyle}
+                            style={clickStyle}
                             opacity={selectedTable === r.id ? 0.6 : 1}
                             onClick={() => onTableClick(r.id)}
                         />

@@ -77,6 +77,12 @@ export interface InfoTable extends TableBase {
 
 export type AlleyTable = ArtistTable | VendorTable | InfoTable;
 
+export function tableName(table: AlleyTable): string {
+    if (table.type === "artist") return table.artists.join(" & ");
+    if (table.type === "vendor") return table.vendorName;
+    return table.title;
+}
+
 export const alleyTables: AlleyTable[] = [
   // ── Artist tables (light blue, numbered 1–58) ──────────────────────────────
   {

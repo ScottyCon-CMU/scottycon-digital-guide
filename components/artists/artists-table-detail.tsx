@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { X, Users, Store, Info } from "lucide-react";
+import { X } from "lucide-react";
+import { tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
+import { TableTypeChip, VendorBadge } from "./table-badges";
 
 interface ArtistTableDetailProps {
     table: AlleyTable;
@@ -10,11 +12,6 @@ interface ArtistTableDetailProps {
 }
 
 export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailProps) {
-    const name =
-        table.type === "artist" ? table.artists.join(" & ")
-            : table.type === "vendor" ? table.vendorName
-                : table.title;
-
     return (
         <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
             {/* Decorative corner */}
@@ -36,25 +33,13 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
                         Table {table.tableNumber}
                     </div>
                 )}
-                {table.type === "vendor" && (
-                    <div className="font-mono font-semibold text-xs px-3 py-1 rounded-sm" style={{ background: "#f39aca", color: "#7a2e52" }}>
-                        Vendor {Math.abs(table.tableNumber)}
-                    </div>
-                )}
-                <div className="font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1 bg-primary/10 text-primary">
-                    {table.type === "artist" ? (
-                        <><Users size={10} />Artists</>
-                    ) : table.type === "vendor" ? (
-                        <><Store size={10} />Vendor</>
-                    ) : (
-                        <><Info size={10} />Information</>
-                    )}
-                </div>
+                {table.type === "vendor" && <VendorBadge tableNumber={table.tableNumber} />}
+                <TableTypeChip type={table.type} />
             </div>
 
             {/* Name */}
             <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
-                {name}
+                {tableName(table)}
             </h3>
 
             {/* Hours (info tables only) */}
@@ -74,7 +59,7 @@ export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailP
                 <div className="relative w-full h-48 mt-2 rounded-md overflow-hidden border border-primary/20">
                     <Image
                         src={table.image}
-                        alt={name}
+                        alt={tableName(table)}
                         fill
                         className="object-cover"
                     />
