@@ -1,30 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { X } from "lucide-react";
 import { tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
 import { TableTypeChip, VendorBadge } from "./table-badges";
 
 interface ArtistTableDetailProps {
     table: AlleyTable;
-    onClose: () => void;
 }
 
-export default function ArtistTableDetail({ table, onClose }: ArtistTableDetailProps) {
+export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
     return (
-        <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
+        <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
             {/* Decorative corner */}
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
-
-            {/* Close button */}
-            <button
-                onClick={onClose}
-                aria-label="Close detail panel"
-                className="absolute top-3 right-6 text-slate-400 hover:text-primary transition-colors"
-            >
-                <X size={16} />
-            </button>
 
             {/* Table number + type badges */}
             <div className="flex items-center gap-3 mb-3">
