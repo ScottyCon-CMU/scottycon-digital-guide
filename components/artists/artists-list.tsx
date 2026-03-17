@@ -28,7 +28,7 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
                     </div>
                 )}
                 {table.type === "vendor" && <VendorBadge tableNumber={table.tableNumber} />}
-                <TableTypeChip type={table.type} className="bg-secondary-dark/10 text-secondary-dark" />
+                <TableTypeChip type={table.type} />
             </div>
 
             {/* Name(s) */}

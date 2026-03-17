@@ -40,12 +40,14 @@ const infoRects = [
 interface ArtistsMapProps {
     selectedTable: number | null;
     onTableClick: (tableNumber: number) => void;
+    onBackgroundClick: () => void;
 }
 
-export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapProps) {
+export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundClick }: ArtistsMapProps) {
     return (
         <div
-            className="mt-6 mx-auto rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-white/50 backdrop-blur-md font-bold"
+            onClick={onBackgroundClick}
+            className="mt-6 mx-auto rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-black/50 backdrop-blur-md font-bold"
             style={{
                 maxHeight: "calc(95svh - 13.5rem)",
                 width: "min(100%, calc((95svh - 13.5rem) * 375.4 / 469))",
@@ -85,7 +87,7 @@ export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapPr
                                 stroke="rgba(255, 255, 255, 0.35)"
                                 strokeMiterlimit={10}
                                 style={artistStyle}
-                                onClick={() => onTableClick(t.tableNumber)}
+                                onClick={(e) => { e.stopPropagation(); onTableClick(t.tableNumber); }}
                             />
                             <text x={t.cx} y={t.cy} {...labelProps}>{t.tableNumber}</text>
                         </g>
@@ -100,7 +102,7 @@ export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapPr
                                 transform={v.transform}
                                 style={clickStyle}
                                 opacity={selectedTable === v.id ? 0.6 : 1}
-                                onClick={() => onTableClick(v.id)}
+                                onClick={(e) => { e.stopPropagation(); onTableClick(v.id); }}
                             />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
                         </g>
@@ -115,7 +117,7 @@ export default function ArtistsMap({ selectedTable, onTableClick }: ArtistsMapPr
                             transform={r.transform}
                             style={clickStyle}
                             opacity={selectedTable === r.id ? 0.6 : 1}
-                            onClick={() => onTableClick(r.id)}
+                            onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
                         />
                     ))}
                 </g>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Map, List } from "lucide-react";
 import ArtistsList from "./artists-list";
 import ArtistsMap from "./artists-map";
@@ -12,32 +12,60 @@ type View = "map" | "list";
 export default function ArtistsPage() {
     const [view, setView] = useState<View>("map");
     const [selectedTable, setSelectedTable] = useState<number | null>(null);
-    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [displayedTable, setDisplayedTable] = useState<number | null>(null);
+    const [cardVisible, setCardVisible] = useState(true);
+    const [panelHeight, setPanelHeight] = useState<number | undefined>(undefined);
     const detailRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const panelInnerRef = useRef<HTMLDivElement>(null);
+
+    // Deselect when clicking outside the map+card container
+    useEffect(() => {
+        if (selectedTable === null) return;
+        function handleOutsideClick(e: MouseEvent) {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+                setSelectedTable(null);
+            }
+        }
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => document.removeEventListener("mousedown", handleOutsideClick);
+    }, [selectedTable]);
+    useEffect(() => {
+        setCardVisible(false);
+        const t = setTimeout(() => {
+            setDisplayedTable(selectedTable);
+            setCardVisible(true);
+        }, 150);
+        return () => clearTimeout(t);
+    }, [selectedTable]);
+
+    // Track inner panel height for smooth layout transition on mobile
+    useEffect(() => {
+        const el = panelInnerRef.current;
+        if (!el) return;
+        setPanelHeight(el.offsetHeight);
+        const observer = new ResizeObserver(() => {
+            setPanelHeight(panelInnerRef.current?.offsetHeight);
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     function handleTableClick(tableNumber: number) {
-        if (isDetailOpen && selectedTable === tableNumber) {
-            handleClose();
+        // Clicking the same table again deselects it
+        if (selectedTable === tableNumber) {
+            setSelectedTable(null);
             return;
         }
         setSelectedTable(tableNumber);
-        setIsDetailOpen(true);
-        // On mobile only — scroll down to the detail panel below the map
+        // Scroll up to the panel (already visible above map on desktop)
         requestAnimationFrame(() => {
-            if (window.innerWidth < 1024) {
-                detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }
+            detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
         });
     }
 
-    function handleClose() {
-        setIsDetailOpen(false);
-        // Clear the table data only after the exit animation finishes
-        setTimeout(() => setSelectedTable(null), 500);
-    }
-
-    const selectedTableData = selectedTable !== null
-        ? alleyTables.find(t => t.tableNumber === selectedTable) ?? null
+    const displayedTableData = displayedTable !== null
+        ? alleyTables.find(t => t.tableNumber === displayedTable) ?? null
         : null;
 
     return (
@@ -80,38 +108,56 @@ export default function ArtistsPage() {
             </div>
             <div>
                 {view === "map" && (
-                    // Clip overflow so the detail doesn't cause a scrollbar while sliding in
-                    <div className="lg:overflow-x-hidden">
-                        <div className="lg:flex lg:gap-6 lg:items-center">
-                            {/* Map — slides left when detail is open, back to centre when closed */}
-                            <div
-                                className={`lg:w-1/2 lg:flex-shrink-0 transition-transform duration-500 ease-in-out ${isDetailOpen ? "lg:translate-x-0" : "lg:translate-x-1/2"
-                                    }`}
-                            >
-                                <ArtistsMap
-                                    selectedTable={selectedTable}
-                                    onTableClick={handleTableClick}
-                                />
-                            </div>
+                    <div ref={containerRef} className="flex flex-col-reverse lg:flex-row lg:gap-6 lg:items-start">
+                        {/* Map */}
+                        <div className="lg:w-1/2 lg:flex-shrink-0">
+                            <ArtistsMap
+                                selectedTable={selectedTable}
+                                onTableClick={handleTableClick}
+                                onBackgroundClick={() => setSelectedTable(null)}
+                            />
+                        </div>
 
-                            {/* Detail — isDetailOpen drives enter/exit classes */}
+                        {/* Info panel — above map on mobile, right column on desktop */}
+                        <div ref={detailRef} className="lg:flex-1 lg:min-w-0 mt-6">
                             <div
-                                ref={detailRef}
-                                className={`lg:flex-1 lg:min-w-0 transition-all ease-in-out ${isDetailOpen
-                                    ? "opacity-100 lg:translate-x-0 duration-500 lg:delay-150"
-                                    : "opacity-0 lg:translate-x-full duration-500 pointer-events-none"
-                                    }`}
+                                className="overflow-hidden"
+                                style={{ height: panelHeight, transition: "height 0.3s ease-in-out" }}
                             >
-                                {selectedTable !== null && (
-                                    selectedTableData
-                                        ? <ArtistTableDetail
-                                            table={selectedTableData}
-                                            onClose={handleClose}
-                                        />
-                                        : <div className="mt-6 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
-                                            Table {selectedTable} — no data yet
-                                        </div>
-                                )}
+                                <div ref={panelInnerRef}>
+                                    <div className={`transition-opacity duration-150 ${cardVisible ? "opacity-100" : "opacity-0"}`}>
+                                        {displayedTable === null ? (
+                                            // Hint card
+                                            <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-6 relative">
+                                                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+                                                <p className="font-mono text-xs text-primary uppercase tracking-wider mb-3">How to use</p>
+                                                <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">Explore the map</h3>
+                                                <p className="text-sm text-slate-600 leading-relaxed">
+                                                    Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
+                                                </p>
+                                                <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-3 font-mono text-xs text-slate-600">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <span className="w-3 h-3 rounded-sm bg-[#4e7fbf] inline-block" />Artist tables
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5">
+                                                        <span className="w-3 h-3 rounded-sm bg-[#f39aca] inline-block" />Vendor tables
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5">
+                                                        <span className="w-3 h-3 rounded-sm bg-[#75cb74] inline-block" />Info desks
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ) : displayedTableData ? (
+                                            <ArtistTableDetail
+                                                table={displayedTableData}
+                                            />
+                                        ) : (
+                                            <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
+                                                Table {displayedTable} — no data yet
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
