@@ -105,13 +105,13 @@ export default function ArtistsPage() {
     );
 
     return (
-        <section className="relative mt-[5vh] px-6 pb-32">
+        <section className="relative mt-[5vh] lg:mt-0 lg:h-[100svh] lg:overflow-hidden pb-32 lg:pb-0">
             <div ref={containerRef} className="lg:flex lg:gap-8 lg:items-start">
 
-                {/* LEFT COLUMN (desktop sidebar) / TOP BLOCK (mobile) */}
-                <div className="lg:w-80 lg:shrink-0 lg:sticky lg:top-8">
+                {/* LEFT COLUMN: title + card + list */}
+                <div className="px-6 lg:pl-6 lg:pr-0 lg:pt-[5vh] lg:flex-1 lg:min-w-0 lg:overflow-y-auto lg:h-[100svh] lg:pb-24 no-scrollbar">
 
-                    {/* Title + Toggle */}
+                    {/* Title + Toggle (toggle hidden on desktop — both views always visible) */}
                     <div className="flex items-end justify-between gap-4 mb-4">
                         <div className="flex flex-col">
                             <div className="flex items-center gap-3">
@@ -124,8 +124,8 @@ export default function ArtistsPage() {
                                 Artists Alley
                             </h1>
                         </div>
-                        {/* View Toggle */}
-                        <div className="flex shrink-0 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden mb-1">
+                        {/* View Toggle — mobile only */}
+                        <div className="lg:hidden flex shrink-0 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden mb-1">
                             <button
                                 onClick={() => setView("map")}
                                 className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "map"
@@ -147,9 +147,9 @@ export default function ArtistsPage() {
                         </div>
                     </div>
 
-                    {/* Card — mobile only (above map, with height animation) */}
+                    {/* Card — mobile only, above map, with height animation */}
                     {view === "map" && (
-                        <div ref={detailRef} className="block lg:hidden">
+                        <div ref={detailRef} className="block lg:hidden mb-4">
                             <div
                                 className="overflow-hidden"
                                 style={{ height: panelHeight, transition: "height 0.3s ease-in-out" }}
@@ -161,26 +161,24 @@ export default function ArtistsPage() {
                         </div>
                     )}
 
-                    {/* Card — desktop only (in sidebar, no height animation needed) */}
-                    {view === "map" && (
-                        <div className="hidden lg:block">
-                            {cardContent}
-                        </div>
-                    )}
+                    {/* Card — desktop only, above list */}
+                    <div className="hidden lg:block mb-4">
+                        {cardContent}
+                    </div>
+
+                    {/* List — always on desktop, only in list view on mobile */}
+                    <div className={view === "list" ? "block" : "hidden lg:block"}>
+                        <ArtistsList />
+                    </div>
                 </div>
 
-                {/* RIGHT COLUMN: map or list */}
-                <div className="lg:flex-1 lg:min-w-0">
-                    {view === "map" && (
-                        <ArtistsMap
-                            selectedTable={selectedTable}
-                            onTableClick={handleTableClick}
-                            onBackgroundClick={() => setSelectedTable(null)}
-                        />
-                    )}
-                    {view === "list" && (
-                        <ArtistsList />
-                    )}
+                {/* RIGHT COLUMN: map — always on desktop, only in map view on mobile */}
+                <div className={`px-6 lg:px-0 lg:pr-6 lg:mt-[5vh] lg:shrink-0 lg:h-[calc(100svh-10rem)] lg:min-h-[38.89vw] lg:min-w-[33.333vw] lg:max-w-[66.667vw] ${view === "map" ? "block" : "hidden lg:block"}`}>
+                    <ArtistsMap
+                        selectedTable={selectedTable}
+                        onTableClick={handleTableClick}
+                        onBackgroundClick={() => setSelectedTable(null)}
+                    />
                 </div>
 
             </div>

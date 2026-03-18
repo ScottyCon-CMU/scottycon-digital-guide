@@ -47,17 +47,12 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
     return (
         <div
             onClick={onBackgroundClick}
-            className="mt-6 mx-auto rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-black/50 backdrop-blur-md font-bold"
-            style={{
-                maxHeight: "calc(95svh - 13.5rem)",
-                width: "min(100%, calc((95svh - 13.5rem) * 375.4 / 438))",
-            }}
+            className="mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-black/50 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 375.4 438"
-                width="100%"
-                height="auto"
+                className="block w-full h-auto lg:w-auto lg:h-full"
             >
                 <defs>
                     <style>{`
