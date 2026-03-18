@@ -352,7 +352,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
             {createPortal(
                 <button
                     onClick={handleScrollToTop}
-                    className={`fixed bottom-28 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
+                    className={`fixed bottom-28 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
                         showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
                     }`}
                     aria-label="Back to top"
