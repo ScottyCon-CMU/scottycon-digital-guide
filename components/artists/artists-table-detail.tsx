@@ -1,15 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
 import { TableTypeChip, VendorBadge } from "./table-badges";
+import ImageLightbox from "./image-lightbox";
 
 interface ArtistTableDetailProps {
     table: AlleyTable;
 }
 
 export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
+    const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+
     return (
+        <>
         <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
             {/* Decorative corner */}
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
@@ -47,7 +52,11 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
             {table.images && table.images.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                     {table.images.map((src, i) => (
-                        <div key={i} className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20">
+                        <div
+                            key={i}
+                            className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20 cursor-zoom-in"
+                            onClick={() => setLightbox({ src, alt: `${tableName(table)} image ${i + 1}` })}
+                        >
                             <img
                                 src={src}
                                 alt={`${tableName(table)} image ${i + 1}`}
@@ -58,5 +67,14 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
                 </div>
             )}
         </div>
+
+        {lightbox && (
+            <ImageLightbox
+                src={lightbox.src}
+                alt={lightbox.alt}
+                onClose={() => setLightbox(null)}
+            />
+        )}
+        </>
     );
 }
