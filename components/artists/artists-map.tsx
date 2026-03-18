@@ -94,26 +94,25 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     <rect className="cls-1" x="-46.3" y="47.3" width="468" height="374.4" transform="translate(-46.8 422.2) rotate(-90)" />
                 </g>
 
-                {/* Entrance & Exit — non-interactive indicators at the top of the hall.
-                     Placed at y=13.1 to match the ~12.6-unit inset the side walls use (vendor x=13.1, right edge x=362.3). */}
+                {/* Entrance & Exit — non-interactive indicators at the top of the hall. */}
                 <g id="Entrances_Exits" pointerEvents="none">
                     {/* Exit — top-left */}
-                    <rect x="13.1" y="13.1" width="43.2" height="9" rx="1.5"
+                    <rect x="13.1" y="9" width="55" height="13" rx="2"
                         fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
-                    <text x="34.7" y="17.6" textAnchor="middle" dominantBaseline="central"
-                        fill="#1657bb" fontSize="3.8" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.4">
+                    <text x="40.6" y="15.5" textAnchor="middle" dominantBaseline="central"
+                        fill="#1657bb" fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
                         EXIT
                     </text>
-                    <polygon points="31.7,22.1 34.7,25.6 37.7,22.1" fill="rgba(255,255,255,0.8)" stroke="rgba(22,88,187,0.6)" strokeWidth="0.5" />
+                    <polygon points="37.6,23.5 40.6,27.5 43.6,23.5" fill="rgba(255,255,255,0.8)" stroke="rgba(22,88,187,0.6)" strokeWidth="0.5" />
 
-                    {/* Entrance — top-right */}
-                    <rect x="319.1" y="13.1" width="43.2" height="9" rx="1.5"
+                    {/* Entrance — top-right (right edge kept at 362.3) */}
+                    <rect x="307.3" y="9" width="55" height="13" rx="2"
                         fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
-                    <text x="340.7" y="17.6" textAnchor="middle" dominantBaseline="central"
-                        fill="#1657bb" fontSize="3.8" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.4">
+                    <text x="334.8" y="15.5" textAnchor="middle" dominantBaseline="central"
+                        fill="#1657bb" fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
                         ENTRANCE
                     </text>
-                    <polygon points="337.7,22.1 340.7,25.6 343.7,22.1" fill="rgba(255,255,255,0.8)" stroke="rgba(22,88,187,0.6)" strokeWidth="0.5" />
+                    <polygon points="331.8,23.5 334.8,27.5 337.8,23.5" fill="rgba(255,255,255,0.8)" stroke="rgba(22,88,187,0.6)" strokeWidth="0.5" />
                 </g>
 
                 {/* Tables */}
