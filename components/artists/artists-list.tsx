@@ -101,7 +101,10 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
     const pendingScrollRef = useRef<number | null>(null);
 
     useEffect(() => {
-        if (scrollToTable == null) return;
+        if (scrollToTable == null) {
+            setOpenCardId(null);
+            return;
+        }
         // If the table is filtered out, clear filters + search first,
         // then let the filteredTables useEffect below do the scroll after re-render
         const isVisible = filteredTables.some(t => t.tableNumber === scrollToTable);
@@ -254,7 +257,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
                         <button
                             key={t}
                             onClick={() => toggleType(t)}
-                            className="flex items-center gap-1 font-mono text-xs text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+                            className="flex items-center gap-1 font-mono text-xs text-primary bg-white/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/30 hover:bg-white/80 transition-colors cursor-pointer"
                         >
                             {t}
                             <X className="w-3 h-3" strokeWidth={2.5} />
