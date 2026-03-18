@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
 import { TableTypeChip, VendorBadge } from "./table-badges";
@@ -45,14 +44,17 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
             }
 
             {/* Optional image */}
-            {table.image && (
-                <div className="relative w-full h-48 mt-2 rounded-md overflow-hidden border border-primary/20">
-                    <Image
-                        src={table.image}
-                        alt={tableName(table)}
-                        fill
-                        className="object-cover"
-                    />
+            {table.images && table.images.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                    {table.images.map((src, i) => (
+                        <div key={i} className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20">
+                            <img
+                                src={src}
+                                alt={`${tableName(table)} image ${i + 1}`}
+                                className="block w-full h-auto max-h-80 object-contain"
+                            />
+                        </div>
+                    ))}
                 </div>
             )}
         </div>
