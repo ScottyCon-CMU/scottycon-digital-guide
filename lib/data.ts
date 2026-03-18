@@ -56,7 +56,7 @@ export const genre = [
 interface TableBase {
   tableNumber: number;
   description: string;
-  image?: string;
+  images?: string[];
 }
 
 export interface ArtistTable extends TableBase {

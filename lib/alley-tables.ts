@@ -21,14 +21,14 @@ function artist(
     /** One name, or an array for a shared table: ["Alex", "Sam"] */
     artists: string | string[],
     description = "",
-    image?: string,
+    images?: string | string[],
 ): ArtistTable {
     return {
         type: "artist",
         tableNumber,
         artists: Array.isArray(artists) ? artists : [artists],
         description,
-        image,
+        images: images === undefined ? undefined : Array.isArray(images) ? images : [images],
     };
 }
 
@@ -37,9 +37,9 @@ function vendor(
     tableNumber: number,
     vendorName: string,
     description = "",
-    image?: string,
+    images?: string | string[],
 ): VendorTable {
-    return { type: "vendor", tableNumber, vendorName, description, image };
+    return { type: "vendor", tableNumber, vendorName, description, images: images === undefined ? undefined : Array.isArray(images) ? images : [images] };
 }
 
 function info(
@@ -48,16 +48,16 @@ function info(
     title: string,
     description = "",
     hours?: string,
-    image?: string,
+    images?: string | string[],
 ): InfoTable {
-    return { type: "info", tableNumber, title, description, hours, image };
+    return { type: "info", tableNumber, title, description, hours, images: images === undefined ? undefined : Array.isArray(images) ? images : [images] };
 }
 
 // ─── Artist tables (1 – 58) ───────────────────────────────────────────────────
 // One entry per table. Tables that share a spot get an array of names.
 
 export const artistTables: ArtistTable[] = [
-    artist( 1, ["Mika Tanaka", "Sora Inoue"],  "Original character prints, acrylic charms, and sticker sheets. Specializing in soft fantasy and pastel aesthetics."),
+    artist( 1, ["Mika Tanaka", "Sora Inoue"],  "Original character prints, acrylic charms, and sticker sheets. Specializing in soft fantasy and pastel aesthetics.", ["/images/example_illustration.jpeg", "/images/example_illustration_2.jpeg"]),
     artist( 2, ["Lena Park", "Yuki Flores"],   "Fan art prints of popular shonen anime, enamel pins, and mini zines. Limited edition ScottyCon 2026 exclusive bundles available!"),
     artist( 3, ["Rei Nakamura", "Casey Ohmura"],"Watercolor illustrations and hand-bound sketchbooks. Commission slots open — bring your OC references!"),
     artist( 4, ["Hana Kwon", "Tomás Rivera"],  "Crocheted plushies, keychains, and wearable accessories inspired by classic RPG games and magical girl anime."),
