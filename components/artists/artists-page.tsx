@@ -31,6 +31,7 @@ export default function ArtistsPage() {
         return () => document.removeEventListener("mousedown", handleOutsideClick);
     }, [selectedTable]);
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: immediate fade-out before the 150ms content swap
         setCardVisible(false);
         const t = setTimeout(() => {
             setDisplayedTable(selectedTable);
@@ -39,7 +40,9 @@ export default function ArtistsPage() {
         return () => clearTimeout(t);
     }, [selectedTable]);
 
-    // Track inner panel height for smooth layout transition on mobile
+    // Track inner panel height for smooth layout transition on mobile.
+    // Depends on `view` so the observer is re-attached when switching back to map view
+    // (the panelInnerRef div unmounts on list view and remounts on map view).
     useEffect(() => {
         const el = panelInnerRef.current;
         if (!el) return;
@@ -49,7 +52,7 @@ export default function ArtistsPage() {
         });
         observer.observe(el);
         return () => observer.disconnect();
-    }, []);
+    }, [view]);
 
     function handleTableClick(tableNumber: number) {
         // Clicking the same table again deselects it
