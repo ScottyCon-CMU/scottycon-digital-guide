@@ -15,66 +15,66 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
 
     return (
         <>
-        <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
-            {/* Decorative corner */}
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+            <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm p-4 relative">
+                {/* Decorative corner */}
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
 
-            {/* Table number + type badges */}
-            <div className="flex items-center gap-3 mb-3">
-                {table.tableNumber > 0 && (
-                    <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
-                        Table {table.tableNumber}
+                {/* Table number + type badges */}
+                <div className="flex items-center gap-3 mb-3">
+                    {table.tableNumber > 0 && (
+                        <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                            Table {table.tableNumber}
+                        </div>
+                    )}
+                    {table.type === "vendor" && <VendorBadge tableNumber={table.tableNumber} />}
+                    <TableTypeChip type={table.type} />
+                </div>
+
+                {/* Name */}
+                <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
+                    {tableName(table) || (
+                        <span className="text-slate-500 italic">Artist TBA</span>
+                    )}
+                </h3>
+
+                {/* Hours (info tables only) */}
+                {table.type === "info" && table.hours && (
+                    <p className="text-xs font-mono text-primary mb-2">🕐 {table.hours}</p>
+                )}
+
+                {/* Description */}
+                {table.description
+                    ? <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">{table.description}</p>
+                    : <p className="text-sm text-slate-500 italic mb-4">No details yet — check back soon!</p>
+                }
+
+                {/* Optional image */}
+                {table.images && table.images.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                        {table.images.map((src, i) => (
+                            <div
+                                key={i}
+                                className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20 cursor-zoom-in"
+                                onClick={() => setLightbox({ src, alt: `${tableName(table)} image ${i + 1}` })}
+                            >
+                                <img
+                                    src={src}
+                                    alt={`${tableName(table)} image ${i + 1}`}
+                                    className="block w-full h-auto max-h-80 object-contain"
+                                />
+                            </div>
+                        ))}
                     </div>
                 )}
-                {table.type === "vendor" && <VendorBadge tableNumber={table.tableNumber} />}
-                <TableTypeChip type={table.type} />
             </div>
 
-            {/* Name */}
-            <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
-                {tableName(table) || (
-                    <span className="text-slate-500 italic">Artist TBA</span>
-                )}
-            </h3>
-
-            {/* Hours (info tables only) */}
-            {table.type === "info" && table.hours && (
-                <p className="text-xs font-mono text-primary mb-2">🕐 {table.hours}</p>
+            {lightbox && (
+                <ImageLightbox
+                    src={lightbox.src}
+                    alt={lightbox.alt}
+                    onClose={() => setLightbox(null)}
+                />
             )}
-
-            {/* Description */}
-            {table.description
-                ? <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">{table.description}</p>
-                : <p className="text-sm text-slate-500 italic mb-4">No details yet — check back soon!</p>
-            }
-
-            {/* Optional image */}
-            {table.images && table.images.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-2">
-                    {table.images.map((src, i) => (
-                        <div
-                            key={i}
-                            className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20 cursor-zoom-in"
-                            onClick={() => setLightbox({ src, alt: `${tableName(table)} image ${i + 1}` })}
-                        >
-                            <img
-                                src={src}
-                                alt={`${tableName(table)} image ${i + 1}`}
-                                className="block w-full h-auto max-h-80 object-contain"
-                            />
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-
-        {lightbox && (
-            <ImageLightbox
-                src={lightbox.src}
-                alt={lightbox.alt}
-                onClose={() => setLightbox(null)}
-            />
-        )}
         </>
     );
 }

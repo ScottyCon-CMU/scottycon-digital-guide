@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { alleyTables, tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
-import { Search, SlidersHorizontal, Check, X } from "lucide-react";
+import { Search, SlidersHorizontal, Check, X, ChevronUp } from "lucide-react";
 import { TableTypeChip, VendorBadge } from "./table-badges";
 import ImageLightbox from "./image-lightbox";
 
@@ -91,14 +91,53 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
     );
 }
 
-export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }: { scrollToTable?: number | null; onDeselect?: () => void; onSelectTable?: (tableNumber: number | null) => void }) {
+export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, scrollContainerRef }: { scrollToTable?: number | null; onDeselect?: () => void; onSelectTable?: (tableNumber: number | null) => void; scrollContainerRef?: React.RefObject<HTMLDivElement | null> }) {
     const [search, setSearch] = useState("");
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
     const [openCardId, setOpenCardId] = useState<number | null>(null);
     const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+    const [showScrollTop, setShowScrollTop] = useState(false);
     const filterRef = useRef<HTMLDivElement>(null);
+    const sentinelRef = useRef<HTMLDivElement>(null);
     const pendingScrollRef = useRef<number | null>(null);
+
+    // Show "back to top" button when sentinel (above search bar) leaves the scroll viewport.
+    // On mobile the window scrolls; on desktop the left column div scrolls.
+    // We discriminate by checking container.scrollTop > 0 to know which is the actual scroller.
+    useEffect(() => {
+        const container = scrollContainerRef?.current ?? null;
+
+        const checkVisibility = () => {
+            const sentinel = sentinelRef.current;
+            if (!sentinel) return;
+            const sentinelTop = sentinel.getBoundingClientRect().top;
+            // If the container div has scrolled, use its top edge as the threshold (desktop).
+            // Otherwise the window is scrolling — use the viewport top (0) as threshold (mobile).
+            const containerIsScrolling = !!container && container.scrollTop > 0;
+            const threshold = containerIsScrolling ? container.getBoundingClientRect().top : 0;
+            setShowScrollTop(sentinelTop < threshold);
+        };
+
+        // Use rAF for the initial check so the layout is fully painted before we measure.
+        const rafId = requestAnimationFrame(checkVisibility);
+        container?.addEventListener("scroll", checkVisibility, { passive: true });
+        window.addEventListener("scroll", checkVisibility, { passive: true });
+        return () => {
+            cancelAnimationFrame(rafId);
+            container?.removeEventListener("scroll", checkVisibility);
+            window.removeEventListener("scroll", checkVisibility);
+        };
+    }, [scrollContainerRef]);
+
+    const handleScrollToTop = () => {
+        const container = scrollContainerRef?.current;
+        if (container && container.scrollTop > 0) {
+            container.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    };
 
     useEffect(() => {
         if (scrollToTable == null) {
@@ -173,138 +212,151 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
 
     return (
         <>
-        <div className="mt-8">
-            {/* Section Title */}
-            <div className="mb-4">
-                <h2 className="font-sans font-bold text-2xl tracking-tight text-slate-900">Browse Tables</h2>
-            </div>
+            <div className="mt-8">
+                {/* Section Title */}
+                <div className="mb-4">
+                    <h2 className="font-sans font-bold text-2xl tracking-tight text-slate-900">Browse Tables</h2>
+                </div>
 
-            {/* Search Bar with Filter Icon */}
-            <div className="relative mb-6">
-                <div className="flex items-center gap-0">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <input
-                            type="text"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Search by name..."
-                            className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                        />
-                    </div>
-                    <div ref={filterRef} className="relative overflow-visible">
-                        <button
-                            onClick={() => setFilterOpen((prev) => !prev)}
-                            className={`relative px-3.5 py-2.5 border border-l-0 border-primary/30 rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
-                                ? "bg-primary text-white"
-                                : "bg-white/50 backdrop-blur-md text-slate-500 hover:bg-primary/10"
-                                }`}
-                        >
-                            <SlidersHorizontal className="w-4 h-4" />
-                            {selectedTypes.length > 0 && (
-                                <span className="absolute -top-1.5 -left-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
-                                    {selectedTypes.length}
-                                </span>
-                            )}
-                        </button>
-
-                        {/* Type Filter Dropdown */}
-                        {filterOpen && (
-                            <div className="absolute right-0 z-10 mt-2 w-48 bg-white/80 backdrop-blur-md border border-primary/30 rounded-lg shadow-lg p-2">
-                                <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-primary/10">
-                                    <span className="font-mono text-xs text-slate-500 uppercase tracking-wider">
-                                        Type
+                {/* Search Bar with Filter Icon */}
+                <div ref={sentinelRef} />
+                <div className="relative mb-6">
+                    <div className="flex items-center gap-0">
+                        <div className="relative flex-1">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <input
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search by name..."
+                                className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                            />
+                        </div>
+                        <div ref={filterRef} className="relative overflow-visible">
+                            <button
+                                onClick={() => setFilterOpen((prev) => !prev)}
+                                className={`relative px-3.5 py-2.5 border border-l-0 border-primary/30 rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
+                                    ? "bg-primary text-white"
+                                    : "bg-white/50 backdrop-blur-md text-slate-500 hover:bg-primary/10"
+                                    }`}
+                            >
+                                <SlidersHorizontal className="w-4 h-4" />
+                                {selectedTypes.length > 0 && (
+                                    <span className="absolute -top-1.5 -left-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
+                                        {selectedTypes.length}
                                     </span>
-                                    {selectedTypes.length > 0 && (
+                                )}
+                            </button>
+
+                            {/* Type Filter Dropdown */}
+                            {filterOpen && (
+                                <div className="absolute right-0 z-10 mt-2 w-48 bg-white/80 backdrop-blur-md border border-primary/30 rounded-lg shadow-lg p-2">
+                                    <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-primary/10">
+                                        <span className="font-mono text-xs text-slate-500 uppercase tracking-wider">
+                                            Type
+                                        </span>
+                                        {selectedTypes.length > 0 && (
+                                            <button
+                                                onClick={() => setSelectedTypes([])}
+                                                className="font-mono text-xs text-primary hover:underline cursor-pointer"
+                                            >
+                                                Clear
+                                            </button>
+                                        )}
+                                    </div>
+                                    {tableTypes.map((t) => (
                                         <button
-                                            onClick={() => setSelectedTypes([])}
-                                            className="font-mono text-xs text-primary hover:underline cursor-pointer"
-                                        >
-                                            Clear
-                                        </button>
-                                    )}
-                                </div>
-                                {tableTypes.map((t) => (
-                                    <button
-                                        key={t}
-                                        onClick={() => toggleType(t)}
-                                        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-left font-mono text-sm transition-colors cursor-pointer ${selectedTypes.includes(t)
-                                            ? "bg-primary/10 text-primary"
-                                            : "text-slate-700 hover:bg-slate-100"
-                                            }`}
-                                    >
-                                        <span
-                                            className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedTypes.includes(t)
-                                                ? "border-primary bg-primary"
-                                                : "border-slate-300"
+                                            key={t}
+                                            onClick={() => toggleType(t)}
+                                            className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-left font-mono text-sm transition-colors cursor-pointer ${selectedTypes.includes(t)
+                                                ? "bg-primary/10 text-primary"
+                                                : "text-slate-700 hover:bg-slate-100"
                                                 }`}
                                         >
-                                            {selectedTypes.includes(t) && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
-                                        </span>
-                                        {t}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+                                            <span
+                                                className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedTypes.includes(t)
+                                                    ? "border-primary bg-primary"
+                                                    : "border-slate-300"
+                                                    }`}
+                                            >
+                                                {selectedTypes.includes(t) && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
+                                            </span>
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
+
+                {/* Active Type Chips — fixed height so content doesn't shift */}
+                <div className="h-8 mb-2 flex items-center">
+                    <div className="flex flex-wrap gap-2">
+                        {selectedTypes.map((t) => (
+                            <button
+                                key={t}
+                                onClick={() => toggleType(t)}
+                                className="flex items-center gap-1 font-mono text-xs text-primary bg-white/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/30 hover:bg-white/80 transition-colors cursor-pointer"
+                            >
+                                {t}
+                                <X className="w-3 h-3" strokeWidth={2.5} />
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Results */}
+                {filteredTables.length === 0 ? (
+                    <p className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded font-mono text-sm text-slate-900">
+                        No tables matched your search.
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 items-start">
+                        {filteredTables.map((table) => (
+                            <ArtistTableCard
+                                key={table.tableNumber}
+                                table={table}
+                                isOpen={openCardId === table.tableNumber}
+                                onImageClick={(src, alt) => setLightbox({ src, alt })}
+                                onToggle={() => {
+                                    const opening = openCardId !== table.tableNumber;
+                                    setOpenCardId(opening ? table.tableNumber : null);
+                                    if (opening) {
+                                        onSelectTable?.(table.tableNumber);
+                                        setTimeout(() => {
+                                            const el = document.querySelector(`[data-table="${table.tableNumber}"]`);
+                                            el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                        }, 320);
+                                    } else {
+                                        onSelectTable?.(null);
+                                    }
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
-            {/* Active Type Chips — fixed height so content doesn't shift */}
-            <div className="h-8 mb-2 flex items-center">
-                <div className="flex flex-wrap gap-2">
-                    {selectedTypes.map((t) => (
-                        <button
-                            key={t}
-                            onClick={() => toggleType(t)}
-                            className="flex items-center gap-1 font-mono text-xs text-primary bg-white/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/30 hover:bg-white/80 transition-colors cursor-pointer"
-                        >
-                            {t}
-                            <X className="w-3 h-3" strokeWidth={2.5} />
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Results */}
-            {filteredTables.length === 0 ? (
-                <p className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded font-mono text-sm text-slate-900">
-                    No tables matched your search.
-                </p>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 items-start">
-                    {filteredTables.map((table) => (
-                        <ArtistTableCard
-                            key={table.tableNumber}
-                            table={table}
-                            isOpen={openCardId === table.tableNumber}
-                            onImageClick={(src, alt) => setLightbox({ src, alt })}
-                            onToggle={() => {
-                                const opening = openCardId !== table.tableNumber;
-                                setOpenCardId(opening ? table.tableNumber : null);
-                                if (opening) {
-                                    onSelectTable?.(table.tableNumber);
-                                    setTimeout(() => {
-                                        const el = document.querySelector(`[data-table="${table.tableNumber}"]`);
-                                        el?.scrollIntoView({ behavior: "smooth", block: "center" });
-                                    }, 320);
-                                } else {
-                                    onSelectTable?.(null);
-                                }
-                            }}
-                        />
-                    ))}
-                </div>
+            {lightbox && (
+                <ImageLightbox
+                    src={lightbox.src}
+                    alt={lightbox.alt}
+                    onClose={() => setLightbox(null)}
+                />
             )}
-        </div>
 
-        {lightbox && (
-            <ImageLightbox
-                src={lightbox.src}
-                alt={lightbox.alt}
-                onClose={() => setLightbox(null)}
-            />
-        )}
+            {/* Floating scroll-to-top button — always mounted so the slide-in transition plays */}
+            <button
+                onClick={handleScrollToTop}
+                className={`fixed bottom-20 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
+                    showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
+                }`}
+                aria-label="Back to top"
+            >
+                <ChevronUp className="w-4 h-4" strokeWidth={2.5} />
+                Back to top
+            </button>
         </>
     );
 }

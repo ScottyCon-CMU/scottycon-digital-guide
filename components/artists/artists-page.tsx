@@ -18,6 +18,7 @@ export default function ArtistsPage() {
     const detailRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const panelInnerRef = useRef<HTMLDivElement>(null);
+    const listColRef = useRef<HTMLDivElement>(null);
 
     // Deselect when clicking outside the map+card container
     useEffect(() => {
@@ -113,7 +114,7 @@ export default function ArtistsPage() {
             <div ref={containerRef} className="lg:flex lg:gap-8 lg:items-start">
 
                 {/* LEFT COLUMN: title + card + list */}
-                <div className="px-6 lg:pl-6 lg:pr-0 lg:pt-[5vh] lg:flex-1 lg:min-w-0 lg:overflow-y-auto lg:h-[100svh] lg:pb-24 no-scrollbar">
+                <div ref={listColRef} className="px-6 lg:pl-6 lg:pr-0 lg:pt-[5vh] lg:flex-1 lg:min-w-0 lg:overflow-y-auto lg:h-[100svh] lg:pb-24 no-scrollbar">
 
                     {/* Title + Toggle (toggle hidden on desktop — both views always visible) */}
                     <div className="flex items-end justify-between gap-4 mb-4">
@@ -172,7 +173,7 @@ export default function ArtistsPage() {
 
                     {/* List — always on desktop, only in list view on mobile */}
                     <div className={view === "list" ? "block" : "hidden lg:block"}>
-                        <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} onSelectTable={setSelectedTable} />
+                        <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} onSelectTable={setSelectedTable} scrollContainerRef={listColRef} />
                     </div>
                 </div>
 
