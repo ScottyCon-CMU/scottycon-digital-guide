@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { alleyTables, tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
 import { Search, SlidersHorizontal, Check, X, ChevronUp } from "lucide-react";
@@ -346,17 +347,21 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                 />
             )}
 
-            {/* Floating scroll-to-top button — always mounted so the slide-in transition plays */}
-            <button
-                onClick={handleScrollToTop}
-                className={`fixed bottom-20 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
-                    showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
-                }`}
-                aria-label="Back to top"
-            >
-                <ChevronUp className="w-4 h-4" strokeWidth={2.5} />
-                Back to top
-            </button>
+            {/* Floating scroll-to-top button — portaled to body so fixed positioning works
+                even when this component is inside a transformed ancestor. */}
+            {createPortal(
+                <button
+                    onClick={handleScrollToTop}
+                    className={`fixed bottom-28 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
+                        showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
+                    }`}
+                    aria-label="Back to top"
+                >
+                    <ChevronUp className="w-4 h-4" strokeWidth={2.5} />
+                    Back to top
+                </button>,
+                document.body
+            )}
         </>
     );
 }

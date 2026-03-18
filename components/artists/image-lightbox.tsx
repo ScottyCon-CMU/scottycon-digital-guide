@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 interface ImageLightboxProps {
@@ -17,7 +18,9 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
         return () => window.removeEventListener("keydown", handler);
     }, [onClose]);
 
-    return (
+    // Render into document.body so `fixed` positioning is always relative to the viewport,
+    // not to any transformed ancestor (transform creates a new containing block for fixed elements).
+    return createPortal(
         <div
             className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
             onClick={onClose}
@@ -38,6 +41,7 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
                 onClick={(e) => e.stopPropagation()}
                 className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
             />
-        </div>
+        </div>,
+        document.body
     );
 }
