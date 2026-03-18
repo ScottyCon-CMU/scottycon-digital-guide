@@ -12,6 +12,7 @@ const tableTypes = ["Artists", "Vendors", "Info"];
 function ArtistTableCard({ table, isOpen, onToggle }: { table: AlleyTable; isOpen: boolean; onToggle: () => void }) {
     return (
         <div
+            data-table={table.tableNumber}
             onClick={onToggle}
             className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer p-4 relative"
         >
@@ -83,12 +84,43 @@ function ArtistTableCard({ table, isOpen, onToggle }: { table: AlleyTable; isOpe
     );
 }
 
-export default function ArtistsList() {
+export default function ArtistsList({ scrollToTable, onDeselect }: { scrollToTable?: number | null; onDeselect?: () => void }) {
     const [search, setSearch] = useState("");
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
     const [openCardId, setOpenCardId] = useState<number | null>(null);
     const filterRef = useRef<HTMLDivElement>(null);
+    const pendingScrollRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (scrollToTable == null) return;
+        // If the table is filtered out, clear filters + search first,
+        // then let the filteredTables useEffect below do the scroll after re-render
+        const isVisible = filteredTables.some(t => t.tableNumber === scrollToTable);
+        if (!isVisible) {
+            pendingScrollRef.current = scrollToTable;
+            setSelectedTypes([]);
+            setSearch("");
+        } else {
+            setOpenCardId(scrollToTable);
+            requestAnimationFrame(() => {
+                const el = document.querySelector(`[data-table="${scrollToTable}"]`);
+                el?.scrollIntoView({ behavior: "smooth", block: "center" });
+            });
+        }
+    }, [scrollToTable]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // After filters are cleared, execute the pending scroll once the card is in the DOM
+    useEffect(() => {
+        if (pendingScrollRef.current == null) return;
+        const tableNum = pendingScrollRef.current;
+        pendingScrollRef.current = null;
+        setOpenCardId(tableNum);
+        requestAnimationFrame(() => {
+            const el = document.querySelector(`[data-table="${tableNum}"]`);
+            el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+    }, [search, selectedTypes]); // runs after filters clear, card is now in DOM
 
     useEffect(() => {
         if (!filterOpen) return;
@@ -117,6 +149,16 @@ export default function ArtistsList() {
             (selectedTypes.includes("Info") && table.type === "info");
         return matchesSearch && matchesType;
     });
+
+    // Auto-deselect map selection when the selected table is filtered out
+    useEffect(() => {
+        if (openCardId == null || pendingScrollRef.current != null) return;
+        const stillVisible = filteredTables.some(t => t.tableNumber === openCardId);
+        if (!stillVisible) {
+            setOpenCardId(null);
+            onDeselect?.();
+        }
+    }, [filteredTables]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="mt-8">
