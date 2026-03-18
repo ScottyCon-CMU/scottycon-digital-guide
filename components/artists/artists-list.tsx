@@ -5,10 +5,11 @@ import { alleyTables, tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
 import { Search, SlidersHorizontal, Check, X } from "lucide-react";
 import { TableTypeChip, VendorBadge } from "./table-badges";
+import ImageLightbox from "./image-lightbox";
 
 const tableTypes = ["Artists", "Vendors", "Info"];
 
-function ArtistTableCard({ table, isOpen, onToggle }: { table: AlleyTable; isOpen: boolean; onToggle: () => void }) {
+function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: AlleyTable; isOpen: boolean; onToggle: () => void; onImageClick: (src: string, alt: string) => void }) {
     return (
         <div
             data-table={table.tableNumber}
@@ -70,7 +71,11 @@ function ArtistTableCard({ table, isOpen, onToggle }: { table: AlleyTable; isOpe
                     {table.images && table.images.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-2">
                             {table.images.map((src, i) => (
-                                <div key={i} className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20">
+                                <div
+                                    key={i}
+                                    className="flex-1 min-w-[calc(25%-0.375rem)] rounded-md overflow-hidden border border-primary/20 cursor-zoom-in"
+                                    onClick={(e) => { e.stopPropagation(); onImageClick(src, `${tableName(table)} image ${i + 1}`); }}
+                                >
                                     <img
                                         src={src}
                                         alt={`${tableName(table)} image ${i + 1}`}
@@ -91,6 +96,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
     const [openCardId, setOpenCardId] = useState<number | null>(null);
+    const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
     const filterRef = useRef<HTMLDivElement>(null);
     const pendingScrollRef = useRef<number | null>(null);
 
@@ -163,6 +169,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
     }, [filteredTables]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
+        <>
         <div className="mt-8">
             {/* Section Title */}
             <div className="mb-4">
@@ -268,6 +275,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
                             key={table.tableNumber}
                             table={table}
                             isOpen={openCardId === table.tableNumber}
+                            onImageClick={(src, alt) => setLightbox({ src, alt })}
                             onToggle={() => {
                                 const opening = openCardId !== table.tableNumber;
                                 setOpenCardId(opening ? table.tableNumber : null);
@@ -286,5 +294,14 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
                 </div>
             )}
         </div>
+
+        {lightbox && (
+            <ImageLightbox
+                src={lightbox.src}
+                alt={lightbox.alt}
+                onClose={() => setLightbox(null)}
+            />
+        )}
+        </>
     );
 }
