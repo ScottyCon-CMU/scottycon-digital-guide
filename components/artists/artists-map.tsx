@@ -67,13 +67,25 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             transform-origin: center;
                             transition: transform 0.15s;
                         }
-                        .table-interactive:hover { transform: scale(1.12); }
+                        .table-interactive:hover  { transform: scale(1.12); }
                         .table-interactive:active { transform: scale(0.93); }
-                        .table-artist { transition: fill 0.15s; }
-                        .table-interactive:hover .table-artist { fill: #2d6fd4; }
-                        .table-vendor, .table-info { transition: opacity 0.15s; }
-                        .table-interactive:hover .table-vendor,
-                        .table-interactive:hover .table-info { opacity: 0.75 !important; }
+
+                        /* Artist fill hierarchy: unselected > hovered > selected > selected+hovered > active */
+                        .table-artist                                               { fill: #4e7fbf; transition: fill 0.15s; }
+                        .table-interactive:hover  .table-artist                    { fill: #3570b2; }
+                        .table-artist.table-selected                               { fill: #1e5499; }
+                        .table-interactive:hover  .table-artist.table-selected     { fill: #163d73; }
+                        .table-interactive:active .table-artist                    { fill: #0a2f5e; }
+
+                        /* Vendor & Info brightness hierarchy */
+                        .table-vendor, .table-info                                                        { transition: filter 0.15s; }
+                        .table-interactive:hover  .table-vendor,
+                        .table-interactive:hover  .table-info                                             { filter: brightness(0.82); }
+                        .table-vendor.table-selected, .table-info.table-selected                          { filter: brightness(0.70); }
+                        .table-interactive:hover  .table-vendor.table-selected,
+                        .table-interactive:hover  .table-info.table-selected                              { filter: brightness(0.60); }
+                        .table-interactive:active .table-vendor,
+                        .table-interactive:active .table-info                                             { filter: brightness(0.52); }
                     `}</style>
                 </defs>
 
@@ -112,8 +124,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             <rect
                                 x={t.x} y={t.y - 5.4} {...R}
                                 transform={t.transform}
-                                className="table-artist"
-                                fill={selectedTable === t.tableNumber ? "#1657bb" : "#4e7fbf"}
+                                className={`table-artist${selectedTable === t.tableNumber ? " table-selected" : ""}`}
                                 stroke="rgba(255, 255, 255, 0.35)"
                                 strokeMiterlimit={10}
                                 style={artistStyle}
@@ -127,11 +138,10 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     {vendorRects.map((v) => (
                         <g key={v.id} className="table-interactive">
                             <rect
-                                className="cls-3 table-vendor"
+                                className={`cls-3 table-vendor${selectedTable === v.id ? " table-selected" : ""}`}
                                 x={v.x} y={v.y} {...R}
                                 transform={v.transform}
                                 style={clickStyle}
-                                opacity={selectedTable === v.id ? 0.6 : 1}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(v.id); }}
                             />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
@@ -142,11 +152,10 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     {infoRects.map((r) => (
                         <g key={r.id} className="table-interactive">
                             <rect
-                                className={`${r.className} table-info`}
+                                className={`${r.className} table-info${selectedTable === r.id ? " table-selected" : ""}`}
                                 x={r.x} y={r.y} {...R}
                                 transform={r.transform}
                                 style={clickStyle}
-                                opacity={selectedTable === r.id ? 0.6 : 1}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
                             />
                         </g>
