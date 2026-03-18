@@ -9,12 +9,10 @@ import { TableTypeChip, VendorBadge } from "./table-badges";
 
 const tableTypes = ["Artists", "Vendors", "Info"];
 
-function ArtistTableCard({ table }: { table: AlleyTable }) {
-    const [cardOpen, setCardOpen] = useState(false);
-
+function ArtistTableCard({ table, isOpen, onToggle }: { table: AlleyTable; isOpen: boolean; onToggle: () => void }) {
     return (
         <div
-            onClick={() => setCardOpen(!cardOpen)}
+            onClick={onToggle}
             className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer p-4 relative"
         >
             {/* Decorative Corner */}
@@ -31,36 +29,56 @@ function ArtistTableCard({ table }: { table: AlleyTable }) {
                 <TableTypeChip type={table.type} />
             </div>
 
-            {/* Name(s) */}
-            <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-                {tableName(table) || (
-                    <span className="text-slate-400 italic">Artist TBA</span>
-                )}
-            </h3>
+            {/* Name(s) + chevron */}
+            <div className="flex items-start justify-between mb-2">
+                <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors">
+                    {tableName(table) || (
+                        <span className="text-slate-400 italic">Artist TBA</span>
+                    )}
+                </h3>
+                <svg
+                    className={`w-4 h-4 text-primary mt-1.5 ml-2 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+                    fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </div>
 
-            {/* Hours (info tables only) */}
-            {table.type === "info" && table.hours && !cardOpen && (
-                <p className="text-xs font-mono text-primary mb-2">🕐 {table.hours}</p>
-            )}
+            {/* Animated expand area */}
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateRows: isOpen ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.3s ease",
+                }}
+            >
+                <div className="overflow-hidden">
+                    {/* Hours (info tables only) */}
+                    {table.type === "info" && table.hours && (
+                        <p className="text-xs font-mono text-primary mb-2 pt-0.5">🕐 {table.hours}</p>
+                    )}
 
-            {/* Description (foldable) */}
-            {cardOpen && (
-                table.description
-                    ? <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">{table.description}</p>
-                    : <p className="text-sm text-slate-500 italic mb-4">No details yet — check back soon!</p>
-            )}
+                    {/* Description */}
+                    <div className="text-sm leading-relaxed mb-2 break-words pt-0.5">
+                        {table.description
+                            ? <span className="text-slate-700">{table.description}</span>
+                            : <span className="text-slate-500 italic">No details yet — check back soon!</span>
+                        }
+                    </div>
 
-            {/* Optional image */}
-            {table.image && (
-                <div className="relative w-full h-40 mt-2 rounded-md overflow-hidden border border-primary/20">
-                    <Image
-                        src={table.image}
-                        alt={tableName(table)}
-                        fill
-                        className="object-cover"
-                    />
+                    {/* Optional image */}
+                    {table.image && (
+                        <div className="relative w-full h-40 mt-1 rounded-md overflow-hidden border border-primary/20">
+                            <Image
+                                src={table.image}
+                                alt={tableName(table)}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     );
 }
@@ -69,6 +87,7 @@ export default function ArtistsList() {
     const [search, setSearch] = useState("");
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
+    const [openCardId, setOpenCardId] = useState<number | null>(null);
     const filterRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -196,7 +215,12 @@ export default function ArtistsList() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                     {filteredTables.map((table) => (
-                        <ArtistTableCard key={table.tableNumber} table={table} />
+                        <ArtistTableCard
+                            key={table.tableNumber}
+                            table={table}
+                            isOpen={openCardId === table.tableNumber}
+                            onToggle={() => setOpenCardId(openCardId === table.tableNumber ? null : table.tableNumber)}
+                        />
                     ))}
                 </div>
             )}
