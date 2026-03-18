@@ -71,103 +71,118 @@ export default function ArtistsPage() {
         ? alleyTables.find(t => t.tableNumber === displayedTable) ?? null
         : null;
 
-    return (
-        <section className="relative mt-[5vh] flex flex-col px-6 pb-32">
-            {/* Title Block */}
-            <div className="flex items-end justify-between gap-4">
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-primary text-white font-mono font-semibold text-xs px-2 py-0.5 rounded-sm">
-                            2026
-                        </div>
-                        <div className="h-px w-24 bg-slate-300" />
+    // Shared card content — rendered in two places (mobile above map, desktop sidebar)
+    const cardContent = (
+        <div className={`transition-opacity duration-150 ${cardVisible ? "opacity-100" : "opacity-0"}`}>
+            {displayedTable === null ? (
+                <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-6 relative">
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+                    <p className="font-mono text-xs text-primary uppercase tracking-wider mb-3">How to use</p>
+                    <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">Explore the map</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-3 font-mono text-xs text-slate-600">
+                        <span className="flex items-center gap-1.5">
+                            <span className="w-3 h-3 rounded-sm bg-[#4e7fbf] inline-block" />Artist tables
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                            <span className="w-3 h-3 rounded-sm bg-[#f39aca] inline-block" />Vendor tables
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                            <span className="w-3 h-3 rounded-sm bg-[#75cb74] inline-block" />Info desks
+                        </span>
                     </div>
-                    <h1 className="font-sans font-bold text-5xl sm:text-6xl tracking-tighter text-slate-900 mt-2">
-                        Artists Alley
-                    </h1>
                 </div>
+            ) : displayedTableData ? (
+                <ArtistTableDetail table={displayedTableData} />
+            ) : (
+                <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
+                    Table {displayedTable} — no data yet
+                </div>
+            )}
+        </div>
+    );
 
-                {/* View Toggle */}
-                <div className="flex shrink-0 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden mb-1">
-                    <button
-                        onClick={() => setView("map")}
-                        className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "map"
-                            ? "bg-primary text-white shadow-sm"
-                            : "text-slate-600 hover:bg-primary/10"
-                            }`}
-                    >
-                        <Map size={13} />Map
-                    </button>
-                    <button
-                        onClick={() => setView("list")}
-                        className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "list"
-                            ? "bg-primary text-white shadow-sm"
-                            : "text-slate-600 hover:bg-primary/10"
-                            }`}
-                    >
-                        <List size={13} />List
-                    </button>
-                </div>
-            </div>
-            <div>
-                {view === "map" && (
-                    <div ref={containerRef} className="flex flex-col-reverse lg:flex-row lg:gap-6 lg:items-start">
-                        {/* Map */}
-                        <div className="lg:w-1/2 lg:flex-shrink-0">
-                            <ArtistsMap
-                                selectedTable={selectedTable}
-                                onTableClick={handleTableClick}
-                                onBackgroundClick={() => setSelectedTable(null)}
-                            />
+    return (
+        <section className="relative mt-[5vh] px-6 pb-32">
+            <div ref={containerRef} className="lg:flex lg:gap-8 lg:items-start">
+
+                {/* LEFT COLUMN (desktop sidebar) / TOP BLOCK (mobile) */}
+                <div className="lg:w-80 lg:shrink-0 lg:sticky lg:top-8">
+
+                    {/* Title + Toggle */}
+                    <div className="flex items-end justify-between gap-4 mb-4">
+                        <div className="flex flex-col">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-primary text-white font-mono font-semibold text-xs px-2 py-0.5 rounded-sm">
+                                    2026
+                                </div>
+                                <div className="h-px w-24 bg-slate-300" />
+                            </div>
+                            <h1 className="font-sans font-bold text-5xl lg:text-4xl tracking-tighter text-slate-900 mt-2">
+                                Artists Alley
+                            </h1>
                         </div>
+                        {/* View Toggle */}
+                        <div className="flex shrink-0 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden mb-1">
+                            <button
+                                onClick={() => setView("map")}
+                                className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "map"
+                                    ? "bg-primary text-white shadow-sm"
+                                    : "text-slate-600 hover:bg-primary/10"
+                                    }`}
+                            >
+                                <Map size={13} />Map
+                            </button>
+                            <button
+                                onClick={() => setView("list")}
+                                className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "list"
+                                    ? "bg-primary text-white shadow-sm"
+                                    : "text-slate-600 hover:bg-primary/10"
+                                    }`}
+                            >
+                                <List size={13} />List
+                            </button>
+                        </div>
+                    </div>
 
-                        {/* Info panel — above map on mobile, right column on desktop */}
-                        <div ref={detailRef} className="lg:flex-1 lg:min-w-0 mt-6">
+                    {/* Card — mobile only (above map, with height animation) */}
+                    {view === "map" && (
+                        <div ref={detailRef} className="block lg:hidden">
                             <div
                                 className="overflow-hidden"
                                 style={{ height: panelHeight, transition: "height 0.3s ease-in-out" }}
                             >
                                 <div ref={panelInnerRef}>
-                                    <div className={`transition-opacity duration-150 ${cardVisible ? "opacity-100" : "opacity-0"}`}>
-                                        {displayedTable === null ? (
-                                            // Hint card
-                                            <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-6 relative">
-                                                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
-                                                <p className="font-mono text-xs text-primary uppercase tracking-wider mb-3">How to use</p>
-                                                <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">Explore the map</h3>
-                                                <p className="text-sm text-slate-600 leading-relaxed">
-                                                    Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
-                                                </p>
-                                                <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-3 font-mono text-xs text-slate-600">
-                                                    <span className="flex items-center gap-1.5">
-                                                        <span className="w-3 h-3 rounded-sm bg-[#4e7fbf] inline-block" />Artist tables
-                                                    </span>
-                                                    <span className="flex items-center gap-1.5">
-                                                        <span className="w-3 h-3 rounded-sm bg-[#f39aca] inline-block" />Vendor tables
-                                                    </span>
-                                                    <span className="flex items-center gap-1.5">
-                                                        <span className="w-3 h-3 rounded-sm bg-[#75cb74] inline-block" />Info desks
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ) : displayedTableData ? (
-                                            <ArtistTableDetail
-                                                table={displayedTableData}
-                                            />
-                                        ) : (
-                                            <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-4 text-center text-sm text-slate-500 font-mono">
-                                                Table {displayedTable} — no data yet
-                                            </div>
-                                        )}
-                                    </div>
+                                    {cardContent}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
-                {view === "list" && (
-                    <div><ArtistsList /></div>
-                )}
+                    )}
+
+                    {/* Card — desktop only (in sidebar, no height animation needed) */}
+                    {view === "map" && (
+                        <div className="hidden lg:block">
+                            {cardContent}
+                        </div>
+                    )}
+                </div>
+
+                {/* RIGHT COLUMN: map or list */}
+                <div className="lg:flex-1 lg:min-w-0">
+                    {view === "map" && (
+                        <ArtistsMap
+                            selectedTable={selectedTable}
+                            onTableClick={handleTableClick}
+                            onBackgroundClick={() => setSelectedTable(null)}
+                        />
+                    )}
+                    {view === "list" && (
+                        <ArtistsList />
+                    )}
+                </div>
+
             </div>
         </section>
     );
