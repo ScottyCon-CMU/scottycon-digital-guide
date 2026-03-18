@@ -1,7 +1,46 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useSyncExternalStore, useCallback } from "react";
 import { events, genre as genres } from "@/lib/data";
+import { formatDescription } from "@/lib/format";
+import { FaRegStar, FaStar } from "react-icons/fa";
 import type { Event } from "@/lib/data";
+
+const FAVORITES_KEY = "favorites";
+const defaultFavorites = Array(events.length).fill(false) as boolean[];
+
+let listeners: Array<() => void> = [];
+let cachedRaw: string | null = null;
+let cachedParsed: boolean[] = defaultFavorites;
+
+function emitChange() {
+  cachedRaw = null;
+  for (const listener of listeners) listener();
+}
+function subscribe(listener: () => void) {
+  listeners = [...listeners, listener];
+  return () => { listeners = listeners.filter((l) => l !== listener); };
+}
+function getSnapshot(): boolean[] {
+  const stored = localStorage.getItem(FAVORITES_KEY);
+  if (stored === cachedRaw) return cachedParsed;
+  cachedRaw = stored;
+  cachedParsed = stored ? JSON.parse(stored) : defaultFavorites;
+  return cachedParsed;
+}
+function getServerSnapshot(): boolean[] {
+  return defaultFavorites;
+}
+
+function useFavorites() {
+  const favorites = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const toggleFavorite = useCallback((id: number) => {
+    const current = getSnapshot();
+    const next = current.map((v, i) => (i === id ? !v : v));
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+    emitChange();
+  }, []);
+  return { favorites, toggleFavorite };
+}
 
 // Convert 24-hour time to 12-hour AM/PM format
 const formatTime = (time: string) => {
@@ -11,10 +50,13 @@ const formatTime = (time: string) => {
   return `${hour12}:${minutes.toString().padStart(2, "0")}${period}`;
 };
 
-function EventCard({ event }: { event: Event }) {
+function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFavorite: boolean; onToggleFavorite: () => void }) {
   const [cardOpen, setCardOpen] = useState(false);
   return (
-    <div onClick={() => setCardOpen(!cardOpen)} className="bg-white/50 backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
+    <div
+      onClick={() => setCardOpen(!cardOpen)}
+      className="bg-white/50 backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group"
+    >
       {/* Decorative Corner */}
       <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
 
@@ -23,27 +65,49 @@ function EventCard({ event }: { event: Event }) {
         <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
           {formatTime(event.startTime)} - {formatTime(event.endTime)}
         </div>
-        <div className="bg-secondary-dark/10 text-secondary-dark font-mono text-xs px-2 py-1 rounded-sm">
+        <div className="bg-secondary/10 text-primary font-mono text-xs px-2 py-1 rounded-sm">
           {event.room[0]}
         </div>
       </div>
 
       {/* Event Title */}
-      <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
-        {event.title}
-      </h3>
+      <div className="flex justify-between">
+        <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
+          {event.title}
+        </h3>
+        <div className="mt-1.5" onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}>
+          {isFavorite ? (
+            <FaStar className="text-yellow-400" />
+          ) : (
+            <FaRegStar className="text-black" />
+          )}
+        </div>
+      </div>
 
       {/* Genre */}
-      <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider">
-        {event.genre}
+      <div className="relative mb-3">
+        <div className="font-mono text-xs text-slate-600 uppercase tracking-wider">
+          {event.genre}
+        </div>
+        {event.description !== "" && (
+          <svg
+            className={`w-3.5 h-3.5 text-primary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${cardOpen ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        )}
       </div>
 
       {/* Description */}
-      {cardOpen ?
-      <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">
-        {event.description}
-      </p>
-      : null}
+      {cardOpen && (event.description !== "") ? (
+        <div className="text-sm text-slate-700 leading-relaxed mb-4 wrap-break-word max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+          {formatDescription(event.description)}
+        </div>
+      ) : null}
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2">
@@ -56,11 +120,14 @@ function EventCard({ event }: { event: Event }) {
           </span>
         ))}
       </div>
+
     </div>
   );
 }
 
 export default function EventsList() {
+  const { favorites, toggleFavorite } = useFavorites();
+
   const [search, setSearch] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -91,13 +158,14 @@ export default function EventsList() {
   // Filter events by search query and genre
   const filteredEvents = sortedEvents.filter((event) => {
     const query = search.toLowerCase();
+    const isFavorited = favorites[event.id];
     const matchesSearch =
       !query ||
       event.title.toLowerCase().includes(query) ||
       event.tags.some((tag) => tag.toLowerCase().includes(query));
     const matchesGenre =
       selectedGenres.length === 0 || selectedGenres.includes(event.genre);
-    return matchesSearch && matchesGenre;
+    return isFavorited || (matchesSearch && matchesGenre);
   });
 
   return (
@@ -161,55 +229,55 @@ export default function EventsList() {
             {/* Genre Filter Dropdown */}
             {filterOpen && (
               <div className="absolute right-0 z-10 mt-2 w-56 bg-white/80 backdrop-blur-md border border-primary/30 rounded-lg shadow-lg p-2">
-            <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-primary/10">
-              <span className="font-mono text-xs text-slate-500 uppercase tracking-wider">
-                Genres
-              </span>
-              {selectedGenres.length > 0 && (
-                <button
-                  onClick={() => setSelectedGenres([])}
-                  className="font-mono text-xs text-primary hover:underline cursor-pointer"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-            {genres.map((g) => (
-              <button
-                key={g}
-                onClick={() => toggleGenre(g)}
-                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-left font-mono text-sm transition-colors cursor-pointer ${
-                  selectedGenres.includes(g)
-                    ? "bg-primary/10 text-primary"
-                    : "text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                    selectedGenres.includes(g)
-                      ? "border-primary bg-primary"
-                      : "border-slate-300"
-                  }`}
-                >
-                  {selectedGenres.includes(g) && (
-                    <svg
-                      className="w-2.5 h-2.5 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={3}
-                      stroke="currentColor"
+                <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-primary/10">
+                  <span className="font-mono text-xs text-slate-500 uppercase tracking-wider">
+                    Genres
+                  </span>
+                  {selectedGenres.length > 0 && (
+                    <button
+                      onClick={() => setSelectedGenres([])}
+                      className="font-mono text-xs text-primary hover:underline cursor-pointer"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
+                      Clear
+                    </button>
                   )}
-                </span>
-                {g}
-              </button>
-            ))}
+                </div>
+                {genres.map((g) => (
+                  <button
+                    key={g}
+                    onClick={() => toggleGenre(g)}
+                    className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-left font-mono text-sm transition-colors cursor-pointer ${
+                      selectedGenres.includes(g)
+                        ? "bg-primary/10 text-primary"
+                        : "text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    <span
+                      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
+                        selectedGenres.includes(g)
+                          ? "border-primary bg-primary"
+                          : "border-slate-300"
+                      }`}
+                    >
+                      {selectedGenres.includes(g) && (
+                        <svg
+                          className="w-2.5 h-2.5 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={3}
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M4.5 12.75l6 6 9-13.5"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                    {g}
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -252,7 +320,7 @@ export default function EventsList() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <EventCard key={event.id} event={event} isFavorite={favorites[event.id]} onToggleFavorite={() => toggleFavorite(event.id)} />
           ))}
         </div>
       )}
