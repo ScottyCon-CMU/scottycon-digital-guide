@@ -11,6 +11,7 @@ type View = "map" | "list";
 
 export default function ArtistsPage() {
     const [view, setView] = useState<View>("map");
+    const [viewFading, setViewFading] = useState(false);
     const [selectedTable, setSelectedTable] = useState<number | null>(null);
     const [displayedTable, setDisplayedTable] = useState<number | null>(null);
     const [cardVisible, setCardVisible] = useState(true);
@@ -66,6 +67,16 @@ export default function ArtistsPage() {
         requestAnimationFrame(() => {
             detailRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
         });
+    }
+
+    function switchView(newView: View) {
+        if (newView === view) return;
+        setViewFading(true);
+        setTimeout(() => {
+            setView(newView);
+            // Double rAF: wait for new content to be in the DOM before fading it in
+            requestAnimationFrame(() => requestAnimationFrame(() => setViewFading(false)));
+        }, 150);
     }
 
     const displayedTableData = displayedTable !== null
@@ -132,7 +143,7 @@ export default function ArtistsPage() {
                         {/* View Toggle — mobile only */}
                         <div className="lg:hidden flex shrink-0 bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden mb-1">
                             <button
-                                onClick={() => setView("map")}
+                                onClick={() => switchView("map")}
                                 className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "map"
                                     ? "bg-primary text-white shadow-sm"
                                     : "text-slate-600 hover:bg-primary/10"
@@ -141,7 +152,7 @@ export default function ArtistsPage() {
                                 <Map size={13} />Map
                             </button>
                             <button
-                                onClick={() => setView("list")}
+                                onClick={() => switchView("list")}
                                 className={`flex items-center gap-1.5 px-3 py-2 font-mono font-bold text-xs uppercase tracking-wider transition-all duration-300 ${view === "list"
                                     ? "bg-primary text-white shadow-sm"
                                     : "text-slate-600 hover:bg-primary/10"
@@ -154,7 +165,7 @@ export default function ArtistsPage() {
 
                     {/* Card — mobile only, above map, with height animation */}
                     {view === "map" && (
-                        <div ref={detailRef} className="block lg:hidden mb-4">
+                        <div ref={detailRef} className={`block lg:hidden mb-4 transition-opacity duration-150 ${viewFading ? "opacity-0" : "opacity-100"}`}>
                             <div
                                 className="overflow-hidden"
                                 style={{ height: panelHeight, transition: "height 0.3s ease-in-out" }}
@@ -172,13 +183,13 @@ export default function ArtistsPage() {
                     </div>
 
                     {/* List — always on desktop, only in list view on mobile */}
-                    <div className={view === "list" ? "block" : "hidden lg:block"}>
+                    <div className={`transition-opacity duration-150 ${viewFading ? "opacity-0" : "opacity-100"} ${view === "list" ? "block" : "hidden lg:block"}`}>
                         <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} onSelectTable={setSelectedTable} scrollContainerRef={listColRef} />
                     </div>
                 </div>
 
                 {/* RIGHT COLUMN: map — always on desktop, only in map view on mobile */}
-                <div className={`px-6 lg:px-0 lg:pr-6 lg:mt-[5vh] lg:shrink-0 lg:h-[calc(100svh-10rem)] lg:min-h-[38.89vw] lg:min-w-[33.333vw] lg:max-w-[66.667vw] ${view === "map" ? "block" : "hidden lg:block"}`}>
+                <div className={`px-6 lg:px-0 lg:pr-6 lg:mt-[5vh] lg:shrink-0 lg:h-[calc(100svh-10rem)] lg:min-h-[38.89vw] lg:min-w-[33.333vw] lg:max-w-[66.667vw] transition-opacity duration-150 ${viewFading ? "opacity-0" : "opacity-100"} ${view === "map" ? "block" : "hidden lg:block"}`}>
                     <ArtistsMap
                         selectedTable={selectedTable}
                         onTableClick={handleTableClick}
