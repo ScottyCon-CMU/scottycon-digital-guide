@@ -11,7 +11,7 @@ type View = "map" | "list";
 
 export default function ArtistsPage() {
     const [view, setView] = useState<View>("map");
-    const [viewFading, setViewFading] = useState(false);
+    const [viewEntering, setViewEntering] = useState(false);
     const [selectedTable, setSelectedTable] = useState<number | null>(null);
     const [displayedTable, setDisplayedTable] = useState<number | null>(null);
     const [cardVisible, setCardVisible] = useState(true);
@@ -71,12 +71,12 @@ export default function ArtistsPage() {
 
     function switchView(newView: View) {
         if (newView === view) return;
-        setViewFading(true);
-        setTimeout(() => {
-            setView(newView);
-            // Double rAF: wait for new content to be in the DOM before fading it in
-            requestAnimationFrame(() => requestAnimationFrame(() => setViewFading(false)));
-        }, 150);
+        // Both state changes in the same render: new content mounts at translateY(10px) with no transition.
+        // Double rAF then fires viewEntering=false, letting the browser transition to translateY(0).
+        // We use transform (not opacity) so backdrop-filter on children is never broken.
+        setView(newView);
+        setViewEntering(true);
+        requestAnimationFrame(() => requestAnimationFrame(() => setViewEntering(false)));
     }
 
     const displayedTableData = displayedTable !== null
@@ -107,7 +107,7 @@ export default function ArtistsPage() {
     );
 
     const cardContent = (
-        <div className={`transition-opacity duration-150 ${cardVisible ? "opacity-100" : "opacity-0"}`}>
+        <div>
             {displayedTable === null ? (
                 hintCard
             ) : displayedTableData ? (
@@ -165,7 +165,14 @@ export default function ArtistsPage() {
 
                     {/* Card — mobile only, above map, with height animation */}
                     {view === "map" && (
-                        <div ref={detailRef} className={`block lg:hidden mb-4 transition-opacity duration-150 ${viewFading ? "opacity-0" : "opacity-100"}`}>
+                        <div
+                            ref={detailRef}
+                            className="block lg:hidden mb-4"
+                            style={{
+                                transform: viewEntering ? "translateY(10px)" : "translateY(0)",
+                                transition: viewEntering ? "none" : "transform 0.25s ease-out",
+                            }}
+                        >
                             <div
                                 className="overflow-hidden"
                                 style={{ height: panelHeight, transition: "height 0.3s ease-in-out" }}
@@ -183,13 +190,25 @@ export default function ArtistsPage() {
                     </div>
 
                     {/* List — always on desktop, only in list view on mobile */}
-                    <div className={`transition-opacity duration-150 ${viewFading ? "opacity-0" : "opacity-100"} ${view === "list" ? "block" : "hidden lg:block"}`}>
+                    <div
+                        className={view === "list" ? "block" : "hidden lg:block"}
+                        style={view === "list" ? {
+                            transform: viewEntering ? "translateY(10px)" : "translateY(0)",
+                            transition: viewEntering ? "none" : "transform 0.25s ease-out",
+                        } : {}}
+                    >
                         <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} onSelectTable={setSelectedTable} scrollContainerRef={listColRef} />
                     </div>
                 </div>
 
                 {/* RIGHT COLUMN: map — always on desktop, only in map view on mobile */}
-                <div className={`px-6 lg:px-0 lg:pr-6 lg:mt-[5vh] lg:shrink-0 lg:h-[calc(100svh-10rem)] lg:min-h-[38.89vw] lg:min-w-[33.333vw] lg:max-w-[66.667vw] transition-opacity duration-150 ${viewFading ? "opacity-0" : "opacity-100"} ${view === "map" ? "block" : "hidden lg:block"}`}>
+                <div
+                    className={`px-6 lg:px-0 lg:pr-6 lg:mt-[5vh] lg:shrink-0 lg:h-[calc(100svh-10rem)] lg:min-h-[38.89vw] lg:min-w-[33.333vw] lg:max-w-[66.667vw] ${view === "map" ? "block" : "hidden lg:block"}`}
+                    style={view === "map" ? {
+                        transform: viewEntering ? "translateY(10px)" : "translateY(0)",
+                        transition: viewEntering ? "none" : "transform 0.25s ease-out",
+                    } : {}}
+                >
                     <ArtistsMap
                         selectedTable={selectedTable}
                         onTableClick={handleTableClick}
