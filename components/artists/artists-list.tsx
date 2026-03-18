@@ -105,10 +105,10 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
             setSearch("");
         } else {
             setOpenCardId(scrollToTable);
-            requestAnimationFrame(() => {
+            setTimeout(() => {
                 const el = document.querySelector(`[data-table="${scrollToTable}"]`);
                 el?.scrollIntoView({ behavior: "smooth", block: "center" });
-            });
+            }, 320);
         }
     }, [scrollToTable]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -118,10 +118,10 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
         const tableNum = pendingScrollRef.current;
         pendingScrollRef.current = null;
         setOpenCardId(tableNum);
-        requestAnimationFrame(() => {
+        setTimeout(() => {
             const el = document.querySelector(`[data-table="${tableNum}"]`);
             el?.scrollIntoView({ behavior: "smooth", block: "center" });
-        });
+        }, 320);
     }, [search, selectedTypes]); // runs after filters clear, card is now in DOM
 
     useEffect(() => {
@@ -273,10 +273,10 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }
                                 setOpenCardId(opening ? table.tableNumber : null);
                                 if (opening) {
                                     onSelectTable?.(table.tableNumber);
-                                    requestAnimationFrame(() => {
+                                    setTimeout(() => {
                                         const el = document.querySelector(`[data-table="${table.tableNumber}"]`);
                                         el?.scrollIntoView({ behavior: "smooth", block: "center" });
-                                    });
+                                    }, 320);
                                 } else {
                                     onSelectTable?.(null);
                                 }
