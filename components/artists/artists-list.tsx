@@ -120,6 +120,12 @@ export default function ArtistsList() {
 
     return (
         <div className="mt-8">
+            {/* Section Title */}
+            <div className="mb-4">
+                <p className="font-mono text-xs text-primary uppercase tracking-wider mb-1">Artists Alley</p>
+                <h2 className="font-sans font-bold text-2xl tracking-tight text-slate-900">Browse Tables</h2>
+            </div>
+
             {/* Search Bar with Filter Icon */}
             <div className="relative mb-6">
                 <div className="flex items-center gap-0">
