@@ -72,28 +72,32 @@ export default function ArtistsPage() {
         : null;
 
     // Shared card content — rendered in two places (mobile above map, desktop sidebar)
+    const hintCard = (
+        <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-6 relative">
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+            <p className="font-mono text-xs text-primary uppercase tracking-wider mb-3">How to use</p>
+            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">Explore the map</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+                Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
+            </p>
+            <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-3 font-mono text-xs text-slate-600">
+                <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-sm bg-[#4e7fbf] inline-block" />Artist tables
+                </span>
+                <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-sm bg-[#f39aca] inline-block" />Vendor tables
+                </span>
+                <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-sm bg-[#75cb74] inline-block" />Info desks
+                </span>
+            </div>
+        </div>
+    );
+
     const cardContent = (
         <div className={`transition-opacity duration-150 ${cardVisible ? "opacity-100" : "opacity-0"}`}>
             {displayedTable === null ? (
-                <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-6 relative">
-                    <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
-                    <p className="font-mono text-xs text-primary uppercase tracking-wider mb-3">How to use</p>
-                    <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">Explore the map</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                        Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
-                    </p>
-                    <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-3 font-mono text-xs text-slate-600">
-                        <span className="flex items-center gap-1.5">
-                            <span className="w-3 h-3 rounded-sm bg-[#4e7fbf] inline-block" />Artist tables
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                            <span className="w-3 h-3 rounded-sm bg-[#f39aca] inline-block" />Vendor tables
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                            <span className="w-3 h-3 rounded-sm bg-[#75cb74] inline-block" />Info desks
-                        </span>
-                    </div>
-                </div>
+                hintCard
             ) : displayedTableData ? (
                 <ArtistTableDetail table={displayedTableData} />
             ) : (
@@ -161,14 +165,14 @@ export default function ArtistsPage() {
                         </div>
                     )}
 
-                    {/* Card — desktop only, above list */}
+                    {/* Card — desktop only, always shows the hint */}
                     <div className="hidden lg:block mb-4">
-                        {cardContent}
+                        {hintCard}
                     </div>
 
                     {/* List — always on desktop, only in list view on mobile */}
                     <div className={view === "list" ? "block" : "hidden lg:block"}>
-                        <ArtistsList />
+                        <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} />
                     </div>
                 </div>
 
