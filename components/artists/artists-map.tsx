@@ -62,6 +62,18 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                         .cls-3 { fill: #f39aca; }
                         .cls-4 { fill: #75cb74ff; }
                         .cls-5 { fill: #bfb04eff; }
+                        .table-interactive {
+                            transform-box: fill-box;
+                            transform-origin: center;
+                            transition: transform 0.15s;
+                        }
+                        .table-interactive:hover { transform: scale(1.12); }
+                        .table-interactive:active { transform: scale(0.93); }
+                        .table-artist { transition: fill 0.15s; }
+                        .table-interactive:hover .table-artist { fill: #2d6fd4; }
+                        .table-vendor, .table-info { transition: opacity 0.15s; }
+                        .table-interactive:hover .table-vendor,
+                        .table-interactive:hover .table-info { opacity: 0.75 !important; }
                     `}</style>
                 </defs>
 
@@ -96,10 +108,11 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <g id="Tables">
                     {/* Artist tables */}
                     {tableRects.map((t) => (
-                        <g key={t.tableNumber}>
+                        <g key={t.tableNumber} className="table-interactive">
                             <rect
                                 x={t.x} y={t.y - 5.4} {...R}
                                 transform={t.transform}
+                                className="table-artist"
                                 fill={selectedTable === t.tableNumber ? "#1657bb" : "#4e7fbf"}
                                 stroke="rgba(255, 255, 255, 0.35)"
                                 strokeMiterlimit={10}
@@ -112,9 +125,9 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
 
                     {/* Vendor tables */}
                     {vendorRects.map((v) => (
-                        <g key={v.id}>
+                        <g key={v.id} className="table-interactive">
                             <rect
-                                className="cls-3"
+                                className="cls-3 table-vendor"
                                 x={v.x} y={v.y} {...R}
                                 transform={v.transform}
                                 style={clickStyle}
@@ -127,15 +140,16 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
 
                     {/* Info tables */}
                     {infoRects.map((r) => (
-                        <rect
-                            key={r.id}
-                            className={r.className}
-                            x={r.x} y={r.y} {...R}
-                            transform={r.transform}
-                            style={clickStyle}
-                            opacity={selectedTable === r.id ? 0.6 : 1}
-                            onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
-                        />
+                        <g key={r.id} className="table-interactive">
+                            <rect
+                                className={`${r.className} table-info`}
+                                x={r.x} y={r.y} {...R}
+                                transform={r.transform}
+                                style={clickStyle}
+                                opacity={selectedTable === r.id ? 0.6 : 1}
+                                onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
+                            />
+                        </g>
                     ))}
                 </g>
             </svg>

@@ -84,7 +84,7 @@ function ArtistTableCard({ table, isOpen, onToggle }: { table: AlleyTable; isOpe
     );
 }
 
-export default function ArtistsList({ scrollToTable, onDeselect }: { scrollToTable?: number | null; onDeselect?: () => void }) {
+export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable }: { scrollToTable?: number | null; onDeselect?: () => void; onSelectTable?: (tableNumber: number | null) => void }) {
     const [search, setSearch] = useState("");
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
@@ -164,7 +164,6 @@ export default function ArtistsList({ scrollToTable, onDeselect }: { scrollToTab
         <div className="mt-8">
             {/* Section Title */}
             <div className="mb-4">
-                <p className="font-mono text-xs text-primary uppercase tracking-wider mb-1">Artists Alley</p>
                 <h2 className="font-sans font-bold text-2xl tracking-tight text-slate-900">Browse Tables</h2>
             </div>
 
@@ -181,7 +180,7 @@ export default function ArtistsList({ scrollToTable, onDeselect }: { scrollToTab
                             className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                         />
                     </div>
-                    <div ref={filterRef} className="relative">
+                    <div ref={filterRef} className="relative overflow-visible">
                         <button
                             onClick={() => setFilterOpen((prev) => !prev)}
                             className={`relative px-3.5 py-2.5 border border-l-0 border-primary/30 rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
@@ -191,7 +190,7 @@ export default function ArtistsList({ scrollToTable, onDeselect }: { scrollToTab
                         >
                             <SlidersHorizontal className="w-4 h-4" />
                             {selectedTypes.length > 0 && (
-                                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
+                                <span className="absolute -top-1.5 -left-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
                                     {selectedTypes.length}
                                 </span>
                             )}
@@ -267,7 +266,19 @@ export default function ArtistsList({ scrollToTable, onDeselect }: { scrollToTab
                             key={table.tableNumber}
                             table={table}
                             isOpen={openCardId === table.tableNumber}
-                            onToggle={() => setOpenCardId(openCardId === table.tableNumber ? null : table.tableNumber)}
+                            onToggle={() => {
+                                const opening = openCardId !== table.tableNumber;
+                                setOpenCardId(opening ? table.tableNumber : null);
+                                if (opening) {
+                                    onSelectTable?.(table.tableNumber);
+                                    requestAnimationFrame(() => {
+                                        const el = document.querySelector(`[data-table="${table.tableNumber}"]`);
+                                        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                    });
+                                } else {
+                                    onSelectTable?.(null);
+                                }
+                            }}
                         />
                     ))}
                 </div>

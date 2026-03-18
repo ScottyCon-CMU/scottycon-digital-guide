@@ -124,7 +124,7 @@ export default function ArtistsPage() {
                                 </div>
                                 <div className="h-px w-24 bg-slate-300" />
                             </div>
-                            <h1 className="font-sans font-bold text-5xl lg:text-4xl tracking-tighter text-slate-900 mt-2">
+                            <h1 className="font-sans font-bold text-5xl sm:text-6xl tracking-tighter text-slate-900 mt-2">
                                 Artists Alley
                             </h1>
                         </div>
@@ -172,7 +172,7 @@ export default function ArtistsPage() {
 
                     {/* List — always on desktop, only in list view on mobile */}
                     <div className={view === "list" ? "block" : "hidden lg:block"}>
-                        <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} />
+                        <ArtistsList scrollToTable={selectedTable} onDeselect={() => setSelectedTable(null)} onSelectTable={setSelectedTable} />
                     </div>
                 </div>
 
