@@ -23,12 +23,12 @@ export default function EventsPage() {
           <h1/>
         </div>
         {/* Toggle Bar */}
-        <div className="flex mt-4 w-full bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden">
+        <div className="flex mt-4 h-12 w-full bg-surface backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden">
           <button
             className={`flex-1 py-3 font-mono font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
               !calView
                 ? "bg-primary text-white shadow-sm"
-                : "text-slate-600 hover:bg-primary/10"
+                : "text-black hover:bg-primary/10"
             }`}
             onClick={() => changeCalView(false)}
           >
@@ -38,7 +38,7 @@ export default function EventsPage() {
             className={`flex-1 py-3 font-mono font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
               calView
                 ? "bg-primary text-white shadow-sm"
-                : "text-slate-600 hover:bg-primary/10"
+                : "text-black hover:bg-primary/10"
             }`}
             onClick={() => changeCalView(true)}
           >

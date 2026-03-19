@@ -106,13 +106,13 @@ export default function EventsCalendar({ floor }: Props) {
 
       <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm">
         {/* Scrollable container */}
-        <div className="overflow-x-auto overflow-y-auto max-h-250">
+        <div className="overflow-x-auto overflow-y-auto max-h-[1000px]">
           <div className="relative" style={{ minWidth: "1440px" }}>
             {/* Time header - sticky */}
             <div className="sticky top-0 z-20 bg-white border-b-2 border-primary/30">
               <div className="flex">
                 {/* Empty corner for room labels */}
-                <div className="w-25 shrink-0 border-r-2 border-primary/30 p-3 sticky left-0 z-30 bg-white">
+                <div className="w-27 flex-shrink-0 border-r-2 border-primary/30 p-3 sticky left-0 z-30 bg-white">
                   <span className="font-sans font-bold text-sm text-slate-700 uppercase">
                     Room & Time
                   </span>
@@ -122,7 +122,7 @@ export default function EventsCalendar({ floor }: Props) {
                   {slots.map((time) => (
                     <div
                       key={time}
-                      className="shrink-0 border-r border-slate-200 p-3 text-center bg-white"
+                      className="flex-shrink-0 border-r border-slate-200 p-3 text-center bg-white"
                       style={{ width: "120px" }}
                     >
                       <span className="font-sans font-bold text-sm text-slate-700">
@@ -144,20 +144,20 @@ export default function EventsCalendar({ floor }: Props) {
                   }`}
                 >
                   {/* Room label - sticky */}
-                  <div className="w-25 shrink-0 border-r-2 border-primary/30 p-3 bg-white sticky left-0 z-10">
+                  <div className="w-27 flex-shrink-0 border-r-2 border-primary/30 p-3 bg-white sticky left-0 z-10">
                     <span className="font-sans font-semibold text-xs text-slate-900">
                       {room[0]}
                     </span>
                   </div>
 
                   {/* Event grid */}
-                  <div className="flex-1 relative" style={{ height: "80px" }}>
+                  <div className="flex-1 relative" style={{ height: "100px" }}>
                     {/* Time grid lines */}
                     <div className="absolute inset-0 flex">
                       {slots.map((time) => (
                         <div
                           key={time}
-                          className="shrink-0 border-r border-slate-200"
+                          className="flex-shrink-0 border-r border-slate-200"
                           style={{ width: "120px" }}
                         />
                       ))}
@@ -199,15 +199,15 @@ export default function EventsCalendar({ floor }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div
             ref={modalRef}
-            className="bg-white/90 backdrop-blur-md border border-primary/30 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 relative overflow-hidden max-h-[60vh] flex flex-col"
+            className="bg-background/70 backdrop-blur-md border border-primary/30 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 relative overflow-hidden max-h-[60vh] flex flex-col"
           >
             {/* Decorative Corner */}
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary rounded-tr-lg" />
 
             {/* Close button */}
             <button
               onClick={() => setSelectedEvent(null)}
-              className="absolute top-3 right-3 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              className="absolute top-3 right-3 text-foreground hover:accent transition-colors cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -215,38 +215,38 @@ export default function EventsCalendar({ floor }: Props) {
             </button>
 
             {/* Time Badge */}
-            <div className="flex items-center gap-3 mb-3 shrink-0">
-              <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+            <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+              <div className="bg-secondary text-background font-mono font-semibold text-xs px-3 py-1 rounded-sm">
                 {formatTime(selectedEvent.startTime)} - {formatTime(selectedEvent.endTime)}
               </div>
-              <div className="bg-secondary/10 text-primary font-mono text-xs px-2 py-1 rounded-sm">
+              <div className="bg-secondary/10 text-secondary font-mono text-xs px-2 py-1 rounded-sm">
                 {selectedEvent.room[0]}
               </div>
             </div>
 
             {/* Event Title */}
-            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2 shrink-0">
+            <h3 className="font-sans font-bold text-xl text-foreground mb-2 flex-shrink-0">
               {selectedEvent.title}
             </h3>
 
             {/* Genre */}
-            <div className="font-mono text-xs text-slate-600 mb-3 uppercase tracking-wider shrink-0">
+            <div className="font-mono text-xs text-foreground mb-3 uppercase tracking-wider flex-shrink-0">
               {selectedEvent.genre}
             </div>
 
             {/* Description */}
             {selectedEvent.description !== "" && (
-              <div className="text-sm text-slate-700 leading-relaxed mb-4 wrap-break-word max-w-none overflow-y-auto overflow-x-hidden min-h-0 whitespace-pre-wrap">
+              <div className="text-sm text-foreground leading-relaxed mb-4 break-words max-w-none overflow-y-auto overflow-x-hidden min-h-0 whitespace-pre-wrap">
                 {formatDescription(selectedEvent.description)}
               </div>
             )}
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 shrink-0">
+            <div className="flex flex-wrap gap-2 flex-shrink-0">
               {selectedEvent.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="font-mono text-xs text-primary/70 bg-primary/5 px-2 py-1 rounded border border-primary/20"
+                  className="font-mono text-xs text-secondary/70 bg-secondary/5 px-2 py-1 rounded border border-primary/20"
                 >
                   #{tag}
                 </span>
