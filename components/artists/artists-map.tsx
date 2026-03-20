@@ -69,7 +69,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
     return (
         <div
             onClick={onBackgroundClick}
-            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-secondary shadow-sm bg-surface hover:bg-blue-400/10 dark:hover:bg-blue-600/10 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-colors duration-200"
+            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-secondary shadow-sm hover:shadow-md hover:scale-[1.01] bg-surface hover:bg-blue-400/5 dark:hover:bg-blue-600/10 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-all duration-200"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
