@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { useTheme } from "next-themes";
 import { tableRects } from "@/lib/data";
 
 // Shared dimensions for all table squares
@@ -14,8 +18,22 @@ const labelProps = {
 };
 
 // Shared interaction styles per category
-const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s" };
-const clickStyle = { cursor: "pointer" as const, transition: "opacity 0.2s" };
+const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s, filter 0.15s" };
+const clickStyle = { cursor: "pointer" as const, transition: "opacity 0.2s, filter 0.15s" };
+
+// Brightness filter driven by React state (CSS filter in SVG <style> is unreliable in WebKit)
+function getFilter(isDark: boolean, isSelected: boolean, isHovered: boolean): string | undefined {
+    if (isDark) {
+        if (isHovered && isSelected) return "brightness(1.50)";
+        if (isSelected) return "brightness(1.20)";
+        if (isHovered) return "brightness(1.35)";
+    } else {
+        if (isHovered && isSelected) return "brightness(0.60)";
+        if (isSelected) return "brightness(0.70)";
+        if (isHovered) return "brightness(0.82)";
+    }
+    return undefined;
+}
 
 // Vendor rects with visual-center coords for inline labels
 const vendorRects = [
@@ -44,10 +62,14 @@ interface ArtistsMapProps {
 }
 
 export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundClick }: ArtistsMapProps) {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+    const [hoveredTable, setHoveredTable] = useState<number | null>(null);
+
     return (
         <div
             onClick={onBackgroundClick}
-            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-secondary shadow-sm bg-surface hover:bg-black/10 dark:hover:bg-black/25 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-colors duration-200"
+            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-secondary shadow-sm bg-surface hover:bg-blue-400/10 dark:hover:bg-blue-600/10 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-colors duration-200"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -71,27 +93,12 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                         .table-interactive:active { transform: scale(0.93); }
 
                         /* Light mode: bright saturated colors */
-                        .table-artist                                               { fill: #4a8fd4; transition: filter 0.15s; }
-                        .table-vendor, .table-info                                  { transition: filter 0.15s; }
+                        .table-artist                                               { fill: #4a8fd4; }
 
                         /* Dark mode: restore original colors */
                         [data-theme="dark"] .table-artist                           { fill: #4e7fbf; }
                         [data-theme="dark"] .cls-3                                  { fill: #f39aca; }
                         [data-theme="dark"] .cls-4                                  { fill: #75cb74; }
-
-                        /* Hover/select hierarchy via brightness (works on any fill color) */
-                        .table-interactive:hover  .table-artist,
-                        .table-interactive:hover  .table-vendor,
-                        .table-interactive:hover  .table-info                       { filter: brightness(0.82); }
-                        .table-artist.table-selected,
-                        .table-vendor.table-selected,
-                        .table-info.table-selected                                  { filter: brightness(0.70); }
-                        .table-interactive:hover  .table-artist.table-selected,
-                        .table-interactive:hover  .table-vendor.table-selected,
-                        .table-interactive:hover  .table-info.table-selected        { filter: brightness(0.60); }
-                        .table-interactive:active .table-artist,
-                        .table-interactive:active .table-vendor,
-                        .table-interactive:active .table-info                       { filter: brightness(0.52); }
                     `}</style>
                 </defs>
 
@@ -125,14 +132,17 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <g id="Tables">
                     {/* Artist tables */}
                     {tableRects.map((t) => (
-                        <g key={t.tableNumber} className="table-interactive">
+                        <g key={t.tableNumber} className="table-interactive"
+                            onMouseEnter={() => setHoveredTable(t.tableNumber)}
+                            onMouseLeave={() => setHoveredTable(null)}
+                        >
                             <rect
                                 x={t.x} y={t.y - 5.4} {...R}
                                 transform={t.transform}
-                                className={`table-artist${selectedTable === t.tableNumber ? " table-selected" : ""}`}
+                                className="table-artist"
                                 stroke="rgba(255, 255, 255, 0.35)"
                                 strokeMiterlimit={10}
-                                style={artistStyle}
+                                style={{ ...artistStyle, filter: getFilter(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(t.tableNumber); }}
                             />
                             <text x={t.cx} y={t.cy} {...labelProps}>{t.tableNumber}</text>
@@ -141,12 +151,15 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
 
                     {/* Vendor tables */}
                     {vendorRects.map((v) => (
-                        <g key={v.id} className="table-interactive">
+                        <g key={v.id} className="table-interactive"
+                            onMouseEnter={() => setHoveredTable(v.id)}
+                            onMouseLeave={() => setHoveredTable(null)}
+                        >
                             <rect
-                                className={`cls-3 table-vendor${selectedTable === v.id ? " table-selected" : ""}`}
+                                className="cls-3 table-vendor"
                                 x={v.x} y={v.y} {...R}
                                 transform={v.transform}
-                                style={clickStyle}
+                                style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === v.id, hoveredTable === v.id) }}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(v.id); }}
                             />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
@@ -155,12 +168,15 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
 
                     {/* Info tables */}
                     {infoRects.map((r) => (
-                        <g key={r.id} className="table-interactive">
+                        <g key={r.id} className="table-interactive"
+                            onMouseEnter={() => setHoveredTable(r.id)}
+                            onMouseLeave={() => setHoveredTable(null)}
+                        >
                             <rect
-                                className={`${r.className} table-info${selectedTable === r.id ? " table-selected" : ""}`}
+                                className={`${r.className} table-info`}
                                 x={r.x} y={r.y} {...R}
                                 transform={r.transform}
-                                style={clickStyle}
+                                style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === r.id, hoveredTable === r.id) }}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
                             />
                         </g>

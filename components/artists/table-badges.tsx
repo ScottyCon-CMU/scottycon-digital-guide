@@ -1,12 +1,11 @@
 import { Users, Store, Info } from "lucide-react";
 import type { AlleyTable } from "@/lib/data";
 
-export function TableTypeChip({ type, className = "bg-primary/10 text-secondary" }: {
+export function TableTypeChip({ type }: {
     type: AlleyTable["type"];
-    className?: string;
 }) {
     return (
-        <div className={`font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1 ${className}`}>
+        <div className="font-mono text-xs px-2 py-1 rounded-sm flex items-center gap-1 bg-primary/10 text-secondary">
             {type === "artist" ? <><Users size={10} />Artists</>
                 : type === "vendor" ? <><Store size={10} />Vendor</>
                     : <><Info size={10} />Information</>}
@@ -16,7 +15,10 @@ export function TableTypeChip({ type, className = "bg-primary/10 text-secondary"
 
 export function VendorBadge({ tableNumber }: { tableNumber: number }) {
     return (
-        <div className="font-mono font-semibold text-xs px-3 py-1 rounded-sm bg-accent/30 text-secondary">
+        <div
+            className="font-mono font-semibold text-xs px-3 py-1 rounded-sm text-white"
+            style={{ background: "var(--table-vendor)" }}
+        >
             Vendor {Math.abs(tableNumber)}
         </div>
     );
