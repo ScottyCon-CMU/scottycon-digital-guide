@@ -125,3 +125,75 @@ Duel of the Fates
     tags: ["Music"],
   },
 ];
+
+export const sponsors = [
+  {
+    name: "Sponsor 1",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+  },
+  {
+    name: "Sponsor 2",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+  },
+  {
+    name: "Sponsor 3",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  },
+  {
+    name: "Sponsor 4",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  },
+  {
+    name: "Sponsor 5",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  },
+  {
+    name: "Sponsor 6",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
+    description:
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  },
+];
+
+export const members = [
+  {
+    name: "Braden Lee",
+    position: "President"
+  },
+  {
+    name: "Member 1",
+    position: "??"
+  },
+  {
+    name: "Member 2",
+    position: "??"
+  },
+  {
+    name: "Member 3",
+    position: "??"
+  },
+  {
+    name: "Member 4",
+    position: "??"
+  },
+  {
+    name: "Member 5",
+    position: "??"
+  },
+];
