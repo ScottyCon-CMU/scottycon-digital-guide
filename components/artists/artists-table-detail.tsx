@@ -34,9 +34,9 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
                 </div>
 
                 {/* Name */}
-                <h3 className="font-sans font-bold text-2xl text-slate-900 mb-2">
+                <h3 className="font-sans font-bold text-2xl text-foreground mb-2">
                     {tableName(table) || (
-                        <span className="text-slate-500 italic">Artist TBA</span>
+                        <span className="text-foreground/40 italic">Artist TBA</span>
                     )}
                 </h3>
 
@@ -47,8 +47,8 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
 
                 {/* Description */}
                 {table.description
-                    ? <p className="text-sm text-slate-700 leading-relaxed mb-4 break-words">{table.description}</p>
-                    : <p className="text-sm text-slate-500 italic mb-4">No details yet — check back soon!</p>
+                    ? <p className="text-sm text-foreground/80 leading-relaxed mb-4 break-words">{table.description}</p>
+                    : <p className="text-sm text-foreground/40 italic mb-4">No details yet — check back soon!</p>
                 }
 
                 {/* Optional image */}
