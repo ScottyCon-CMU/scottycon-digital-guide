@@ -17,12 +17,15 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
         <>
             <div className="bg-surface backdrop-blur-md border border-secondary rounded-lg overflow-hidden shadow-sm p-4 relative">
                 {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary dark:border-foreground rounded-tr-lg" />
 
                 {/* Table number + type badges */}
                 <div className="flex items-center gap-3 mb-3">
                     {table.tableNumber > 0 && (
-                        <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                        <div
+                            className="text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm"
+                            style={{ background: `var(--table-${table.type})` }}
+                        >
                             Table {table.tableNumber}
                         </div>
                     )}

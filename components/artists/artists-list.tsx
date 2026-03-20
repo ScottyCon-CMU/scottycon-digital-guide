@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useTheme } from "next-themes";
 import { alleyTables, tableName } from "@/lib/data";
 import type { AlleyTable } from "@/lib/data";
 import { Search, SlidersHorizontal, Check, X, ChevronUp } from "lucide-react";
@@ -18,12 +19,15 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
             className="bg-surface backdrop-blur-md border border-secondary rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer p-4 relative"
         >
             {/* Decorative Corner */}
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary dark:border-foreground rounded-tr-lg" />
 
             {/* Table number badge + type badge */}
             <div className="flex items-center gap-3 mb-3">
                 {table.tableNumber > 0 && (
-                    <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
+                    <div
+                        className="text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm"
+                        style={{ background: `var(--table-${table.type})` }}
+                    >
                         Table {table.tableNumber}
                     </div>
                 )}
@@ -96,6 +100,9 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
     const [search, setSearch] = useState("");
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
+    const [searchFocused, setSearchFocused] = useState(false);
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
     const [openCardId, setOpenCardId] = useState<number | null>(null);
     const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
     const [showScrollTop, setShowScrollTop] = useState(false);
@@ -240,15 +247,21 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search by name..."
-                                className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-secondary rounded-l-lg font-mono text-sm text-foreground themed-placeholder focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                onFocus={() => setSearchFocused(true)}
+                                onBlur={() => setSearchFocused(false)}
+                                className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-secondary rounded-l-lg font-mono text-sm text-foreground themed-placeholder focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:focus:border-foreground dark:focus:ring-foreground transition-all"
                             />
                         </div>
                         <div ref={filterRef} className="relative overflow-visible">
                             <button
                                 onClick={() => setFilterOpen((prev) => !prev)}
-                                className={`relative px-3.5 py-2.5 border border-l-0 border-secondary rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
-                                    ? "bg-primary text-white"
-                                    : "bg-surface backdrop-blur-md text-foreground/60 hover:bg-primary/10"
+                                className={`relative px-3.5 py-2.5 border border-l-0 rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
+                                    ? "bg-primary text-white border-primary"
+                                    : searchFocused
+                                        ? isDark
+                                            ? "bg-surface backdrop-blur-md text-foreground/60 border-foreground ring-1 ring-foreground"
+                                            : "bg-surface backdrop-blur-md text-foreground/60 border-primary ring-1 ring-primary"
+                                        : "bg-surface backdrop-blur-md text-foreground/60 hover:bg-primary/10 border-secondary"
                                     }`}
                             >
                                 <SlidersHorizontal className="w-4 h-4" />
