@@ -41,24 +41,21 @@ function getScale(isSelected: boolean, isHovered: boolean): string {
     return "scale(1)";
 }
 
-// Vendor rects with visual-center coords for inline labels
+// Vendor rects — all in screen space (no SVG transforms), so animations always scale from the right center.
+// Right col (x≈74): 1–3 top→bottom · Left col (x≈13): 4–6 top→bottom
 const vendorRects = [
-    { id: -1, x: 13.1, y: 382.1, cx: 23.9, cy: 392.9, transform: "translate(-369 416.8) rotate(-90)" },
-    { id: -2, x: 13.1, y: 403.7, cx: 23.9, cy: 414.5, transform: "translate(-390.6 438.4) rotate(-90)" },
-    { id: -3, x: 13.1, y: 245.3, cx: 23.9, cy: 256.1, transform: "translate(-232.2 280) rotate(-90)" },
-    { id: -4, x: 13.1, y: 324.5, cx: 23.9, cy: 335.3, transform: "translate(-311.4 359.2) rotate(-90)" },
-    { id: -5, x: 13.1, y: 302.9, cx: 23.9, cy: 313.7, transform: "translate(-289.8 337.6) rotate(-90)" },
-    { id: -6, x: 74.3, y: 403.7, cx: 85.1, cy: 414.5, transform: "translate(-329.4 499.6) rotate(-90)" },
-    { id: -7, x: 74.3, y: 382.1, cx: 85.1, cy: 392.9, transform: "translate(-307.8 478) rotate(-90)" },
-    { id: -8, x: 74.3, y: 324.5, cx: 85.1, cy: 335.3, transform: "translate(-250.2 420.4) rotate(-90)" },
-    { id: -9, x: 74.3, y: 266.9, cx: 85.1, cy: 277.7, transform: "translate(-192.6 362.8) rotate(-90)" },
+    { id: -1, vx: 74.3, vy: 266.9, vw: 21.6, vh: 21.6, cx: 85.1,  cy: 277.7 }, // right 1
+    { id: -2, vx: 74.3, vy: 324.5, vw: 21.6, vh: 21.6, cx: 85.1,  cy: 335.3 }, // right 2
+    { id: -3, vx: 74.3, vy: 382.1, vw: 21.6, vh: 43.2, cx: 85.1,  cy: 403.7 }, // right 3+4 merged
+    { id: -4, vx: 13.1, vy: 266.9, vw: 21.6, vh: 21.6, cx: 23.9,  cy: 277.7 }, // left 4
+    { id: -5, vx: 13.1, vy: 324.5, vw: 21.6, vh: 43.2, cx: 23.9,  cy: 346.1 }, // left 5+6 merged
+    { id: -6, vx: 13.1, vy: 403.7, vw: 21.6, vh: 21.6, cx: 23.9,  cy: 414.5 }, // left 6
 ];
 
-// Info rects (dark blue + green)
+// Info rects — w/h/cx/cy explicit so merged rect dimensions work correctly
 const infoRects = [
-    { id: -100, x: 340.7, y: 79.7, className: "cls-4", transform: "translate(261 442) rotate(-90)" },
-    { id: -101, x: 278.12, y: 30.7, className: "cls-4", transform: undefined },
-    { id: -102, x: 256.52, y: 30.7, className: "cls-4", transform: undefined },
+    { id: -100, x: 340.7,  y: 79.7, w: 21.6, h: 21.6, cx: 351.5,  cy:  90.5, className: "cls-4", transform: "translate(261 442) rotate(-90)" },
+    { id: -101, x: 256.52, y: 30.7, w: 43.2, h: 21.6, cx: 278.12, cy:  41.5, className: "cls-4", transform: undefined }, // -101 + -102 merged
 ];
 
 interface ArtistsMapProps {
@@ -186,22 +183,23 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <g id="Tables">
                     {/* Artist tables */}
                     {tableRects.map((t) => (
-                        <g key={t.tableNumber}
-                            className={`table-interactive${clickedTable === t.tableNumber ? " table-popping" : ""}`}
-                            style={{ transform: getScale(selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
-                            onMouseEnter={() => setHoveredTable(t.tableNumber)}
-                            onMouseLeave={() => setHoveredTable(null)}
-                        >
-                            <rect
-                                x={t.x} y={t.y - 5.4} {...R}
-                                transform={t.transform}
-                                className="table-artist"
-                                style={{ ...artistStyle, filter: getFilter(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
-                                onClick={(e) => { e.stopPropagation(); triggerPop(t.tableNumber); onTableClick(t.tableNumber); }}
-                            />
-                            <rect x={t.x} y={t.y - 5.4} {...R} transform={t.transform}
-                                fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
-                            <text x={t.cx} y={t.cy} {...labelProps}>{t.tableNumber}</text>
+                        <g key={t.tableNumber} transform={t.transform}>
+                            <g
+                                className={`table-interactive${clickedTable === t.tableNumber ? " table-popping" : ""}`}
+                                style={{ transform: getScale(selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
+                                onMouseEnter={() => setHoveredTable(t.tableNumber)}
+                                onMouseLeave={() => setHoveredTable(null)}
+                            >
+                                <rect
+                                    x={t.x} y={t.y - 5.4} {...R}
+                                    className="table-artist"
+                                    style={{ ...artistStyle, filter: getFilter(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
+                                    onClick={(e) => { e.stopPropagation(); triggerPop(t.tableNumber); onTableClick(t.tableNumber); }}
+                                />
+                                <rect x={t.x} y={t.y - 5.4} {...R}
+                                    fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
+                                <text x={t.x + 10.8} y={t.y + 5.4} {...labelProps} transform={`rotate(90, ${t.x + 10.8}, ${t.y + 5.4})`}>{t.tableNumber}</text>
+                            </g>
                         </g>
                     ))}
 
@@ -215,12 +213,11 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                         >
                             <rect
                                 className="cls-3 table-vendor"
-                                x={v.x} y={v.y} {...R}
-                                transform={v.transform}
+                                x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
                                 style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === v.id, hoveredTable === v.id) }}
                                 onClick={(e) => { e.stopPropagation(); triggerPop(v.id); onTableClick(v.id); }}
                             />
-                            <rect x={v.x} y={v.y} {...R} transform={v.transform}
+                            <rect x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
                         </g>
@@ -236,12 +233,12 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                         >
                             <rect
                                 className={`${r.className} table-info`}
-                                x={r.x} y={r.y} {...R}
+                                x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2}
                                 transform={r.transform}
                                 style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === r.id, hoveredTable === r.id) }}
                                 onClick={(e) => { e.stopPropagation(); triggerPop(r.id); onTableClick(r.id); }}
                             />
-                            <rect x={r.x} y={r.y} {...R} transform={r.transform}
+                            <rect x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2} transform={r.transform}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                         </g>
                     ))}
@@ -252,24 +249,21 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     {tableRects.map((t) => (
                         <rect
                             key={rippleGen?.id === t.tableNumber ? `ripple-${t.tableNumber}-${rippleGen.gen}` : `ripple-${t.tableNumber}-idle`}
-                            x={t.x} y={t.y - 5.4} {...R}
-                            transform={t.transform}
+                            x={t.cx - 10.8} y={t.cy - 10.8} {...R}
                             className={`table-ripple-ring artist-ripple${rippleGen?.id === t.tableNumber ? " table-rippling" : ""}`}
                         />
                     ))}
                     {vendorRects.map((v) => (
                         <rect
                             key={rippleGen?.id === v.id ? `ripple-${v.id}-${rippleGen.gen}` : `ripple-${v.id}-idle`}
-                            x={v.x} y={v.y} {...R}
-                            transform={v.transform}
+                            x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
                             className={`table-ripple-ring vendor-ripple${rippleGen?.id === v.id ? " table-rippling" : ""}`}
                         />
                     ))}
                     {infoRects.map((r) => (
                         <rect
                             key={rippleGen?.id === r.id ? `ripple-${r.id}-${rippleGen.gen}` : `ripple-${r.id}-idle`}
-                            x={r.x} y={r.y} {...R}
-                            transform={r.transform}
+                            x={r.cx - r.w / 2} y={r.cy - r.h / 2} width={r.w} height={r.h} rx={2} ry={2}
                             className={`table-ripple-ring info-ripple${rippleGen?.id === r.id ? " table-rippling" : ""}`}
                         />
                     ))}

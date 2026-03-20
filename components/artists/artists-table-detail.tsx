@@ -36,7 +36,7 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
                 {/* Name */}
                 <h3 className="font-sans font-bold text-2xl text-foreground mb-2">
                     {tableName(table) || (
-                        <span className="text-foreground/40 italic">Artist TBA</span>
+                        <span className="text-foreground/40 italic">{table.type === "vendor" ? "Vendor TBA" : "Artist TBA"}</span>
                     )}
                 </h3>
 
