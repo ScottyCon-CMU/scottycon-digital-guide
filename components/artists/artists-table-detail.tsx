@@ -40,11 +40,6 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
                     )}
                 </h3>
 
-                {/* Hours (info tables only) */}
-                {table.type === "info" && table.hours && (
-                    <p className="text-xs font-mono text-primary mb-2">🕐 {table.hours}</p>
-                )}
-
                 {/* Description */}
                 {table.description
                     ? <p className="text-sm text-foreground/80 leading-relaxed mb-4 break-words">{table.description}</p>

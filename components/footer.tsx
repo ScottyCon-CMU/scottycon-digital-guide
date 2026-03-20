@@ -31,18 +31,16 @@ export default function Footer() {
                 href={item.href}
                 className={`
                   flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300
-                  ${
-                    isActive
-                      ? "bg-primary text-background"
-                      : "text-secondary opacity-70 hover:opacity-100 hover:bg-secondary/10"
+                  ${isActive
+                    ? "bg-primary text-background"
+                    : "text-secondary opacity-70 hover:opacity-100 hover:bg-secondary/10"
                   }
                 `}
               >
                 <span>{item.icon}</span>
                 <span
-                  className={`font-mono text-xs font-bold tracking-wider hidden md:block ${
-                    isActive ? "block" : ""
-                  }`}
+                  className={`font-mono text-xs font-bold tracking-wider hidden md:block ${isActive ? "block" : ""
+                    }`}
                 >
                   {item.name}
                 </span>

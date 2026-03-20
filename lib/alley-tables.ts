@@ -134,6 +134,6 @@ export const vendorTables: VendorTable[] = [
 // -100 = dark blue desk · -101 and -102 = green desks (see map)
 
 export const infoTables: InfoTable[] = [
-    info(-100, "Artist Alley Registration",  "Check in here to receive your table badge, tote bag, and exhibitor packet. Have your confirmation email ready. Staff can also help resolve table assignment issues.", "10:00 AM – 5:00 PM"),
-    info(-101, "Information Desk",           "General convention information, maps, and lost & found. Staff here can direct you to programming rooms, restrooms, first aid, and accessibility services.",          "9:00 AM – 6:00 PM"),
+    info(-100, "AAC Stamp Cards",  "Info desk description here."),
+    info(-101, "ScottyCon Merch",  "Info desk description here."),
 ];
