@@ -35,6 +35,13 @@ function getFilter(isDark: boolean, isSelected: boolean, isHovered: boolean): st
     return undefined;
 }
 
+function getScale(isSelected: boolean, isHovered: boolean): string {
+    if (isSelected && isHovered) return "scale(1.18)";
+    if (isSelected) return "scale(1.10)";
+    if (isHovered) return "scale(1.12)";
+    return "scale(1)";
+}
+
 // Vendor rects with visual-center coords for inline labels
 const vendorRects = [
     { id: -1, x: 13.1, y: 382.1, cx: 23.9, cy: 392.9, transform: "translate(-369 416.8) rotate(-90)" },
@@ -64,6 +71,7 @@ interface ArtistsMapProps {
 export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundClick }: ArtistsMapProps) {
     const { resolvedTheme } = useTheme();
     const isDark = resolvedTheme === "dark";
+    const tableStroke = isDark ? "rgba(255,255,255,0.90)" : "rgba(255,255,255,0.70)";
     const [hoveredTable, setHoveredTable] = useState<number | null>(null);
 
     return (
@@ -79,7 +87,11 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <defs>
                     <style>{`
                         .cls-1 { fill: none; stroke: var(--primary); stroke-opacity: 0.2; stroke-miterlimit: 10; }
-                        .cls-2, .cls-3, .cls-4, .cls-5 { stroke: rgba(255, 255, 255, 0.35); stroke-miterlimit: 10; }
+                        .cls-2, .cls-3, .cls-4, .cls-5 { stroke-miterlimit: 10; }
+                        [data-theme="dark"] .cls-2,
+                        [data-theme="dark"] .cls-3,
+                        [data-theme="dark"] .cls-4,
+                        [data-theme="dark"] .cls-5 { stroke: rgba(255, 255, 255, 0.90); }
                         .cls-2 { fill: var(--primary); }
                         .cls-3 { fill: #f560b5; }
                         .cls-4 { fill: #3db83c; }
@@ -87,10 +99,8 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                         .table-interactive {
                             transform-box: fill-box;
                             transform-origin: center;
-                            transition: transform 0.15s;
+                            transition: transform 0.15s, filter 0.15s;
                         }
-                        .table-interactive:hover  { transform: scale(1.12); }
-                        .table-interactive:active { transform: scale(0.93); }
 
                         /* Light mode: bright saturated colors */
                         .table-artist                                               { fill: #4a8fd4; }
@@ -111,21 +121,27 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <g id="Entrances_Exits" pointerEvents="none">
                     {/* Exit — top-left */}
                     <rect x="13.1" y="9" width="55" height="13" rx="2"
-                        style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
+                        style={{ fill: "var(--primary)" }} />
+                    <rect x="13.1" y="9" width="55" height="13" rx="2"
+                        fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} />
                     <text x="40.6" y="15.5" textAnchor="middle" dominantBaseline="central"
-                        style={{ fill: "var(--primary)" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
+                        style={{ fill: "white" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
                         EXIT
                     </text>
-                    <polygon points="37.6,23.5 40.6,27.5 43.6,23.5" style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
+                    <polygon points="36.6,26 40.6,31.5 44.6,26"
+                        fill="var(--primary)" stroke={tableStroke} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
 
                     {/* Entrance — top-right (right edge kept at 362.3) */}
                     <rect x="307.3" y="9" width="55" height="13" rx="2"
-                        style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
+                        style={{ fill: "var(--primary)" }} />
+                    <rect x="307.3" y="9" width="55" height="13" rx="2"
+                        fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} />
                     <text x="334.8" y="15.5" textAnchor="middle" dominantBaseline="central"
-                        style={{ fill: "var(--primary)" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
+                        style={{ fill: "white" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
                         ENTRANCE
                     </text>
-                    <polygon points="331.8,23.5 334.8,27.5 337.8,23.5" style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
+                    <polygon points="330.8,26 334.8,31.5 338.8,26"
+                        fill="var(--primary)" stroke={tableStroke} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
                 </g>
 
                 {/* Tables */}
@@ -133,6 +149,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     {/* Artist tables */}
                     {tableRects.map((t) => (
                         <g key={t.tableNumber} className="table-interactive"
+                            style={{ transform: getScale(selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
                             onMouseEnter={() => setHoveredTable(t.tableNumber)}
                             onMouseLeave={() => setHoveredTable(null)}
                         >
@@ -140,11 +157,11 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 x={t.x} y={t.y - 5.4} {...R}
                                 transform={t.transform}
                                 className="table-artist"
-                                stroke="rgba(255, 255, 255, 0.35)"
-                                strokeMiterlimit={10}
                                 style={{ ...artistStyle, filter: getFilter(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(t.tableNumber); }}
                             />
+                            <rect x={t.x} y={t.y - 5.4} {...R} transform={t.transform}
+                                fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                             <text x={t.cx} y={t.cy} {...labelProps}>{t.tableNumber}</text>
                         </g>
                     ))}
@@ -152,6 +169,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     {/* Vendor tables */}
                     {vendorRects.map((v) => (
                         <g key={v.id} className="table-interactive"
+                            style={{ transform: getScale(selectedTable === v.id, hoveredTable === v.id) }}
                             onMouseEnter={() => setHoveredTable(v.id)}
                             onMouseLeave={() => setHoveredTable(null)}
                         >
@@ -162,6 +180,8 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === v.id, hoveredTable === v.id) }}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(v.id); }}
                             />
+                            <rect x={v.x} y={v.y} {...R} transform={v.transform}
+                                fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
                         </g>
                     ))}
@@ -169,6 +189,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                     {/* Info tables */}
                     {infoRects.map((r) => (
                         <g key={r.id} className="table-interactive"
+                            style={{ transform: getScale(selectedTable === r.id, hoveredTable === r.id) }}
                             onMouseEnter={() => setHoveredTable(r.id)}
                             onMouseLeave={() => setHoveredTable(null)}
                         >
@@ -179,6 +200,8 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === r.id, hoveredTable === r.id) }}
                                 onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
                             />
+                            <rect x={r.x} y={r.y} {...R} transform={r.transform}
+                                fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                         </g>
                     ))}
                 </g>

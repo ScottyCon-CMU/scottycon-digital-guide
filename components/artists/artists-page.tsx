@@ -92,7 +92,7 @@ export default function ArtistsPage() {
             <p className="font-mono text-xs text-foreground uppercase tracking-wider mb-3">How to use</p>
             <h3 className="font-sans font-bold text-xl text-foreground mb-2">Explore the map</h3>
             <p className="text-sm text-foreground/70 leading-relaxed">
-                Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
+                Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork. Tap on the blank area of the map to deselect.
             </p>
             <div className="mt-4 pt-4 border-t border-secondary/20 flex flex-wrap gap-3 font-mono text-xs text-foreground">
                 <span className="flex items-center gap-1.5">
