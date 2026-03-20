@@ -19,7 +19,7 @@ const labelProps = {
 
 // Shared interaction styles per category
 const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s" };
-const clickStyle  = { cursor: "pointer" as const };
+const clickStyle = { cursor: "pointer" as const };
 
 // SVG overlay rect opacity — replaces CSS filter brightness() which is unreliable
 // in mobile WebKit, especially inside SVG-transformed ancestors.
@@ -27,12 +27,12 @@ const clickStyle  = { cursor: "pointer" as const };
 function getOverlayOpacity(isDark: boolean, isSelected: boolean, isHovered: boolean): number {
     if (isDark) {
         if (isSelected && isHovered) return 0.35;
-        if (isSelected)              return 0.18;
-        if (isHovered)               return 0.28;
+        if (isSelected) return 0.18;
+        if (isHovered) return 0.28;
     } else {
         if (isSelected && isHovered) return 0.40;
-        if (isSelected)              return 0.28;
-        if (isHovered)               return 0.18;
+        if (isSelected) return 0.28;
+        if (isHovered) return 0.18;
     }
     return 0;
 }
@@ -46,18 +46,18 @@ function getScale(isSelected: boolean, isHovered: boolean): string {
 // Vendor rects — all in screen space (no SVG transforms), so animations always scale from the right center.
 // Right col (x≈74): 1–3 top→bottom · Left col (x≈13): 4–6 top→bottom
 const vendorRects = [
-    { id: -1, vx: 74.3, vy: 266.9, vw: 21.6, vh: 21.6, cx: 85.1,  cy: 277.7 }, // right 1
-    { id: -2, vx: 74.3, vy: 324.5, vw: 21.6, vh: 21.6, cx: 85.1,  cy: 335.3 }, // right 2
-    { id: -3, vx: 74.3, vy: 382.1, vw: 21.6, vh: 43.2, cx: 85.1,  cy: 403.7 }, // right 3+4 merged
-    { id: -4, vx: 13.1, vy: 266.9, vw: 21.6, vh: 21.6, cx: 23.9,  cy: 277.7 }, // left 4
-    { id: -5, vx: 13.1, vy: 324.5, vw: 21.6, vh: 43.2, cx: 23.9,  cy: 346.1 }, // left 5+6 merged
-    { id: -6, vx: 13.1, vy: 403.7, vw: 21.6, vh: 21.6, cx: 23.9,  cy: 414.5 }, // left 6
+    { id: -1, vx: 74.3, vy: 266.9, vw: 21.6, vh: 21.6, cx: 85.1, cy: 277.7 }, // right 1
+    { id: -2, vx: 74.3, vy: 324.5, vw: 21.6, vh: 21.6, cx: 85.1, cy: 335.3 }, // right 2
+    { id: -3, vx: 74.3, vy: 382.1, vw: 21.6, vh: 43.2, cx: 85.1, cy: 403.7 }, // right 3+4 merged
+    { id: -4, vx: 13.1, vy: 266.9, vw: 21.6, vh: 21.6, cx: 23.9, cy: 277.7 }, // left 4
+    { id: -5, vx: 13.1, vy: 324.5, vw: 21.6, vh: 43.2, cx: 23.9, cy: 346.1 }, // left 5+6 merged
+    { id: -6, vx: 13.1, vy: 403.7, vw: 21.6, vh: 21.6, cx: 23.9, cy: 414.5 }, // left 6
 ];
 
 // Info rects — w/h/cx/cy explicit so merged rect dimensions work correctly
 const infoRects = [
-    { id: -100, x: 340.7,  y: 79.7, w: 21.6, h: 21.6, cx: 351.5,  cy:  90.5, className: "cls-4", transform: "translate(261 442) rotate(-90)" },
-    { id: -101, x: 256.52, y: 30.7, w: 43.2, h: 21.6, cx: 278.12, cy:  41.5, className: "cls-4", transform: undefined }, // -101 + -102 merged
+    { id: -100, x: 340.7, y: 79.7, w: 21.6, h: 21.6, cx: 351.5, cy: 90.5, className: "cls-4", transform: "translate(261 442) rotate(-90)" },
+    { id: -101, x: 256.52, y: 30.7, w: 43.2, h: 21.6, cx: 278.12, cy: 41.5, className: "cls-4", transform: undefined }, // -101 + -102 merged
 ];
 
 interface ArtistsMapProps {

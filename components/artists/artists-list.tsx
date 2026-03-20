@@ -59,11 +59,6 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
                 }}
             >
                 <div className="overflow-hidden">
-                    {/* Hours (info tables only) */}
-                    {table.type === "info" && table.hours && (
-                        <p className="text-xs font-mono text-secondary mb-2 pt-0.5">🕐 {table.hours}</p>
-                    )}
-
                     {/* Description */}
                     <div className="text-sm leading-relaxed mb-2 break-words pt-0.5">
                         {table.description
@@ -376,9 +371,8 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
             {portalTarget && createPortal(
                 <button
                     onClick={handleScrollToTop}
-                    className={`fixed bottom-28 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
-                        showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
-                    }`}
+                    className={`fixed bottom-28 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
+                        }`}
                     aria-label="Back to top"
                 >
                     <ChevronUp className="w-4 h-4" strokeWidth={2.5} />
