@@ -18,21 +18,23 @@ const labelProps = {
 };
 
 // Shared interaction styles per category
-const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s, filter 0.15s" };
-const clickStyle = { cursor: "pointer" as const, transition: "opacity 0.2s, filter 0.15s" };
+const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s" };
+const clickStyle  = { cursor: "pointer" as const };
 
-// Brightness filter driven by React state (CSS filter in SVG <style> is unreliable in WebKit)
-function getFilter(isDark: boolean, isSelected: boolean, isHovered: boolean): string | undefined {
+// SVG overlay rect opacity — replaces CSS filter brightness() which is unreliable
+// in mobile WebKit, especially inside SVG-transformed ancestors.
+// A semi-transparent white (dark mode) or black (light mode) rect is overlaid on top.
+function getOverlayOpacity(isDark: boolean, isSelected: boolean, isHovered: boolean): number {
     if (isDark) {
-        if (isHovered && isSelected) return "brightness(1.50)";
-        if (isSelected) return "brightness(1.20)";
-        if (isHovered) return "brightness(1.35)";
+        if (isSelected && isHovered) return 0.35;
+        if (isSelected)              return 0.18;
+        if (isHovered)               return 0.28;
     } else {
-        if (isHovered && isSelected) return "brightness(0.60)";
-        if (isSelected) return "brightness(0.70)";
-        if (isHovered) return "brightness(0.82)";
+        if (isSelected && isHovered) return 0.40;
+        if (isSelected)              return 0.28;
+        if (isHovered)               return 0.18;
     }
-    return undefined;
+    return 0;
 }
 
 function getScale(isSelected: boolean, isHovered: boolean): string {
@@ -193,9 +195,13 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 <rect
                                     x={t.x} y={t.y - 5.4} {...R}
                                     className="table-artist"
-                                    style={{ ...artistStyle, filter: getFilter(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
+                                    style={artistStyle}
                                     onClick={(e) => { e.stopPropagation(); triggerPop(t.tableNumber); onTableClick(t.tableNumber); }}
                                 />
+                                <rect x={t.x} y={t.y - 5.4} {...R}
+                                    fill={isDark ? "white" : "black"}
+                                    fillOpacity={getOverlayOpacity(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber)}
+                                    pointerEvents="none" style={{ transition: "fill-opacity 0.15s" }} />
                                 <rect x={t.x} y={t.y - 5.4} {...R}
                                     fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                                 <text x={t.x + 10.8} y={t.y + 5.4} {...labelProps} transform={`rotate(90, ${t.x + 10.8}, ${t.y + 5.4})`}>{t.tableNumber}</text>
@@ -214,9 +220,13 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             <rect
                                 className="cls-3 table-vendor"
                                 x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
-                                style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === v.id, hoveredTable === v.id) }}
+                                style={clickStyle}
                                 onClick={(e) => { e.stopPropagation(); triggerPop(v.id); onTableClick(v.id); }}
                             />
+                            <rect x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
+                                fill={isDark ? "white" : "black"}
+                                fillOpacity={getOverlayOpacity(isDark, selectedTable === v.id, hoveredTable === v.id)}
+                                pointerEvents="none" style={{ transition: "fill-opacity 0.15s" }} />
                             <rect x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
@@ -235,9 +245,13 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 className={`${r.className} table-info`}
                                 x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2}
                                 transform={r.transform}
-                                style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === r.id, hoveredTable === r.id) }}
+                                style={clickStyle}
                                 onClick={(e) => { e.stopPropagation(); triggerPop(r.id); onTableClick(r.id); }}
                             />
+                            <rect x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2} transform={r.transform}
+                                fill={isDark ? "white" : "black"}
+                                fillOpacity={getOverlayOpacity(isDark, selectedTable === r.id, hoveredTable === r.id)}
+                                pointerEvents="none" style={{ transition: "fill-opacity 0.15s" }} />
                             <rect x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2} transform={r.transform}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                         </g>
