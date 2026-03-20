@@ -85,22 +85,22 @@ export default function ArtistsPage() {
 
     // Shared card content — rendered in two places (mobile above map, desktop sidebar)
     const hintCard = (
-        <div className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg p-6 relative">
+        <div className="bg-surface backdrop-blur-md border border-secondary rounded-lg p-6 relative">
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
-            <p className="font-mono text-xs text-primary uppercase tracking-wider mb-3">How to use</p>
-            <h3 className="font-sans font-bold text-xl text-slate-900 mb-2">Explore the map</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="font-mono text-xs text-secondary uppercase tracking-wider mb-3">How to use</p>
+            <h3 className="font-sans font-bold text-xl text-foreground mb-2">Explore the map</h3>
+            <p className="text-sm text-foreground/70 leading-relaxed">
                 Tap any square on the map to see which artist or vendor is hosting that table, along with their description and artwork.
             </p>
-            <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-3 font-mono text-xs text-slate-600">
+            <div className="mt-4 pt-4 border-t border-secondary/20 flex flex-wrap gap-3 font-mono text-xs text-foreground/60">
                 <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-sm bg-[#4e7fbf] inline-block" />Artist tables
+                    <span className="w-3 h-3 rounded-sm inline-block" style={{ background: "var(--table-artist)" }} />Artist tables
                 </span>
                 <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-sm bg-[#f39aca] inline-block" />Vendor tables
+                    <span className="w-3 h-3 rounded-sm inline-block" style={{ background: "var(--table-vendor)" }} />Vendor tables
                 </span>
                 <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-sm bg-[#75cb74] inline-block" />Info desks
+                    <span className="w-3 h-3 rounded-sm inline-block" style={{ background: "var(--table-info)" }} />Info desks
                 </span>
             </div>
         </div>

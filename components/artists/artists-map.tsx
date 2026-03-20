@@ -47,7 +47,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
     return (
         <div
             onClick={onBackgroundClick}
-            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-primary/30 shadow-sm bg-black/50 hover:bg-black/55 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-colors duration-200"
+            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-secondary shadow-sm bg-surface hover:bg-black/10 dark:hover:bg-black/25 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-colors duration-200"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -56,11 +56,11 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
             >
                 <defs>
                     <style>{`
-                        .cls-1 { fill: none; stroke: rgba(22, 88, 187, 0.2); stroke-miterlimit: 10; }
+                        .cls-1 { fill: none; stroke: var(--primary); stroke-opacity: 0.2; stroke-miterlimit: 10; }
                         .cls-2, .cls-3, .cls-4, .cls-5 { stroke: rgba(255, 255, 255, 0.35); stroke-miterlimit: 10; }
-                        .cls-2 { fill: #1657bb; }
-                        .cls-3 { fill: #f39aca; }
-                        .cls-4 { fill: #75cb74ff; }
+                        .cls-2 { fill: var(--primary); }
+                        .cls-3 { fill: #f560b5; }
+                        .cls-4 { fill: #3db83c; }
                         .cls-5 { fill: #bfb04eff; }
                         .table-interactive {
                             transform-box: fill-box;
@@ -70,22 +70,28 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                         .table-interactive:hover  { transform: scale(1.12); }
                         .table-interactive:active { transform: scale(0.93); }
 
-                        /* Artist fill hierarchy: unselected > hovered > selected > selected+hovered > active */
-                        .table-artist                                               { fill: #4e7fbf; transition: fill 0.15s; }
-                        .table-interactive:hover  .table-artist                    { fill: #3570b2; }
-                        .table-artist.table-selected                               { fill: #1e5499; }
-                        .table-interactive:hover  .table-artist.table-selected     { fill: #163d73; }
-                        .table-interactive:active .table-artist                    { fill: #0a2f5e; }
+                        /* Light mode: bright saturated colors */
+                        .table-artist                                               { fill: #4a8fd4; transition: filter 0.15s; }
+                        .table-vendor, .table-info                                  { transition: filter 0.15s; }
 
-                        /* Vendor & Info brightness hierarchy */
-                        .table-vendor, .table-info                                                        { transition: filter 0.15s; }
+                        /* Dark mode: restore original colors */
+                        [data-theme="dark"] .table-artist                           { fill: #4e7fbf; }
+                        [data-theme="dark"] .cls-3                                  { fill: #f39aca; }
+                        [data-theme="dark"] .cls-4                                  { fill: #75cb74; }
+
+                        /* Hover/select hierarchy via brightness (works on any fill color) */
+                        .table-interactive:hover  .table-artist,
                         .table-interactive:hover  .table-vendor,
-                        .table-interactive:hover  .table-info                                             { filter: brightness(0.82); }
-                        .table-vendor.table-selected, .table-info.table-selected                          { filter: brightness(0.70); }
+                        .table-interactive:hover  .table-info                       { filter: brightness(0.82); }
+                        .table-artist.table-selected,
+                        .table-vendor.table-selected,
+                        .table-info.table-selected                                  { filter: brightness(0.70); }
+                        .table-interactive:hover  .table-artist.table-selected,
                         .table-interactive:hover  .table-vendor.table-selected,
-                        .table-interactive:hover  .table-info.table-selected                              { filter: brightness(0.60); }
+                        .table-interactive:hover  .table-info.table-selected        { filter: brightness(0.60); }
+                        .table-interactive:active .table-artist,
                         .table-interactive:active .table-vendor,
-                        .table-interactive:active .table-info                                             { filter: brightness(0.52); }
+                        .table-interactive:active .table-info                       { filter: brightness(0.52); }
                     `}</style>
                 </defs>
 
@@ -98,21 +104,21 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <g id="Entrances_Exits" pointerEvents="none">
                     {/* Exit — top-left */}
                     <rect x="13.1" y="9" width="55" height="13" rx="2"
-                        fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
+                        style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
                     <text x="40.6" y="15.5" textAnchor="middle" dominantBaseline="central"
-                        fill="#1657bb" fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
+                        style={{ fill: "var(--primary)" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
                         EXIT
                     </text>
-                    <polygon points="37.6,23.5 40.6,27.5 43.6,23.5" fill="rgba(255,255,255,0.8)" stroke="rgba(22,88,187,0.6)" strokeWidth="0.5" />
+                    <polygon points="37.6,23.5 40.6,27.5 43.6,23.5" style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
 
                     {/* Entrance — top-right (right edge kept at 362.3) */}
                     <rect x="307.3" y="9" width="55" height="13" rx="2"
-                        fill="rgba(255, 255, 255, 0.8)" stroke="rgba(22, 88, 187, 0.6)" strokeWidth="0.5" />
+                        style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
                     <text x="334.8" y="15.5" textAnchor="middle" dominantBaseline="central"
-                        fill="#1657bb" fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
+                        style={{ fill: "var(--primary)" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
                         ENTRANCE
                     </text>
-                    <polygon points="331.8,23.5 334.8,27.5 337.8,23.5" fill="rgba(255,255,255,0.8)" stroke="rgba(22,88,187,0.6)" strokeWidth="0.5" />
+                    <polygon points="331.8,23.5 334.8,27.5 337.8,23.5" style={{ fill: "white", fillOpacity: 0.85, stroke: "var(--primary)", strokeOpacity: 0.6, strokeWidth: 0.5 }} />
                 </g>
 
                 {/* Tables */}
