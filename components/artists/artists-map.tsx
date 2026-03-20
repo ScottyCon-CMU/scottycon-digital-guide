@@ -36,7 +36,6 @@ function getFilter(isDark: boolean, isSelected: boolean, isHovered: boolean): st
 }
 
 function getScale(isSelected: boolean, isHovered: boolean): string {
-    if (isSelected && isHovered) return "scale(1.18)";
     if (isSelected) return "scale(1.10)";
     if (isHovered) return "scale(1.12)";
     return "scale(1)";
@@ -73,6 +72,15 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
     const isDark = resolvedTheme === "dark";
     const tableStroke = isDark ? "rgba(255,255,255,0.90)" : "rgba(255,255,255,0.70)";
     const [hoveredTable, setHoveredTable] = useState<number | null>(null);
+    const [clickedTable, setClickedTable] = useState<number | null>(null);
+    const [rippleGen, setRippleGen] = useState<{ id: number; gen: number } | null>(null);
+
+    function triggerPop(id: number) {
+        setClickedTable(id);
+        setTimeout(() => setClickedTable(null), 460);
+        setRippleGen(prev => ({ id, gen: (prev?.gen ?? 0) + 1 }));
+        setTimeout(() => setRippleGen(null), 650);
+    }
 
     return (
         <div
@@ -101,6 +109,36 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             transform-origin: center;
                             transition: transform 0.15s, filter 0.15s;
                         }
+                        .table-interactive.table-popping {
+                            transition: none;
+                            animation: table-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                        }
+                        @keyframes table-pop {
+                            0%   { transform: scale(1); }
+                            100% { transform: scale(1.10); }
+                        }
+
+                        .table-ripple-ring {
+                            transform-box: fill-box;
+                            transform-origin: center;
+                            fill: none;
+                            stroke-width: 4;
+                            pointer-events: none;
+                            opacity: 0;
+                        }
+                        .table-ripple-ring.table-rippling {
+                            animation: table-ripple 0.6s ease-out forwards;
+                        }
+                        @keyframes table-ripple {
+                            0%   { transform: scale(1);    stroke-width: 5;   opacity: 0.80; }
+                            100% { transform: scale(1.65); stroke-width: 0.2; opacity: 0; }
+                        }
+                        .artist-ripple { stroke: #4a8fd4; }
+                        .vendor-ripple { stroke: #f560b5; }
+                        .info-ripple   { stroke: #3db83c; }
+                        [data-theme="dark"] .artist-ripple { stroke: #4e7fbf; }
+                        [data-theme="dark"] .vendor-ripple { stroke: #f39aca; }
+                        [data-theme="dark"] .info-ripple   { stroke: #75cb74; }
 
                         /* Light mode: bright saturated colors */
                         .table-artist                                               { fill: #4a8fd4; }
@@ -148,7 +186,8 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                 <g id="Tables">
                     {/* Artist tables */}
                     {tableRects.map((t) => (
-                        <g key={t.tableNumber} className="table-interactive"
+                        <g key={t.tableNumber}
+                            className={`table-interactive${clickedTable === t.tableNumber ? " table-popping" : ""}`}
                             style={{ transform: getScale(selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
                             onMouseEnter={() => setHoveredTable(t.tableNumber)}
                             onMouseLeave={() => setHoveredTable(null)}
@@ -158,7 +197,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 transform={t.transform}
                                 className="table-artist"
                                 style={{ ...artistStyle, filter: getFilter(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber) }}
-                                onClick={(e) => { e.stopPropagation(); onTableClick(t.tableNumber); }}
+                                onClick={(e) => { e.stopPropagation(); triggerPop(t.tableNumber); onTableClick(t.tableNumber); }}
                             />
                             <rect x={t.x} y={t.y - 5.4} {...R} transform={t.transform}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
@@ -168,7 +207,8 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
 
                     {/* Vendor tables */}
                     {vendorRects.map((v) => (
-                        <g key={v.id} className="table-interactive"
+                        <g key={v.id}
+                            className={`table-interactive${clickedTable === v.id ? " table-popping" : ""}`}
                             style={{ transform: getScale(selectedTable === v.id, hoveredTable === v.id) }}
                             onMouseEnter={() => setHoveredTable(v.id)}
                             onMouseLeave={() => setHoveredTable(null)}
@@ -178,7 +218,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 x={v.x} y={v.y} {...R}
                                 transform={v.transform}
                                 style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === v.id, hoveredTable === v.id) }}
-                                onClick={(e) => { e.stopPropagation(); onTableClick(v.id); }}
+                                onClick={(e) => { e.stopPropagation(); triggerPop(v.id); onTableClick(v.id); }}
                             />
                             <rect x={v.x} y={v.y} {...R} transform={v.transform}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
@@ -188,7 +228,8 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
 
                     {/* Info tables */}
                     {infoRects.map((r) => (
-                        <g key={r.id} className="table-interactive"
+                        <g key={r.id}
+                            className={`table-interactive${clickedTable === r.id ? " table-popping" : ""}`}
                             style={{ transform: getScale(selectedTable === r.id, hoveredTable === r.id) }}
                             onMouseEnter={() => setHoveredTable(r.id)}
                             onMouseLeave={() => setHoveredTable(null)}
@@ -198,11 +239,39 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                 x={r.x} y={r.y} {...R}
                                 transform={r.transform}
                                 style={{ ...clickStyle, filter: getFilter(isDark, selectedTable === r.id, hoveredTable === r.id) }}
-                                onClick={(e) => { e.stopPropagation(); onTableClick(r.id); }}
+                                onClick={(e) => { e.stopPropagation(); triggerPop(r.id); onTableClick(r.id); }}
                             />
                             <rect x={r.x} y={r.y} {...R} transform={r.transform}
                                 fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                         </g>
+                    ))}
+                </g>
+
+                {/* Ripple rings — own layer so pop-transform on the table <g> doesn't interfere */}
+                <g id="Ripples" pointerEvents="none">
+                    {tableRects.map((t) => (
+                        <rect
+                            key={rippleGen?.id === t.tableNumber ? `ripple-${t.tableNumber}-${rippleGen.gen}` : `ripple-${t.tableNumber}-idle`}
+                            x={t.x} y={t.y - 5.4} {...R}
+                            transform={t.transform}
+                            className={`table-ripple-ring artist-ripple${rippleGen?.id === t.tableNumber ? " table-rippling" : ""}`}
+                        />
+                    ))}
+                    {vendorRects.map((v) => (
+                        <rect
+                            key={rippleGen?.id === v.id ? `ripple-${v.id}-${rippleGen.gen}` : `ripple-${v.id}-idle`}
+                            x={v.x} y={v.y} {...R}
+                            transform={v.transform}
+                            className={`table-ripple-ring vendor-ripple${rippleGen?.id === v.id ? " table-rippling" : ""}`}
+                        />
+                    ))}
+                    {infoRects.map((r) => (
+                        <rect
+                            key={rippleGen?.id === r.id ? `ripple-${r.id}-${rippleGen.gen}` : `ripple-${r.id}-idle`}
+                            x={r.x} y={r.y} {...R}
+                            transform={r.transform}
+                            className={`table-ripple-ring info-ripple${rippleGen?.id === r.id ? " table-rippling" : ""}`}
+                        />
                     ))}
                 </g>
             </svg>
