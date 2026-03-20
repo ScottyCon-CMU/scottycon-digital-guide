@@ -99,6 +99,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
     const [openCardId, setOpenCardId] = useState<number | null>(null);
     const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
     const filterRef = useRef<HTMLDivElement>(null);
     const sentinelRef = useRef<HTMLDivElement>(null);
     const pendingScrollRef = useRef<number | null>(null);
@@ -139,6 +140,10 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
+
+    // Capture portal target inside useEffect — document is undefined during SSR so
+    // this must never appear in the render path directly.
+    useEffect(() => { setPortalTarget(document.body); }, []);
 
     useEffect(() => {
         if (scrollToTable == null) {
@@ -339,17 +344,18 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                 )}
             </div>
 
-            {lightbox && (
+            {portalTarget && lightbox && createPortal(
                 <ImageLightbox
                     src={lightbox.src}
                     alt={lightbox.alt}
                     onClose={() => setLightbox(null)}
-                />
+                />,
+                portalTarget
             )}
 
             {/* Floating scroll-to-top button — portaled to body so fixed positioning works
                 even when this component is inside a transformed ancestor. */}
-            {createPortal(
+            {portalTarget && createPortal(
                 <button
                     onClick={handleScrollToTop}
                     className={`fixed bottom-28 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-primary text-white font-mono font-semibold text-xs px-4 py-2.5 rounded-full shadow-lg hover:bg-primary/90 active:scale-95 cursor-pointer transition-all duration-300 ${
@@ -360,7 +366,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                     <ChevronUp className="w-4 h-4" strokeWidth={2.5} />
                     Back to top
                 </button>,
-                document.body
+                portalTarget
             )}
         </>
     );

@@ -20,6 +20,8 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
 
     // Render into document.body so `fixed` positioning is always relative to the viewport,
     // not to any transformed ancestor (transform creates a new containing block for fixed elements).
+    // Guard with typeof check in case this ever renders during SSR.
+    if (typeof document === "undefined") return null;
     return createPortal(
         <div
             className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
