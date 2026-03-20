@@ -57,13 +57,13 @@ function info(
 // One entry per table. Tables that share a spot get an array of names.
 
 export const artistTables: ArtistTable[] = [
-    artist( 1, ["Mika Tanaka", "Sora Inoue"],  "Original character prints, acrylic charms, and sticker sheets. Specializing in soft fantasy and pastel aesthetics.", ["/images/example_illustration.jpeg", "/images/example_illustration_2.jpeg"]),
-    artist( 2, ["Lena Park", "Yuki Flores"],   "Fan art prints of popular shonen anime, enamel pins, and mini zines. Limited edition ScottyCon 2026 exclusive bundles available!"),
-    artist( 3, ["Rei Nakamura", "Casey Ohmura"],"Watercolor illustrations and hand-bound sketchbooks. Commission slots open — bring your OC references!"),
-    artist( 4, ["Hana Kwon", "Tomás Rivera"],  "Crocheted plushies, keychains, and wearable accessories inspired by classic RPG games and magical girl anime."),
-    artist( 5, ["Emi Suzuki", "Jin Choi"],     "Gothic and dark fantasy digital prints, tarot-inspired card sets, and custom bookmarks."),
-    artist( 6, "Yuna Abe",                     "Ink brush illustrations of Japanese folklore and yokai. Custom name stamps available — get yours carved on-site!"),
-    artist( 7, ["Devon Clarke", "Priya Nair"], "Minimalist line-art apparel and tote bags. Exclusive ScottyCon collab designs available while supplies last."),
+    artist( 1, ["Aritst 1", "Artist 2"],  "Table description here", ["/images/example_illustration.jpeg", "/images/example_illustration_2.jpeg"]),
+    artist( 2, ""),
+    artist( 3, ""),
+    artist( 4, ""),
+    artist( 5, ""),
+    artist( 6, ""),
+    artist( 7, ""),
     artist( 8, ""),
     artist( 9, ""),
     artist(10, ""),
@@ -122,11 +122,11 @@ export const artistTables: ArtistTable[] = [
 // Numbered top→bottom, right col (x≈74) first then left col (x≈13).
 
 export const vendorTables: VendorTable[] = [
-    vendor(-1, "Stardust Jewelry",       "Handcrafted gemstone and resin jewelry inspired by anime and fantasy themes. Custom order commissions open."),
-    vendor(-2, "Enchanted Realm Games",  "Tabletop RPG books, dice sets, and accessories. Demo games running throughout the day — drop in any time."),
-    vendor(-3, "Otaku Outfitters",       "Anime-licensed apparel and accessories. T-shirts, hoodies, and hats for a wide range of series."),
-    vendor(-4, "Cosplay Kingdom",        "Costumes, wigs, props, and accessories for all skill levels. Repairs and alterations available on-site."),
-    vendor(-5, "Sakura Sweets",          "Japanese candy, snacks, and drinks. Try our seasonal ScottyCon 2026 mochi sampler box!"),
+    vendor(-1, "Vendor Name",       "Vendor description here."),
+    vendor(-2, ""),
+    vendor(-3, ""),
+    vendor(-4, ""),
+    vendor(-5, ""),
     vendor(-6, ""),
 ];
 
