@@ -117,19 +117,17 @@ export const artistTables: ArtistTable[] = [
     artist(58, ""),
 ];
 
-// ─── Vendor tables (-1 through -9) ───────────────────────────────────────────
+// ─── Vendor tables (-1 through -8) ───────────────────────────────────────────
 // IDs are negative to distinguish vendors from artist tables on the map.
+// Numbered top→bottom, right col (x≈74) first then left col (x≈13).
 
 export const vendorTables: VendorTable[] = [
-    vendor(-1, "Nebula Books & Comics",  "Curated selection of manga, light novels, and indie comics. Buy 3, get 1 free on all used manga this weekend only."),
-    vendor(-2, "Pixel Potion Studio",    "Indie game merchandise, retro pixel art prints, and hand-soldered enamel pins. Cash and card accepted."),
-    vendor(-3, "Cosplay Kingdom",        "Costumes, wigs, props, and accessories for all skill levels. Repairs and alterations available on-site."),
-    vendor(-4, "Galactic Toys & Figures","Import figures, model kits, and collectible blind boxes. Specialty items from Japan and Korea."),
+    vendor(-1, "Stardust Jewelry",       "Handcrafted gemstone and resin jewelry inspired by anime and fantasy themes. Custom order commissions open."),
+    vendor(-2, "Enchanted Realm Games",  "Tabletop RPG books, dice sets, and accessories. Demo games running throughout the day — drop in any time."),
+    vendor(-3, "Otaku Outfitters",       "Anime-licensed apparel and accessories. T-shirts, hoodies, and hats for a wide range of series."),
+    vendor(-4, "Cosplay Kingdom",        "Costumes, wigs, props, and accessories for all skill levels. Repairs and alterations available on-site."),
     vendor(-5, "Sakura Sweets",          "Japanese candy, snacks, and drinks. Try our seasonal ScottyCon 2026 mochi sampler box!"),
-    vendor(-6, "The Card Vault",         "Trading card games — buying, selling, and trading. Pokemon, Yu-Gi-Oh!, and more. Graded slabs available."),
-    vendor(-7, "Otaku Outfitters",       "Anime-licensed apparel and accessories. T-shirts, hoodies, and hats for a wide range of series."),
-    vendor(-8, "Enchanted Realm Games",  "Tabletop RPG books, dice sets, and accessories. Demo games running throughout the day — drop in any time."),
-    vendor(-9, "Stardust Jewelry",       "Handcrafted gemstone and resin jewelry inspired by anime and fantasy themes. Custom order commissions open."),
+    vendor(-6, ""),
 ];
 
 // ─── Info / service tables ────────────────────────────────────────────────────
@@ -138,5 +136,4 @@ export const vendorTables: VendorTable[] = [
 export const infoTables: InfoTable[] = [
     info(-100, "Artist Alley Registration",  "Check in here to receive your table badge, tote bag, and exhibitor packet. Have your confirmation email ready. Staff can also help resolve table assignment issues.", "10:00 AM – 5:00 PM"),
     info(-101, "Information Desk",           "General convention information, maps, and lost & found. Staff here can direct you to programming rooms, restrooms, first aid, and accessibility services.",          "9:00 AM – 6:00 PM"),
-    info(-102, "Merchandise & Program Sales","Pick up your ScottyCon 2026 program booklet, official merchandise, and limited-run souvenir items. Cash and all major cards accepted.",                              "10:00 AM – 5:00 PM"),
 ];

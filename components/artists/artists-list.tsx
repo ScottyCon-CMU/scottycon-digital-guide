@@ -39,7 +39,7 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
             <div className="flex items-start justify-between mb-2">
                 <h3 className="font-sans font-bold text-xl text-foreground group-hover:text-secondary transition-colors">
                     {tableName(table) || (
-                        <span className="text-foreground/40 italic">Artist TBA</span>
+                        <span className="text-foreground/40 italic">{table.type === "vendor" ? "Vendor TBA" : "Artist TBA"}</span>
                     )}
                 </h3>
                 <svg
