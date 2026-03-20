@@ -25,7 +25,9 @@ export default function ArtistsPage() {
     useEffect(() => {
         if (selectedTable === null) return;
         function handleOutsideClick(e: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+            const target = e.target as Element;
+            if (target.closest('[data-no-deselect]')) return;
+            if (containerRef.current && !containerRef.current.contains(target)) {
                 setSelectedTable(null);
             }
         }
