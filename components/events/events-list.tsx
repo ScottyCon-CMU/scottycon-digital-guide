@@ -5,6 +5,16 @@ import { formatDescription } from "@/lib/format";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import type { Event } from "@/lib/data";
 
+const genreColors: Record<string, string> = {
+  Specialty:   "bg-violet-400",
+  Performance: "bg-rose-400",
+  Gaming:      "bg-emerald-400",
+  Anime:       "bg-pink-400",
+  Panels:      "bg-sky-400",
+  Crafts:      "bg-amber-400",
+  Food:        "bg-orange-400",
+};
+
 const FAVORITES_KEY = "favorites";
 const defaultFavorites = Array(events.length).fill(false) as boolean[];
 
@@ -55,43 +65,44 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
   return (
     <div
       onClick={() => setCardOpen(!cardOpen)}
-      className="bg-white/50 backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group"
+      className="bg-surface backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group"
     >
       {/* Decorative Corner */}
-      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary rounded-tr-lg" />
 
       {/* Time Badge */}
       <div className="flex items-center gap-3 mb-3">
         <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
           {formatTime(event.startTime)} - {formatTime(event.endTime)}
         </div>
-        <div className="bg-secondary/10 text-primary font-mono text-xs px-2 py-1 rounded-sm">
+        <div className="bg-secondary/10 text-secondary font-mono text-xs px-2 py-1 rounded-sm">
           {event.room[0]}
         </div>
       </div>
 
       {/* Event Title */}
       <div className="flex justify-between">
-        <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors mb-2">
+        <h3 className="font-sans font-bold text-xl text-foreground group-hover:text-secondary transition-colors mb-2">
           {event.title}
         </h3>
         <div className="mt-1.5" onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}>
           {isFavorite ? (
             <FaStar className="text-yellow-400" />
           ) : (
-            <FaRegStar className="text-black" />
+            <FaRegStar className="text-foreground" />
           )}
         </div>
       </div>
 
       {/* Genre */}
       <div className="relative mb-3">
-        <div className="font-mono text-xs text-slate-600 uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 font-mono text-xs text-foreground uppercase tracking-wider">
+          <span className={`w-2.5 h-2.5 rounded-sm shrink-0 ${genreColors[event.genre] ?? "bg-primary"}`} />
           {event.genre}
         </div>
         {event.description !== "" && (
           <svg
-            className={`w-3.5 h-3.5 text-primary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${cardOpen ? "rotate-180" : ""}`}
+            className={`w-3.5 h-3.5 text-secondary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${cardOpen ? "rotate-180" : ""}`}
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={2}
@@ -104,7 +115,7 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
 
       {/* Description */}
       {cardOpen && (event.description !== "") ? (
-        <div className="text-sm text-slate-700 leading-relaxed mb-4 wrap-break-word max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+        <div className="text-sm text-foreground leading-relaxed mb-4 wrap-break-word max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
           {formatDescription(event.description)}
         </div>
       ) : null}
@@ -114,7 +125,7 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
         {event.tags.map((tag, index) => (
           <span
             key={index}
-            className="font-mono text-xs text-primary/70 bg-primary/5 px-2 py-1 rounded border border-primary/20"
+            className="font-mono text-xs text-secondary/70 bg-secondary/5 px-2 py-1 rounded border border-primary/20"
           >
             #{tag}
           </span>
@@ -193,7 +204,7 @@ export default function EventsList() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name or tag..."
-              className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-foreground placeholder:secondary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
             />
           </div>
           <div ref={filterRef} className="relative">
@@ -202,7 +213,7 @@ export default function EventsList() {
               className={`relative px-3.5 py-2.5 border border-l-0 border-primary/30 rounded-r-lg transition-all cursor-pointer ${
                 filterOpen || selectedGenres.length > 0
                   ? "bg-primary text-white"
-                  : "bg-white/50 backdrop-blur-md text-slate-500 hover:bg-primary/10"
+                  : "bg-surface backdrop-blur-md text-slate-500 hover:bg-primary/10"
               }`}
             >
               <svg
@@ -291,7 +302,7 @@ export default function EventsList() {
             <button
               key={g}
               onClick={() => toggleGenre(g)}
-              className="flex items-center gap-1 font-mono text-xs text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+              className="flex items-center gap-1 font-mono text-xs text-secondary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
             >
               {g}
               <svg
@@ -314,7 +325,7 @@ export default function EventsList() {
 
       {/* Results */}
       {filteredEvents.length === 0 ? (
-        <p className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded font-mono text-sm text-slate-900">
+        <p className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-primary/30 rounded font-mono text-sm text-foreground">
           No events matched your search.
         </p>
       ) : (
