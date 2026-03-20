@@ -8,6 +8,16 @@
   }
 }
 
+.themed-placeholder::placeholder {
+  color: #1657bb;
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .themed-placeholder::placeholder {
+  color: #d0edfb;
+  opacity: 0.7;
+}
+
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
@@ -17,6 +27,9 @@
   --primary: #1657bb;
   --secondary: #1657bb;
   --accent: #f39aca;
+  --table-artist: #4a8fd4;
+  --table-vendor: #f560b5;
+  --table-info: #3db83c;
 }
 
 [data-theme="dark"] {
@@ -26,6 +39,9 @@
   --primary: #1657bb;
   --secondary: #d0edfb;
   --accent: #f39aca;
+  --table-artist: #4e7fbf;
+  --table-vendor: #f39aca;
+  --table-info: #75cb74;
 }
 
 @theme {

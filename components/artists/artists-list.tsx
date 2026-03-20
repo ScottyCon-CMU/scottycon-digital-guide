@@ -15,7 +15,7 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
         <div
             data-table={table.tableNumber}
             onClick={onToggle}
-            className="bg-white/50 backdrop-blur-md border border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer p-4 relative"
+            className="bg-surface backdrop-blur-md border border-secondary rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer p-4 relative"
         >
             {/* Decorative Corner */}
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
@@ -33,13 +33,13 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
 
             {/* Name(s) + chevron */}
             <div className="flex items-start justify-between mb-2">
-                <h3 className="font-sans font-bold text-xl text-slate-900 group-hover:text-primary transition-colors">
+                <h3 className="font-sans font-bold text-xl text-foreground group-hover:text-secondary transition-colors">
                     {tableName(table) || (
-                        <span className="text-slate-400 italic">Artist TBA</span>
+                        <span className="text-foreground/40 italic">Artist TBA</span>
                     )}
                 </h3>
                 <svg
-                    className={`w-4 h-4 text-primary mt-1.5 ml-2 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+                    className={`w-4 h-4 text-secondary mt-1.5 ml-2 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
                     fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"
                 >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -57,14 +57,14 @@ function ArtistTableCard({ table, isOpen, onToggle, onImageClick }: { table: All
                 <div className="overflow-hidden">
                     {/* Hours (info tables only) */}
                     {table.type === "info" && table.hours && (
-                        <p className="text-xs font-mono text-primary mb-2 pt-0.5">🕐 {table.hours}</p>
+                        <p className="text-xs font-mono text-secondary mb-2 pt-0.5">🕐 {table.hours}</p>
                     )}
 
                     {/* Description */}
                     <div className="text-sm leading-relaxed mb-2 break-words pt-0.5">
                         {table.description
-                            ? <span className="text-slate-700">{table.description}</span>
-                            : <span className="text-slate-500 italic">No details yet — check back soon!</span>
+                            ? <span className="text-foreground/80">{table.description}</span>
+                            : <span className="text-foreground/50 italic">No details yet — check back soon!</span>
                         }
                     </div>
 
@@ -221,7 +221,12 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
             <div className="mt-8">
                 {/* Section Title */}
                 <div className="mb-4">
-                    <h2 className="font-sans font-bold text-2xl tracking-tight text-slate-900">Browse Tables</h2>
+                    <div className="flex items-center gap-4 text-secondary">
+                        <h2 className="font-mono font-semibold tracking-widest text-sm uppercase whitespace-nowrap">
+                            {"// Browse_Tables"}
+                        </h2>
+                        <div className="h-[1.5px] flex-1 bg-secondary" />
+                    </div>
                 </div>
 
                 {/* Search Bar with Filter Icon */}
@@ -229,26 +234,26 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                 <div className="relative mb-6">
                     <div className="flex items-center gap-0">
                         <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
                             <input
                                 type="text"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search by name..."
-                                className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-secondary rounded-l-lg font-mono text-sm text-foreground themed-placeholder focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                             />
                         </div>
                         <div ref={filterRef} className="relative overflow-visible">
                             <button
                                 onClick={() => setFilterOpen((prev) => !prev)}
-                                className={`relative px-3.5 py-2.5 border border-l-0 border-primary/30 rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
+                                className={`relative px-3.5 py-2.5 border border-l-0 border-secondary rounded-r-lg transition-all cursor-pointer ${filterOpen || selectedTypes.length > 0
                                     ? "bg-primary text-white"
-                                    : "bg-white/50 backdrop-blur-md text-slate-500 hover:bg-primary/10"
+                                    : "bg-surface backdrop-blur-md text-foreground/60 hover:bg-primary/10"
                                     }`}
                             >
                                 <SlidersHorizontal className="w-4 h-4" />
                                 {selectedTypes.length > 0 && (
-                                    <span className="absolute -top-1.5 -left-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
+                                    <span className="absolute -top-1.5 -left-1.5 w-4 h-4 bg-primary border-2 border-foreground rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
                                         {selectedTypes.length}
                                     </span>
                                 )}
@@ -256,15 +261,15 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
 
                             {/* Type Filter Dropdown */}
                             {filterOpen && (
-                                <div className="absolute right-0 z-10 mt-2 w-48 bg-white/80 backdrop-blur-md border border-primary/30 rounded-lg shadow-lg p-2">
-                                    <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-primary/10">
-                                        <span className="font-mono text-xs text-slate-500 uppercase tracking-wider">
+                                <div className="absolute right-0 z-10 mt-2 w-48 bg-background/90 backdrop-blur-md border border-secondary rounded-lg shadow-lg p-2">
+                                    <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-secondary/20">
+                                        <span className="font-mono text-xs text-foreground/60 uppercase tracking-wider">
                                             Type
                                         </span>
                                         {selectedTypes.length > 0 && (
                                             <button
                                                 onClick={() => setSelectedTypes([])}
-                                                className="font-mono text-xs text-primary hover:underline cursor-pointer"
+                                                className="font-mono text-xs text-secondary hover:underline cursor-pointer"
                                             >
                                                 Clear
                                             </button>
@@ -275,14 +280,14 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                                             key={t}
                                             onClick={() => toggleType(t)}
                                             className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-left font-mono text-sm transition-colors cursor-pointer ${selectedTypes.includes(t)
-                                                ? "bg-primary/10 text-primary"
-                                                : "text-slate-700 hover:bg-slate-100"
+                                                ? "bg-primary/10 text-secondary"
+                                                : "text-foreground/80 hover:bg-primary/10"
                                                 }`}
                                         >
                                             <span
                                                 className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedTypes.includes(t)
                                                     ? "border-primary bg-primary"
-                                                    : "border-slate-300"
+                                                    : "border-foreground/30"
                                                     }`}
                                             >
                                                 {selectedTypes.includes(t) && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
@@ -303,7 +308,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
                             <button
                                 key={t}
                                 onClick={() => toggleType(t)}
-                                className="flex items-center gap-1 font-mono text-xs text-primary bg-white/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/30 hover:bg-white/80 transition-colors cursor-pointer"
+                                className="flex items-center gap-1 font-mono text-xs text-secondary bg-surface backdrop-blur-md px-2.5 py-1 rounded-full border border-secondary hover:bg-primary/20 transition-colors cursor-pointer"
                             >
                                 {t}
                                 <X className="w-3 h-3" strokeWidth={2.5} />
@@ -314,7 +319,7 @@ export default function ArtistsList({ scrollToTable, onDeselect, onSelectTable, 
 
                 {/* Results */}
                 {filteredTables.length === 0 ? (
-                    <p className="w-full pl-10 pr-4 py-2 bg-white/50 backdrop-blur-md border border-primary/30 rounded font-mono text-sm text-slate-900">
+                    <p className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-secondary rounded font-mono text-sm text-foreground">
                         No tables matched your search.
                     </p>
                 ) : (
