@@ -34,7 +34,15 @@ function getSnapshot(): boolean[] {
   const stored = localStorage.getItem(FAVORITES_KEY);
   if (stored === cachedRaw) return cachedParsed;
   cachedRaw = stored;
-  cachedParsed = stored ? JSON.parse(stored) : defaultFavorites;
+  if (!stored) {
+    cachedParsed = defaultFavorites;
+  } else {
+    const parsed: boolean[] = JSON.parse(stored);
+    // Pad with false if events were added since the array was stored
+    cachedParsed = parsed.length >= events.length
+      ? parsed
+      : [...parsed, ...Array(events.length - parsed.length).fill(false)];
+  }
   return cachedParsed;
 }
 function getServerSnapshot(): boolean[] {
@@ -172,6 +180,7 @@ export default function EventsList() {
     const isFavorited = favorites[event.id];
     const matchesSearch =
       !query ||
+      event.genre.toLowerCase().includes(query) ||
       event.title.toLowerCase().includes(query) ||
       event.tags.some((tag) => tag.toLowerCase().includes(query));
     const matchesGenre =
