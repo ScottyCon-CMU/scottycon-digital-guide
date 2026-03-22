@@ -12,7 +12,7 @@ const genreColors: Record<string, string> = {
   Anime:       "bg-pink-400",
   Panels:      "bg-sky-400",
   Crafts:      "bg-amber-400",
-  Food:        "bg-orange-400",
+  Vendors:     "bg-orange-400",
 };
 
 const FAVORITES_KEY = "favorites";
@@ -127,7 +127,7 @@ function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFa
             key={index}
             className="font-mono text-xs text-secondary/70 bg-secondary/5 px-2 py-1 rounded border border-primary/20"
           >
-            #{tag}
+            # {tag}
           </span>
         ))}
       </div>

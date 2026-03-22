@@ -11,7 +11,7 @@ const genreColors: Record<string, { bg: string; hover: string }> = {
   Panels:      { bg: "bg-sky-400/90",     hover: "hover:bg-sky-500" },
   Anime:       { bg: "bg-pink-400/90",    hover: "hover:bg-pink-500" },
   Crafts:      { bg: "bg-amber-400/90",   hover: "hover:bg-amber-500" },
-  Food:        { bg: "bg-orange-400/90",   hover: "hover:bg-orange-500" },
+  Vendors:     { bg: "bg-orange-400/90",   hover: "hover:bg-orange-500" },
 };
 
 interface Props {
@@ -88,6 +88,22 @@ export default function EventsCalendar({ floor }: Props) {
     );
   });
 
+  // Detect overlapping events in same room and assign vertical slot (0 or 1)
+  const getOverlapSlot = (event: Event, roomEvents: Event[]): { slot: number; total: number } => {
+    const overlapping = roomEvents.filter(
+      (other) =>
+        other.id !== event.id &&
+        other.startTime < event.endTime &&
+        other.endTime > event.startTime,
+    );
+    if (overlapping.length === 0) return { slot: 0, total: 1 };
+    // Assign slot based on sort order (earlier start or earlier id gets slot 0)
+    const group = [event, ...overlapping].sort((a, b) =>
+      a.startTime === b.startTime ? a.id - b.id : a.startTime.localeCompare(b.startTime),
+    );
+    return { slot: group.indexOf(event), total: 2 };
+  };
+
   return (
     <div className="mt-6">
       {floor === 1 ? 
@@ -109,7 +125,7 @@ export default function EventsCalendar({ floor }: Props) {
         <div className="overflow-x-auto overflow-y-auto max-h-[1000px]">
           <div className="relative" style={{ minWidth: "1440px" }}>
             {/* Time header - sticky */}
-            <div className="sticky top-0 z-20 bg-background/50 border-b-2 border-secondary/30">
+            <div className="sticky top-0 z-20 bg-background border-b-2 border-secondary/30">
               <div className="flex">
                 {/* Empty corner for room labels */}
                 <div className="w-27 flex-shrink-0 border-r-2 border-secondary/30 p-3 sticky left-0 z-30 bg-background">
@@ -144,7 +160,7 @@ export default function EventsCalendar({ floor }: Props) {
                   }`}
                 >
                   {/* Room label - sticky */}
-                  <div className="w-27 flex-shrink-0 border-r-2 border-secondary/30 p-3 bg-background/50 sticky left-0 z-10">
+                  <div className="w-27 flex-shrink-0 border-r-2 border-secondary/30 p-3 bg-background sticky left-0 z-10">
                     <span className="font-sans font-semibold text-xs text-foreground">
                       {room[0]}
                     </span>
@@ -166,11 +182,14 @@ export default function EventsCalendar({ floor }: Props) {
                     {/* Events for this room */}
                     {eventsByRoom[room[0]]?.map((event) => {
                       const style = getEventStyle(event);
+                      const { slot, total } = getOverlapSlot(event, eventsByRoom[room[0]]);
+                      const topPx = total === 1 ? 8 : slot === 0 ? 4 : 50;
+                      const bottomPx = total === 1 ? 8 : slot === 0 ? 52 : 4;
                       return (
                         <div
                           key={event.id}
-                          className={`absolute top-2 bottom-2 ${genreColors[event.genre]?.bg ?? "bg-secondary/90"} ${genreColors[event.genre]?.hover ?? "hover:bg-secondary"} text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg`}
-                          style={style}
+                          className={`absolute ${genreColors[event.genre]?.bg ?? "bg-secondary/90"} ${genreColors[event.genre]?.hover ?? "hover:bg-secondary"} text-white rounded-md p-2 overflow-hidden cursor-pointer transition-all duration-200 hover:z-30 hover:shadow-lg`}
+                          style={{ ...style, top: `${topPx}px`, bottom: `${bottomPx}px` }}
                           onClick={() => setSelectedEvent(event)}
                         >
                           <div className="font-sans font-bold text-xs leading-tight mb-1 truncate">
@@ -230,7 +249,8 @@ export default function EventsCalendar({ floor }: Props) {
             </h3>
 
             {/* Genre */}
-            <div className="font-mono text-xs text-foreground mb-3 uppercase tracking-wider flex-shrink-0">
+            <div className="flex items-center gap-1.5 font-mono text-xs text-foreground mb-3 uppercase tracking-wider flex-shrink-0">
+              <span className={`w-2.5 h-2.5 rounded-sm shrink-0 ${genreColors[selectedEvent.genre]?.bg ?? "bg-secondary/90"}`} />
               {selectedEvent.genre}
             </div>
 
@@ -248,7 +268,7 @@ export default function EventsCalendar({ floor }: Props) {
                   key={index}
                   className="font-mono text-xs text-secondary/70 bg-secondary/5 px-2 py-1 rounded border border-secondary/20"
                 >
-                  #{tag}
+                  # {tag}
                 </span>
               ))}
             </div>
