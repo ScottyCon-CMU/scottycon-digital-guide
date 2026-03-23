@@ -63,9 +63,8 @@ export default function UpcomingEvents() {
                   })}
                 </span>
                 <span className="text-foreground/50">|</span>
-                {/* Formatted to show the Floor properly */}
                 <span>
-                  {event.room[0]}, Floor {event.room[1]}
+                  {event.room.name}, Floor {event.room.floor}
                 </span>
               </div>
 
@@ -75,20 +74,6 @@ export default function UpcomingEvents() {
                   <p className="text-sm text-foreground/90 font-sans leading-relaxed">
                     {event.description}
                   </p>
-
-                  {/* Optional: Show tags if the event has them */}
-                  {event.tags && event.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {event.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[10px] font-mono bg-secondary/20 text-secondary px-2 py-0.5 rounded-sm uppercase tracking-wider"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               )}
             </button>

@@ -1,39 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { useTheme } from "next-themes";
 import { tableRects } from "@/lib/data";
 
-// Shared dimensions for all table squares
 const R = { width: "21.6", height: "21.6", rx: 2, ry: 2 } as const;
 
-// Shared label props for all inline text
 const labelProps = {
     textAnchor: "middle" as const,
     dominantBaseline: "central" as const,
-    fill: "#fff",
+    fill: "var(--background)", 
     fontSize: 8,
     fontFamily: "var(--font-sans), system-ui, sans-serif",
     pointerEvents: "none" as const,
 };
 
-// Shared interaction styles per category
 const artistStyle = { cursor: "pointer" as const, transition: "fill 0.2s" };
 const clickStyle = { cursor: "pointer" as const };
 
-// SVG overlay rect opacity — replaces CSS filter brightness() which is unreliable
-// in mobile WebKit, especially inside SVG-transformed ancestors.
-// A semi-transparent white (dark mode) or black (light mode) rect is overlaid on top.
-function getOverlayOpacity(isDark: boolean, isSelected: boolean, isHovered: boolean): number {
-    if (isDark) {
-        if (isSelected && isHovered) return 0.35;
-        if (isSelected) return 0.18;
-        if (isHovered) return 0.28;
-    } else {
-        if (isSelected && isHovered) return 0.40;
-        if (isSelected) return 0.28;
-        if (isHovered) return 0.18;
-    }
+function getOverlayOpacity(isSelected: boolean, isHovered: boolean): number {
+    if (isSelected && isHovered) return 0.25;
+    if (isSelected) return 0.15;
+    if (isHovered) return 0.10;
     return 0;
 }
 
@@ -43,21 +30,20 @@ function getScale(isSelected: boolean, isHovered: boolean): string {
     return "scale(1)";
 }
 
-// Vendor rects — all in screen space (no SVG transforms), so animations always scale from the right center.
-// Right col (x≈74): 1–3 top→bottom · Left col (x≈13): 4–6 top→bottom
+// Vendor rects
 const vendorRects = [
-    { id: -1, vx: 74.3, vy: 266.9, vw: 21.6, vh: 21.6, cx: 85.1, cy: 277.7 }, // right 1
-    { id: -2, vx: 74.3, vy: 324.5, vw: 21.6, vh: 21.6, cx: 85.1, cy: 335.3 }, // right 2
-    { id: -3, vx: 74.3, vy: 382.1, vw: 21.6, vh: 43.2, cx: 85.1, cy: 403.7 }, // right 3+4 merged
-    { id: -4, vx: 13.1, vy: 266.9, vw: 21.6, vh: 21.6, cx: 23.9, cy: 277.7 }, // left 4
-    { id: -5, vx: 13.1, vy: 324.5, vw: 21.6, vh: 43.2, cx: 23.9, cy: 346.1 }, // left 5+6 merged
-    { id: -6, vx: 13.1, vy: 403.7, vw: 21.6, vh: 21.6, cx: 23.9, cy: 414.5 }, // left 6
+    { id: -1, vx: 74.3, vy: 266.9, vw: 21.6, vh: 21.6, cx: 85.1, cy: 277.7 }, 
+    { id: -2, vx: 74.3, vy: 324.5, vw: 21.6, vh: 21.6, cx: 85.1, cy: 335.3 }, 
+    { id: -3, vx: 74.3, vy: 382.1, vw: 21.6, vh: 43.2, cx: 85.1, cy: 403.7 }, 
+    { id: -4, vx: 13.1, vy: 266.9, vw: 21.6, vh: 21.6, cx: 23.9, cy: 277.7 }, 
+    { id: -5, vx: 13.1, vy: 324.5, vw: 21.6, vh: 43.2, cx: 23.9, cy: 346.1 }, 
+    { id: -6, vx: 13.1, vy: 403.7, vw: 21.6, vh: 21.6, cx: 23.9, cy: 414.5 }, 
 ];
 
-// Info rects — w/h/cx/cy explicit so merged rect dimensions work correctly
+// Info rects
 const infoRects = [
-    { id: -100, x: 340.7, y: 79.7, w: 21.6, h: 21.6, cx: 351.5, cy: 90.5, className: "cls-4", transform: "translate(261 442) rotate(-90)" },
-    { id: -101, x: 256.52, y: 30.7, w: 43.2, h: 21.6, cx: 278.12, cy: 41.5, className: "cls-4", transform: undefined }, // -101 + -102 merged
+    { id: -100, x: 340.7, y: 79.7, w: 21.6, h: 21.6, cx: 351.5, cy: 90.5, transform: "translate(261 442) rotate(-90)" },
+    { id: -101, x: 256.52, y: 30.7, w: 43.2, h: 21.6, cx: 278.12, cy: 41.5, transform: undefined }, 
 ];
 
 interface ArtistsMapProps {
@@ -67,9 +53,6 @@ interface ArtistsMapProps {
 }
 
 export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundClick }: ArtistsMapProps) {
-    const { resolvedTheme } = useTheme();
-    const isDark = resolvedTheme === "dark";
-    const tableStroke = isDark ? "rgba(255,255,255,0.90)" : "rgba(255,255,255,0.70)";
     const [hoveredTable, setHoveredTable] = useState<number | null>(null);
     const [clickedTable, setClickedTable] = useState<number | null>(null);
     const [rippleGen, setRippleGen] = useState<{ id: number; gen: number } | null>(null);
@@ -84,7 +67,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
     return (
         <div
             onClick={onBackgroundClick}
-            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-lg overflow-hidden border border-secondary shadow-sm hover:shadow-md hover:scale-[1.01] bg-surface hover:bg-blue-400/5 dark:hover:bg-blue-600/10 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-all duration-200"
+            className="group mt-6 lg:mt-0 mx-auto lg:mx-0 rounded-xl overflow-hidden border border-secondary/30 shadow-sm hover:shadow-md hover:scale-[1.01] bg-surface hover:bg-secondary/5 backdrop-blur-md font-bold max-h-[calc(95svh-13.5rem)] w-[min(100%,calc((95svh-13.5rem)*375.4/438))] lg:w-auto lg:h-full lg:max-h-none transition-all duration-300 cursor-default"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -93,16 +76,18 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
             >
                 <defs>
                     <style>{`
-                        .cls-1 { fill: none; stroke: var(--primary); stroke-opacity: 0.2; stroke-miterlimit: 10; }
-                        .cls-2, .cls-3, .cls-4, .cls-5 { stroke-miterlimit: 10; }
-                        [data-theme="dark"] .cls-2,
-                        [data-theme="dark"] .cls-3,
-                        [data-theme="dark"] .cls-4,
-                        [data-theme="dark"] .cls-5 { stroke: rgba(255, 255, 255, 0.90); }
-                        .cls-2 { fill: var(--primary); }
-                        .cls-3 { fill: #f560b5; }
-                        .cls-4 { fill: #3db83c; }
-                        .cls-5 { fill: #bfb04eff; }
+                        /* Base floor plan outlines */
+                        .floor-outline { fill: none; stroke: var(--secondary); stroke-opacity: 0.3; stroke-miterlimit: 10; }
+                        
+                        /* Table Colors - Inherited directly from globals.css variables! */
+                        .table-artist { fill: var(--table-artist); stroke-miterlimit: 10; }
+                        .table-vendor { fill: var(--table-vendor); stroke-miterlimit: 10; }
+                        .table-info   { fill: var(--table-info);   stroke-miterlimit: 10; }
+                        
+                        /* Entrance/Exit Colors */
+                        .table-entrance { fill: var(--primary); }
+
+                        /* Animations */
                         .table-interactive {
                             transform-box: fill-box;
                             transform-origin: center;
@@ -117,6 +102,7 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             100% { transform: scale(1.10); }
                         }
 
+                        /* Ripple Effects */
                         .table-ripple-ring {
                             transform-box: fill-box;
                             transform-origin: center;
@@ -132,53 +118,32 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             0%   { transform: scale(1);    stroke-width: 5;   opacity: 0.80; }
                             100% { transform: scale(1.65); stroke-width: 0.2; opacity: 0; }
                         }
-                        .artist-ripple { stroke: #4a8fd4; }
-                        .vendor-ripple { stroke: #f560b5; }
-                        .info-ripple   { stroke: #3db83c; }
-                        [data-theme="dark"] .artist-ripple { stroke: #4e7fbf; }
-                        [data-theme="dark"] .vendor-ripple { stroke: #f39aca; }
-                        [data-theme="dark"] .info-ripple   { stroke: #75cb74; }
-
-                        /* Light mode: bright saturated colors */
-                        .table-artist                                               { fill: #4a8fd4; }
-
-                        /* Dark mode: restore original colors */
-                        [data-theme="dark"] .table-artist                           { fill: #4e7fbf; }
-                        [data-theme="dark"] .cls-3                                  { fill: #f39aca; }
-                        [data-theme="dark"] .cls-4                                  { fill: #75cb74; }
+                        
+                        /* Ripple Colors */
+                        .artist-ripple { stroke: var(--table-artist); }
+                        .vendor-ripple { stroke: var(--table-vendor); }
+                        .info-ripple   { stroke: var(--table-info); }
                     `}</style>
                 </defs>
 
-                {/* Floor Plan */}
+                {/* Floor Plan Boundary */}
                 <g id="Floor_Plan">
-                    <rect className="cls-1" x="-46.3" y="47.3" width="468" height="374.4" transform="translate(-46.8 422.2) rotate(-90)" />
+                    <rect className="floor-outline" x="-46.3" y="47.3" width="468" height="374.4" transform="translate(-46.8 422.2) rotate(-90)" />
                 </g>
 
-                {/* Entrance & Exit — non-interactive indicators at the top of the hall. */}
+                {/* Entrance & Exit */}
                 <g id="Entrances_Exits" pointerEvents="none">
-                    {/* Exit — top-left */}
-                    <rect x="13.1" y="9" width="55" height="13" rx="2"
-                        style={{ fill: "var(--primary)" }} />
-                    <rect x="13.1" y="9" width="55" height="13" rx="2"
-                        fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} />
-                    <text x="40.6" y="15.5" textAnchor="middle" dominantBaseline="central"
-                        style={{ fill: "white" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
-                        EXIT
-                    </text>
-                    <polygon points="36.6,26 40.6,31.5 44.6,26"
-                        fill="var(--primary)" stroke={tableStroke} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+                    {/* Exit */}
+                    <rect x="13.1" y="9" width="55" height="13" rx="2" className="table-entrance" />
+                    <rect x="13.1" y="9" width="55" height="13" rx="2" fill="none" stroke="var(--background)" strokeWidth={1.5} strokeMiterlimit={10} />
+                    <text x="40.6" y="15.5" {...labelProps} letterSpacing="0.5">EXIT</text>
+                    <polygon points="36.6,26 40.6,31.5 44.6,26" fill="var(--primary)" stroke="var(--background)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
 
-                    {/* Entrance — top-right (right edge kept at 362.3) */}
-                    <rect x="307.3" y="9" width="55" height="13" rx="2"
-                        style={{ fill: "var(--primary)" }} />
-                    <rect x="307.3" y="9" width="55" height="13" rx="2"
-                        fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} />
-                    <text x="334.8" y="15.5" textAnchor="middle" dominantBaseline="central"
-                        style={{ fill: "white" }} fontSize="5.5" fontFamily="var(--font-sans), system-ui, sans-serif" letterSpacing="0.5">
-                        ENTRANCE
-                    </text>
-                    <polygon points="330.8,26 334.8,31.5 338.8,26"
-                        fill="var(--primary)" stroke={tableStroke} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+                    {/* Entrance */}
+                    <rect x="307.3" y="9" width="55" height="13" rx="2" className="table-entrance" />
+                    <rect x="307.3" y="9" width="55" height="13" rx="2" fill="none" stroke="var(--background)" strokeWidth={1.5} strokeMiterlimit={10} />
+                    <text x="334.8" y="15.5" {...labelProps} letterSpacing="0.5">ENTRANCE</text>
+                    <polygon points="330.8,26 334.8,31.5 338.8,26" fill="var(--primary)" stroke="var(--background)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
                 </g>
 
                 {/* Tables */}
@@ -198,12 +163,14 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                                     style={artistStyle}
                                     onClick={(e) => { e.stopPropagation(); triggerPop(t.tableNumber); onTableClick(t.tableNumber); }}
                                 />
+                                {/* State Overlay */}
                                 <rect x={t.x} y={t.y - 5.4} {...R}
-                                    fill={isDark ? "white" : "black"}
-                                    fillOpacity={getOverlayOpacity(isDark, selectedTable === t.tableNumber, hoveredTable === t.tableNumber)}
+                                    fill="var(--foreground)"
+                                    fillOpacity={getOverlayOpacity(selectedTable === t.tableNumber, hoveredTable === t.tableNumber)}
                                     pointerEvents="none" style={{ transition: "fill-opacity 0.15s" }} />
+                                {/* Border Stroke */}
                                 <rect x={t.x} y={t.y - 5.4} {...R}
-                                    fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
+                                    fill="none" stroke="var(--background)" strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                                 <text x={t.x + 10.8} y={t.y + 5.4} {...labelProps} transform={`rotate(90, ${t.x + 10.8}, ${t.y + 5.4})`}>{t.tableNumber}</text>
                             </g>
                         </g>
@@ -218,17 +185,17 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             onMouseLeave={() => setHoveredTable(null)}
                         >
                             <rect
-                                className="cls-3 table-vendor"
+                                className="table-vendor"
                                 x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
                                 style={clickStyle}
                                 onClick={(e) => { e.stopPropagation(); triggerPop(v.id); onTableClick(v.id); }}
                             />
                             <rect x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
-                                fill={isDark ? "white" : "black"}
-                                fillOpacity={getOverlayOpacity(isDark, selectedTable === v.id, hoveredTable === v.id)}
+                                fill="var(--foreground)"
+                                fillOpacity={getOverlayOpacity(selectedTable === v.id, hoveredTable === v.id)}
                                 pointerEvents="none" style={{ transition: "fill-opacity 0.15s" }} />
                             <rect x={v.vx} y={v.vy} width={v.vw} height={v.vh} rx={2} ry={2}
-                                fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
+                                fill="none" stroke="var(--background)" strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                             <text x={v.cx} y={v.cy} {...labelProps}>{Math.abs(v.id)}</text>
                         </g>
                     ))}
@@ -242,23 +209,23 @@ export default function ArtistsMap({ selectedTable, onTableClick, onBackgroundCl
                             onMouseLeave={() => setHoveredTable(null)}
                         >
                             <rect
-                                className={`${r.className} table-info`}
+                                className="table-info"
                                 x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2}
                                 transform={r.transform}
                                 style={clickStyle}
                                 onClick={(e) => { e.stopPropagation(); triggerPop(r.id); onTableClick(r.id); }}
                             />
                             <rect x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2} transform={r.transform}
-                                fill={isDark ? "white" : "black"}
-                                fillOpacity={getOverlayOpacity(isDark, selectedTable === r.id, hoveredTable === r.id)}
+                                fill="var(--foreground)"
+                                fillOpacity={getOverlayOpacity(selectedTable === r.id, hoveredTable === r.id)}
                                 pointerEvents="none" style={{ transition: "fill-opacity 0.15s" }} />
                             <rect x={r.x} y={r.y} width={r.w} height={r.h} rx={2} ry={2} transform={r.transform}
-                                fill="none" stroke={tableStroke} strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
+                                fill="none" stroke="var(--background)" strokeWidth={1.5} strokeMiterlimit={10} pointerEvents="none" />
                         </g>
                     ))}
                 </g>
 
-                {/* Ripple rings — own layer so pop-transform on the table <g> doesn't interfere */}
+                {/* Ripple rings */}
                 <g id="Ripples" pointerEvents="none">
                     {tableRects.map((t) => (
                         <rect
