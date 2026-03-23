@@ -1,26 +1,29 @@
 "use client";
-import { useState, useRef, useEffect, useSyncExternalStore, useCallback } from "react";
-import { events, genre as genres } from "@/lib/data";
-import { formatDescription } from "@/lib/format";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useSyncExternalStore,
+  useCallback,
+} from "react";
+import { events, genres, genreColors } from "@/lib/data";
+import { formatTime24To12, formatDescription } from "@/lib/utils"; // Adjusted import
 import { FaRegStar, FaStar } from "react-icons/fa";
+import {
+  BsSearch,
+  BsFilter,
+  BsCheckLg,
+  BsChevronDown,
+  BsX,
+} from "react-icons/bs";
 import type { Event } from "@/lib/data";
 
-const genreColors: Record<string, string> = {
-  Specialty:   "bg-violet-400",
-  Performance: "bg-rose-400",
-  Gaming:      "bg-emerald-400",
-  Anime:       "bg-pink-400",
-  Panels:      "bg-sky-400",
-  Crafts:      "bg-amber-400",
-  Food:        "bg-orange-400",
-};
-
+// --- Favorites Store Logic ---
 const FAVORITES_KEY = "favorites";
-const defaultFavorites = Array(events.length).fill(false) as boolean[];
-
+const defaultFavorites: Record<number, boolean> = {};
 let listeners: Array<() => void> = [];
 let cachedRaw: string | null = null;
-let cachedParsed: boolean[] = defaultFavorites;
+let cachedParsed: Record<number, boolean> = defaultFavorites;
 
 function emitChange() {
   cachedRaw = null;
@@ -28,132 +31,129 @@ function emitChange() {
 }
 function subscribe(listener: () => void) {
   listeners = [...listeners, listener];
-  return () => { listeners = listeners.filter((l) => l !== listener); };
+  return () => {
+    listeners = listeners.filter((l) => l !== listener);
+  };
 }
-function getSnapshot(): boolean[] {
+function getSnapshot(): Record<number, boolean> {
   const stored = localStorage.getItem(FAVORITES_KEY);
   if (stored === cachedRaw) return cachedParsed;
   cachedRaw = stored;
   cachedParsed = stored ? JSON.parse(stored) : defaultFavorites;
   return cachedParsed;
 }
-function getServerSnapshot(): boolean[] {
+function getServerSnapshot(): Record<number, boolean> {
   return defaultFavorites;
 }
 
 function useFavorites() {
-  const favorites = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const favorites = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
+
   const toggleFavorite = useCallback((id: number) => {
     const current = getSnapshot();
-    const next = current.map((v, i) => (i === id ? !v : v));
+    const next = { ...current, [id]: !current[id] };
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
     emitChange();
   }, []);
   return { favorites, toggleFavorite };
 }
 
-// Convert 24-hour time to 12-hour AM/PM format
-const formatTime = (time: string) => {
-  const [hours, minutes] = time.split(":").map(Number);
-  const period = hours >= 12 ? "PM" : "AM";
-  const hour12 = hours % 12 || 12;
-  return `${hour12}:${minutes.toString().padStart(2, "0")}${period}`;
-};
+function EventCard({
+  event,
+  isFavorite,
+  onToggleFavorite,
+}: {
+  event: Event;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const hasDescription = event.description !== "";
 
-function EventCard({ event, isFavorite, onToggleFavorite }: { event: Event; isFavorite: boolean; onToggleFavorite: () => void }) {
-  const [cardOpen, setCardOpen] = useState(false);
   return (
     <div
-      onClick={() => setCardOpen(!cardOpen)}
-      className="bg-surface backdrop-blur-md border border-primary/30 p-4 rounded-lg relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group"
+      onClick={() => hasDescription && setIsExpanded(!isExpanded)}
+      className={`bg-surface backdrop-blur-md border border-secondary/30 p-4 rounded-xl relative overflow-hidden shadow-sm transition-all duration-300 group ${hasDescription ? "cursor-pointer hover:shadow-secondary/20" : ""}`}
     >
-      {/* Decorative Corner */}
-      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary rounded-tr-lg" />
+      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-xl" />
 
-      {/* Time Badge */}
       <div className="flex items-center gap-3 mb-3">
-        <div className="bg-primary text-white font-mono font-semibold text-xs px-3 py-1 rounded-sm">
-          {formatTime(event.startTime)} - {formatTime(event.endTime)}
+        <div className="bg-primary text-background font-mono font-semibold text-xs px-3 py-1 rounded-md">
+          {formatTime24To12(event.startTime)} -{" "}
+          {formatTime24To12(event.endTime)}
         </div>
-        <div className="bg-secondary/10 text-secondary font-mono text-xs px-2 py-1 rounded-sm">
-          {event.room[0]}
+        <div className="bg-secondary/10 text-secondary font-mono text-xs px-2 py-1 rounded-md">
+          {event.room.name}
         </div>
       </div>
 
-      {/* Event Title */}
-      <div className="flex justify-between">
-        <h3 className="font-sans font-bold text-xl text-foreground group-hover:text-secondary transition-colors mb-2">
-          {event.title}
-        </h3>
-        <div className="mt-1.5" onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}>
+      <div className="flex justify-between items-start">
+        <div className="flex flex-col mb-2 pr-4">
+          <h3 className="font-sans font-bold text-xl text-foreground group-hover:text-primary transition-colors">
+            {event.title}
+          </h3>
+          <span className="font-sans text-sm text-secondary mt-0.5">
+            By: {event.host}
+          </span>
+        </div>
+        <button
+          className="mt-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite();
+          }}
+        >
           {isFavorite ? (
-            <FaStar className="text-yellow-400" />
+            <FaStar className="text-accent text-lg drop-shadow-sm" />
           ) : (
-            <FaRegStar className="text-foreground" />
+            <FaRegStar className="text-secondary opacity-50 hover:opacity-100 hover:text-accent transition-all" />
           )}
-        </div>
+        </button>
       </div>
 
-      {/* Genre */}
-      <div className="relative mb-3">
-        <div className="flex items-center gap-1.5 font-mono text-xs text-foreground uppercase tracking-wider">
-          <span className={`w-2.5 h-2.5 rounded-sm shrink-0 ${genreColors[event.genre] ?? "bg-primary"}`} />
+      <div className="relative mb-2 flex justify-between items-center">
+        <div className="flex items-center gap-1.5 font-mono text-xs text-secondary uppercase tracking-wider">
+          <span
+            className={`w-2.5 h-2.5 rounded-sm shrink-0 ${genreColors[event.genre]?.bg.split("/")[0] ?? "bg-primary"}`}
+          />
           {event.genre}
         </div>
-        {event.description !== "" && (
-          <svg
-            className={`w-3.5 h-3.5 text-secondary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${cardOpen ? "rotate-180" : ""}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-          </svg>
+        {hasDescription && (
+          <BsChevronDown
+            className={`text-secondary transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
+          />
         )}
       </div>
 
-      {/* Description */}
-      {cardOpen && (event.description !== "") ? (
-        <div className="text-sm text-foreground leading-relaxed mb-4 wrap-break-word max-w-none max-h-48 overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+      {isExpanded && hasDescription && (
+        <div className="text-sm text-foreground opacity-90 leading-relaxed mt-3 pt-3 border-t border-secondary/20 whitespace-pre-wrap">
           {formatDescription(event.description)}
         </div>
-      ) : null}
-
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2">
-        {event.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="font-mono text-xs text-secondary/70 bg-secondary/5 px-2 py-1 rounded border border-primary/20"
-          >
-            #{tag}
-          </span>
-        ))}
-      </div>
-
+      )}
     </div>
   );
 }
 
 export default function EventsList() {
   const { favorites, toggleFavorite } = useFavorites();
-
   const [search, setSearch] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!filterOpen) return;
+    if (!isFilterOpen) return;
     const handleClick = (e: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
-        setFilterOpen(false);
-      }
+      if (filterRef.current && !filterRef.current.contains(e.target as Node))
+        setIsFilterOpen(false);
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, [filterOpen]);
+  }, [isFilterOpen]);
 
   const toggleGenre = (genre: string) => {
     setSelectedGenres((prev) =>
@@ -161,177 +161,126 @@ export default function EventsList() {
     );
   };
 
-  // Sort events by start time
-  const sortedEvents = [...events].sort((a, b) => {
-    return a.startTime.localeCompare(b.startTime);
-  });
-
-  // Filter events by search query and genre
-  const filteredEvents = sortedEvents.filter((event) => {
-    const query = search.toLowerCase();
-    const isFavorited = favorites[event.id];
-    const matchesSearch =
-      !query ||
-      event.title.toLowerCase().includes(query) ||
-      event.tags.some((tag) => tag.toLowerCase().includes(query));
-    const matchesGenre =
-      selectedGenres.length === 0 || selectedGenres.includes(event.genre);
-    return isFavorited || (matchesSearch && matchesGenre);
-  });
+  const filteredEvents = events
+    .sort((a, b) => a.startTime.localeCompare(b.startTime))
+    .filter((event) => {
+      const query = search.toLowerCase();
+      const isFavorited = favorites[event.id];
+      const matchesSearch = !query || event.title.toLowerCase().includes(query);
+      const matchesGenre =
+        selectedGenres.length === 0 || selectedGenres.includes(event.genre);
+      return isFavorited || (matchesSearch && matchesGenre);
+    });
 
   return (
-    <div className="mt-8">
-      {/* Search Bar with Filter Icon */}
-      <div className="relative mb-6">
-        <div className="flex items-center gap-0">
-          <div className="relative flex-1">
-            <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name or tag..."
-              className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-primary/30 rounded-l-lg font-mono text-sm text-foreground placeholder:secondary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-            />
-          </div>
-          <div ref={filterRef} className="relative">
-            <button
-              onClick={() => setFilterOpen((prev) => !prev)}
-              className={`relative px-3.5 py-2.5 border border-l-0 border-primary/30 rounded-r-lg transition-all cursor-pointer ${
-                filterOpen || selectedGenres.length > 0
-                  ? "bg-primary text-white"
-                  : "bg-surface backdrop-blur-md text-slate-500 hover:bg-primary/10"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-                />
-              </svg>
-              {selectedGenres.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-white rounded-full text-white text-[10px] font-mono font-bold flex items-center justify-center">
-                  {selectedGenres.length}
-                </span>
-              )}
-            </button>
+    <div className="mt-4">
+      {/* Search & Filter Bar */}
+      <div className="relative mb-6 flex items-center">
+        <div className="relative flex-1">
+          <BsSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary opacity-60" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name..."
+            className="w-full pl-10 pr-4 py-2.5 bg-surface backdrop-blur-md border border-secondary/30 rounded-l-xl font-mono text-sm text-foreground themed-placeholder focus:outline-none focus:border-primary transition-all"
+          />
+        </div>
 
-            {/* Genre Filter Dropdown */}
-            {filterOpen && (
-              <div className="absolute right-0 z-10 mt-2 w-56 bg-white/80 backdrop-blur-md border border-primary/30 rounded-lg shadow-lg p-2">
-                <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-primary/10">
-                  <span className="font-mono text-xs text-slate-500 uppercase tracking-wider">
-                    Genres
-                  </span>
-                  {selectedGenres.length > 0 && (
-                    <button
-                      onClick={() => setSelectedGenres([])}
-                      className="font-mono text-xs text-primary hover:underline cursor-pointer"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-                {genres.map((g) => (
+        {/* Filter Dropdown */}
+        <div ref={filterRef} className="relative h-full">
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className={`relative px-4 py-2.5 border border-l-0 border-secondary/30 rounded-r-xl transition-all flex items-center gap-2 h-full ${
+              isFilterOpen || selectedGenres.length > 0
+                ? "bg-primary text-background"
+                : "bg-surface text-secondary hover:bg-secondary/10"
+            }`}
+          >
+            <BsFilter className="text-lg" />
+            {selectedGenres.length > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-accent border-2 border-background rounded-full text-background text-[10px] font-bold flex items-center justify-center">
+                {selectedGenres.length}
+              </span>
+            )}
+          </button>
+
+          {isFilterOpen && (
+            <div className="absolute right-0 z-10 mt-2 w-56 bg-background/95 backdrop-blur-xl border border-secondary/30 rounded-xl shadow-lg shadow-secondary/10 p-2">
+              <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-secondary/20">
+                <span className="font-mono text-xs text-secondary uppercase tracking-wider">
+                  Genres
+                </span>
+                {selectedGenres.length > 0 && (
+                  <button
+                    onClick={() => setSelectedGenres([])}
+                    className="font-mono text-xs text-primary hover:text-accent transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              {genres.map((g) => {
+                const isSelected = selectedGenres.includes(g);
+                return (
                   <button
                     key={g}
                     onClick={() => toggleGenre(g)}
-                    className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-left font-mono text-sm transition-colors cursor-pointer ${
-                      selectedGenres.includes(g)
+                    className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-left font-mono text-sm transition-colors ${
+                      isSelected
                         ? "bg-primary/10 text-primary"
-                        : "text-slate-700 hover:bg-slate-100"
+                        : "text-foreground opacity-80 hover:opacity-100 hover:bg-secondary/10"
                     }`}
                   >
-                    <span
-                      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
-                        selectedGenres.includes(g)
+                    <div
+                      className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
+                        isSelected
                           ? "border-primary bg-primary"
-                          : "border-slate-300"
+                          : "border-secondary/50"
                       }`}
                     >
-                      {selectedGenres.includes(g) && (
-                        <svg
-                          className="w-2.5 h-2.5 text-white"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={3}
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M4.5 12.75l6 6 9-13.5"
-                          />
-                        </svg>
+                      {isSelected && (
+                        <BsCheckLg className="text-background text-[10px]" />
                       )}
-                    </span>
+                    </div>
                     {g}
                   </button>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Active Genre Chips */}
+      {/* Active Filters */}
       {selectedGenres.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {selectedGenres.map((g) => (
             <button
               key={g}
               onClick={() => toggleGenre(g)}
-              className="flex items-center gap-1 font-mono text-xs text-secondary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+              className="flex items-center gap-1 font-mono text-xs text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20 hover:bg-primary/20 hover:text-accent transition-colors"
             >
-              {g}
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2.5}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              {g} <BsX className="text-sm" />
             </button>
           ))}
         </div>
       )}
 
-      {/* Results */}
+      {/* Results Grid */}
       {filteredEvents.length === 0 ? (
-        <p className="w-full pl-10 pr-4 py-2 bg-surface backdrop-blur-md border border-primary/30 rounded font-mono text-sm text-foreground">
+        <p className="w-full p-4 bg-surface border border-secondary/30 rounded-xl font-mono text-sm text-secondary text-center">
           No events matched your search.
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} isFavorite={favorites[event.id]} onToggleFavorite={() => toggleFavorite(event.id)} />
+            <EventCard
+              key={event.id}
+              event={event}
+              isFavorite={!!favorites[event.id]}
+              onToggleFavorite={() => toggleFavorite(event.id)}
+            />
           ))}
         </div>
       )}
