@@ -310,14 +310,14 @@ Performed by Star Wars Club`,
     endTime: "15:45",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
-    description: `"Our mission is to create an environment and provide musicians with the means to explore and develop their interests in the American art form of jazz. We also aim to share our music with the CMU community, providing live entertainment, a relaxing setting, stress relief, and a community of people to spend time with.
+    description: `Our mission is to create an environment and provide musicians with the means to explore and develop their interests in the American art form of jazz. We also aim to share our music with the CMU community, providing live entertainment, a relaxing setting, stress relief, and a community of people to spend time with.
 
 Setlist:
-1. ""Grand Prix!"" (Mario Kart World medley) arr. Zachary Smentek (original pieces by Atsuko Asahi)
-2. ""Daydream Generation"" (YuYu Hakusho) by Matsuko Mawatari, arr. Kenechukwu Echezona (English lyrics by Sara White and Melody Sentai Harmonyranger)
-3. ""Above the Skies of Dream Land"" (Kirby series medley) arr. Kenechukwu Echezona (original pieces by Hironobu Inagaki, Atsuyoshi Isemura, Hirokazu Ando, and Megumi Ohara)
-4. ""Broken Rose"" (NANA medley) arr. Samyukta Athreya (original pieces by Anna Tsuchiya and Olivia Lufkin)
-5. ""Bad Applelovania!!"" (Touhou x Undertale) by ZUN and TobyFox, arr. Kenechukwu Echezona"`,
+1. "Grand Prix!" (Mario Kart World medley) arr. Zachary Smentek (original pieces by Atsuko Asahi)
+2. "Daydream Generation" (YuYu Hakusho) by Matsuko Mawatari, arr. Kenechukwu Echezona (English lyrics by Sara White and Melody Sentai Harmonyranger)
+3. "Above the Skies of Dream Land" (Kirby series medley) arr. Kenechukwu Echezona (original pieces by Hironobu Inagaki, Atsuyoshi Isemura, Hirokazu Ando, and Megumi Ohara)
+4. "Broken Rose" (NANA medley) arr. Samyukta Athreya (original pieces by Anna Tsuchiya and Olivia Lufkin)
+5. "Bad Applelovania!!" (Touhou x Undertale) by ZUN and TobyFox, arr. Kenechukwu Echezona`,
   },
   {
     id: 19,
@@ -327,13 +327,13 @@ Setlist:
     endTime: "16:45",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
-    description: `"CMU's own concert band plays arrangements of The Legend of Zelda, Spirited Away, Deltarune, and Cuphead! We're here to have fun and are always open to new members.
+    description: `CMU's own concert band plays arrangements of The Legend of Zelda, Spirited Away, Deltarune, and Cuphead! We're here to have fun and are always open to new members.
 
 Setlist:
 1. Spirited Away, Joe Hisaishi & Yumi Kimura / Kazuhiro Morita
 2. Legend of Zelda Medley, Various / Lamagna & Sanders
 3. Cuphead, Kristofer Maddigan / Christopher López
-4. Hammer of Justice, Toby Fox / Justin Peng"`,
+4. Hammer of Justice, Toby Fox / Justin Peng`,
   },
   {
     id: 20,
@@ -343,9 +343,9 @@ Setlist:
     endTime: "17:45",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
-    description: `"A masquerade is a contest for cosplayers/costumers who want to show off their costumes on stage. Some cosplayers choose to perform skits and others show off their craftsmanship to compete for prizes.
+    description: `A masquerade is a contest for cosplayers/costumers who want to show off their costumes on stage. Some cosplayers choose to perform skits and others show off their craftsmanship to compete for prizes.
 
-At ScottyCon's masquerade, all entries will participate in a walk-on á la fashion show as an opportunity to show off their costume."`,
+At ScottyCon's masquerade, all entries will participate in a walk-on á la fashion show as an opportunity to show off their costume.`,
   },
   {
     id: 21,
@@ -355,12 +355,12 @@ At ScottyCon's masquerade, all entries will participate in a walk-on á la fashi
     endTime: "18:30",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
-    description: `"The most sterotypical ETC students bring you the most incredible girl band anime music!
+    description: `The most sterotypical ETC students bring you the most incredible girl band anime music!
 
 Setlist:
 1. 天使にふれたよ! - 放課後ティータイム
 2. 誰にもなれない私だから - トゲナシトゲアリ
-3. 猛独が襲う (MyGO!!!!! Cover) - MyGO!!!!!"`,
+3. 猛独が襲う (MyGO!!!!! Cover) - MyGO!!!!!`,
   },
   {
     id: 22,
@@ -370,7 +370,7 @@ Setlist:
     endTime: "19:30",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
-    description: `"Video Game and Anime Cosplaying Flute Player (who plays games fast) performs your favorite video game and anime tunes!
+    description: `Video Game and Anime Cosplaying Flute Player (who plays games fast) performs your favorite video game and anime tunes!
 
 Setlist:
 1. Skyloft from Legend of Zelda Hyrule Warriors
@@ -382,7 +382,7 @@ Setlist:
 7. Legend of Zelda Tears of the Kingdom Theme
 8. Novigrad Set from The Witcher 3
 9. Crossing Field by LiSa
-10. Weight of Life from Xenoblade Chronicles 3"`,
+10. Weight of Life from Xenoblade Chronicles 3`,
   },
   {
     id: 23,
@@ -392,13 +392,13 @@ Setlist:
     endTime: "21:00",
     room: { name: "McKenna, Peter, Wright Rooms", floor: 2 },
     genre: "Gaming",
-    description: `"Presented by Rhythm Games Club and in partnership with Ikigai Arcade, ScottyCon's selection of rhythm game cabinets will be available in Peter/Wright/McKenna from 11 AM-9 PM.
+    description: `Presented by Rhythm Games Club and in partnership with Ikigai Arcade, ScottyCon's selection of rhythm game cabinets will be available in Peter/Wright/McKenna from 11 AM-9 PM.
 
 List of Cabinets:
 - 4x Wacca
 - 2x Chunithm
 - Ongeki
-- Groove Coaster"`,
+- Groove Coaster`,
   },
   {
     id: 24,

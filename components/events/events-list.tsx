@@ -118,7 +118,7 @@ function EventCard({
       <div className="relative mb-2 flex justify-between items-center">
         <div className="flex items-center gap-1.5 font-mono text-xs text-secondary uppercase tracking-wider">
           <span
-            className={`w-2.5 h-2.5 rounded-sm shrink-0 ${genreColors[event.genre]?.bg.split("/")[0] ?? "bg-primary"}`}
+            className={`w-2.5 h-2.5 rounded-sm shrink-0 ${genreColors[event.genre]?.bg ?? "bg-primary"}`}
           />
           {event.genre}
         </div>
@@ -166,7 +166,8 @@ export default function EventsList() {
     .filter((event) => {
       const query = search.toLowerCase();
       const isFavorited = favorites[event.id];
-      const matchesSearch = !query || event.title.toLowerCase().includes(query);
+      const matchesSearch = !query || event.title.toLowerCase().includes(query)
+        || event.genre.toLowerCase().includes(query);
       const matchesGenre =
         selectedGenres.length === 0 || selectedGenres.includes(event.genre);
       return isFavorited || (matchesSearch && matchesGenre);

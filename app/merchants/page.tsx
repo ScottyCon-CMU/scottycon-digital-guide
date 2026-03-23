@@ -161,18 +161,22 @@ export default function ArtistsRoute() {
             ref={listColRef}
             className="px-6 lg:pl-6 lg:pr-0 lg:pt-[5vh] lg:flex-1 lg:min-w-0 lg:overflow-y-auto lg:h-svh lg:pb-24 no-scrollbar"
           >
-            {/* Title + Toggle */}
+            {/* Title */}
+            <div className="flex items-center gap-3">
+              <div className="bg-primary text-background font-mono font-semibold text-xs px-2 py-0.5 rounded-sm">
+                2026
+              </div>
+              <div className="h-px w-24 bg-secondary/30" />
+            </div>
+            <h1 className="font-sans font-bold text-5xl sm:text-6xl tracking-tighter text-foreground mt-2">
+              Merchants Hall
+            </h1>
+            {/* Subtitle + Toggle */}
             <div className="flex items-end justify-between gap-4 mb-4">
               <div className="flex flex-col">
-                <div className="flex items-center gap-3">
-                  <div className="bg-primary text-background font-mono font-semibold text-xs px-2 py-0.5 rounded-sm">
-                    2026
-                  </div>
-                  <div className="h-px w-24 bg-secondary/30" />
-                </div>
-                <h1 className="font-sans font-bold text-5xl sm:text-6xl tracking-tighter text-foreground mt-2">
-                  Artists Alley
-                </h1>
+                <h2 className="font-sans font-bold text-2xl sm:text-2xl tracking-tighter text-foreground mt-2">
+                  Artists Alley and Vendors
+                </h2>
               </div>
 
               {/* View Toggle — mobile only */}

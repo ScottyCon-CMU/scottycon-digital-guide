@@ -114,7 +114,7 @@ export default function EventsCalendar({ floor }: Props) {
             {Object.entries(genreColors).map(([genre, colors]) => (
               <div key={genre} className="flex items-center gap-1.5">
                 <div
-                  className={`w-3 h-3 ${colors.bg.split("/")[0]} rounded-sm shadow-sm`}
+                  className={`w-3 h-3 ${colors.bg} rounded-sm shadow-sm`}
                 />
                 <span className="font-mono text-foreground/90">{genre}</span>
               </div>
