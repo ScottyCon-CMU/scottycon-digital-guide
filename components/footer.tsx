@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Calendar, House, Map, Palette, User, Moon, Sun } from "lucide-react";
+import { Calendar, House, Map, Handbag, User, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 
@@ -12,7 +12,7 @@ export default function Footer() {
   const navItems = [
     { name: "HOME", href: "/", icon: <House size={20} /> },
     { name: "EVENTS", href: "/events", icon: <Calendar size={20} /> },
-    { name: "ARTISTS", href: "/artists", icon: <Palette size={20} /> },
+    { name: "MERCHANTS", href: "/merchants", icon: <Handbag size={20} /> },
     { name: "MAP", href: "/map", icon: <Map size={20} /> },
     { name: "CREDITS", href: "/credits", icon: <User size={20}/>},
   ];
