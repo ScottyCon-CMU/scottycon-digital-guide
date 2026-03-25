@@ -5,7 +5,7 @@ import EventsCalendar from "@/components/events/events-calendar";
 import EventsList from "@/components/events/events-list";
 
 export default function EventsPage() {
-  const [isCalendarView, setIsCalendarView] = useState(false);
+  const [isCalendarView, setIsCalendarView] = useState(true);
 
   const tabClass = (isActive: boolean) =>
     `flex-1 py-3 font-mono font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
@@ -34,16 +34,16 @@ export default function EventsPage() {
           {/* Toggle Bar */}
           <div className="flex mt-6 h-12 w-full bg-surface backdrop-blur-md border border-secondary/30 rounded-lg overflow-hidden cursor-pointer shadow-sm shadow-secondary/5">
             <button
-              className={tabClass(!isCalendarView)}
-              onClick={() => setIsCalendarView(false)}
-            >
-              List View
-            </button>
-            <button
               className={tabClass(isCalendarView)}
               onClick={() => setIsCalendarView(true)}
             >
               Calendar View
+            </button>
+            <button
+              className={tabClass(!isCalendarView)}
+              onClick={() => setIsCalendarView(false)}
+            >
+              List View
             </button>
           </div>
         </div>
