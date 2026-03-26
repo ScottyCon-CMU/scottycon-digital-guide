@@ -2,7 +2,7 @@ export const notices = [
   {
     title: "Wi-Fi",
     message:
-      "ScottyCon 2026 has free Wi-Fi! Connect to 'CMU-GUEST' with your email and XXXXXXXX as the password.",
+      "ScottyCon 2026 has free Wi-Fi! Connect to 'CMU-GUEST' with your email and ANYDVDFD as the password.",
   },
   {
     title: "Lost & Found",
