@@ -1116,7 +1116,7 @@ export const tableRects = [
 
 export const sponsors = [
   {
-    name: "Languages, Cultures & Applied Linguistics at Carnegie Mellon",
+    name: "Languages, Cultures & Applied Linguistics at CMU",
     logo: "/images/vendors/vendor5.avif",
     website: "https://www.cmu.edu/dietrich/lcal/",
     description:
@@ -1161,6 +1161,8 @@ export const sponsors = [
     name: "Megaroad",
     logo: "/images/vendors/vendor4.avif",
     website: "http://www.megaroad.com/",
+    description:
+      "Welcome to Megaroad Toys and Entertainment, a family toy and hobby store with an emphasis on Japan and anime-related toys, stationery, and gifts.",
   },
   {
     name: "Kei-mart",
@@ -1180,6 +1182,8 @@ export const sponsors = [
     name: "Ebisu",
     logo: "/images/vendors/vendor7.webp",
     website: "https://www.instagram.com/ebisupgh/?hl=en",
+    description:
+      "Ebisu provides high-quality Japanese items and Asian Boutique.",
   },
 ];
 
@@ -1225,6 +1229,9 @@ export const members = [
   },
   {
     name: "Bright Zheng",
+  },
+  {
+    name: "Ivan Zhang",
   },
   {
     name: "John Cao",

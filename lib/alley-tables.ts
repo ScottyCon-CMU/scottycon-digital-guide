@@ -57,7 +57,7 @@ function info(
 // One entry per table. Tables that share a spot get an array of names.
 
 export const artistTables: ArtistTable[] = [
-    artist( 1, ["jay k.", "Abby Xiong"],  "", []),
+    artist( 1, ["jay k.", "Abby Xiong"],  "", ["/images/artists/table1.webp"]),
     artist( 2, ["Neveah", "brexx2"], "", ["/images/artists/table2-1.avif", "/images/artists/table2-2.avif"]),
     artist( 3, ["Amber Ultramarine", "Chamen"], "", ["/images/artists/table3.avif"]),
     artist( 4, ["Fishbone.png", "duhhh.hhh.hhh"], "", []),
