@@ -27,13 +27,14 @@ export const rooms = [
   { name: "McConomy Auditorium", floor: 1 },
   { name: "Connan Room", floor: 1 },
   { name: "Kirr Commons", floor: 1 },
+  { name: "Wean Commons", floor: 1 },
   { name: "Rangos Auditorium", floor: 2 },
   { name: "Danforth Lounge", floor: 2 },
   { name: "Danforth Conference Room", floor: 2 },
   { name: "McKenna, Peter, Wright Rooms", floor: 2 },
   { name: "Dowd Room", floor: 2 },
   { name: "Pake Room", floor: 2 },
-  { name: "Wean Commons", floor: 2 },
+  { name: "GM and Fosters Room", floor: 2 },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 export const genres = [
@@ -471,8 +472,8 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     id: 30,
     title: "Summer Wars Screening",
     host: "ScottyCon Staff",
-    startTime: "14:00",
-    endTime: "16:00",
+    startTime: "15:00",
+    endTime: "17:00",
     room: { name: "McConomy Auditorium", floor: 1 },
     genre: "Anime",
     description: `ScottyCon will be screening the 2009 timeless epic by Mamoru Hosoda. See if you can spot CMU's cameo in the film!
@@ -538,9 +539,9 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     id: 36,
     title: "Mos Eisley Cantina",
     host: "Star Wars Club",
-    startTime: "13:00",
-    endTime: "18:00",
-    room: { name: "Wean Commons", floor: 2 },
+    startTime: "11:30",
+    endTime: "17:30",
+    room: { name: "Wean Commons", floor: 1 },
     genre: "Vendors",
     description:
       "Transport your taste-buds to a galaxy far, far away! Enjoy Star Wars themed Wookie cookies, R2-D2 pancakes, Death Star waffles, Darth Vader paninis, Boba (Fett) and more!",
@@ -549,12 +550,47 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     id: 37,
     title: "Chinese Treats",
     host: "Awareness of Roots in Chinese Culture (ARCC)",
-    startTime: "13:00",
-    endTime: "18:00",
-    room: { name: "Wean Commons", floor: 2 },
+    startTime: "11:00",
+    endTime: "15:00",
+    room: { name: "Wean Commons", floor: 1 },
     genre: "Vendors",
     description:
       "We are a cultural organization dedicated to spreading awareness for Chinese culture around the CMU and Pittsburgh community! Visit our booth for delicious pork dumplings and tangyuan.",
+  },
+  {
+    id: 38,
+    title: "Maquia Screening",
+    host: "ScottyCon Staff",
+    startTime: "17:30",
+    endTime: "19:30",
+    room: { name: "McConomy Auditorium", floor: 1 },
+    genre: "Anime",
+    description:
+      `What's a convention without anime? Stop by and watch the anime we've selected for everyone!
+      
+      The people of Iolph are known for two things: their youthful longevity and peaceful lives weaving tapestry. When that is disturbed and their home thrown into chaos by those believing that their blood gifts longer life, Maquia loses not only her friends, but a place to return to.`,
+  },
+  {
+    id: 39,
+    title: "Wits and Wagers",
+    host: "Vermillion Anime Club",
+    startTime: "17:45",
+    endTime: "18:30",
+    room: { name: "Dowd Room", floor: 2 },
+    genre: "Gaming",
+    description:
+      "Test your luck and your anime knowledge by playing this special anime edition of Wits and Wagers!",
+  },
+  {
+    id: 40,
+    title: "Manga Library",
+    host: "Our Manga Library",
+    startTime: "11:00",
+    endTime: "21:00",
+    room: { name: "GM and Fosters Room", floor: 2 },
+    genre: "Panel",
+    description:
+      "Want to take a break with a good story? Visit Our Manga Library with over 400 volumes of manga to choose from.",
   },
 ];
 
