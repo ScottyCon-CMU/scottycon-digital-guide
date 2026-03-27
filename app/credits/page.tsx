@@ -36,7 +36,6 @@ export default function SponsorsSection() {
                 width={168}
                 height={168}
                 className="object-contain rounded-md"
-                style={{ width: "auto", height: "auto" }}
               />
             </div>
           </div>
