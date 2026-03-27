@@ -1140,6 +1140,11 @@ export const sponsors = [
     description:
       "Secret Manga Shop offers a curated collection of Manga, Awesome Pokemon + Anime + Manga Plush & Figures, Cool Japanese Stationary & Kitchenware, Apparel, and Hard-to-Find Art Supplies for Creating Manga. All make great gifts!!! Open Wednesday through Sunday.",
   },
+  {
+    name: "Ebisu",
+    logo: "/images/vendors/vendor7.webp",
+    website: "https://www.instagram.com/ebisupgh/?hl=en",
+  },
 ];
 
 export const members = [
