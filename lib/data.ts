@@ -539,8 +539,8 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     id: 36,
     title: "Mos Eisley Cantina",
     host: "Star Wars Club",
-    startTime: "13:00",
-    endTime: "17:00",
+    startTime: "11:30",
+    endTime: "17:30",
     room: { name: "Wean Commons", floor: 1 },
     genre: "Vendors",
     description:
@@ -566,7 +566,9 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     room: { name: "McConomy Auditorium", floor: 1 },
     genre: "Anime",
     description:
-      "The people of Iolph are known for two things: their youthful longevity and peaceful lives weaving tapestry. When that is disturbed and their home thrown into chaos by those believing that their blood gifts longer life, Maquia loses not only her friends, but a place to return to.",
+      `What's a convention without anime? Stop by and watch the anime we've selected for everyone!
+      
+      The people of Iolph are known for two things: their youthful longevity and peaceful lives weaving tapestry. When that is disturbed and their home thrown into chaos by those believing that their blood gifts longer life, Maquia loses not only her friends, but a place to return to.`,
   },
   {
     id: 39,
@@ -1114,82 +1116,46 @@ export const tableRects = [
 
 export const sponsors = [
   {
-    name: "Languages, Cultures & Applied Linguistics at Carnegie Mellon",
-    logo: "/images/sponsors/lcal.png",
-    website: "https://www.cmu.edu/dietrich/lcal/",
+    name: "Sponsor 1",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
     description:
-      "At the Department of Languages, Cultures & Applied Linguitics (LCAL), we prepare students to engage with the world’s complexity through language, culture and communication. By studying Arabic, Chinese, French, German, Italian, Japanese, Korean, Russian and Spanish, students develop the intercultural fluency and critical insight needed to navigate a globally connected, technologically evolving future.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
   },
   {
-    name: "Bakery Square",
-    logo: "/images/sponsors/bakerysquare.png",
-    website: "https://www.bakery-square.com/",
+    name: "Sponsor 2",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
     description:
-      "Bakery Square is an open-air shopping mall with tons of dining and retail options as well as frequent community events. We're less than 2 miles from CMU's campus - come visit us!",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
   },
   {
-    name: "ScottyLabs",
-    logo: "/images/sponsors/scottylabs.png",
-    website: "https://www.scottylabs.org/",
+    name: "Sponsor 3",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
     description:
-      "We’re a student-run organization dedicated to building tech that enhances campus life—empowering the Carnegie Mellon University community to create, collaborate, and solve real-world problems through apps and events.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    name: "Meowers",
-    logo: "/images/sponsors/meowers.png",
-    website: "https://www.instagram.com/cmu_2030/",
+    name: "Sponsor 4",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
     description:
-      "Class of 2030.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    name: "Perry's Cards",
-    logo: "/images/sponsors/perryscards.png",
-    website: "https://perrys-cards.com/",
+    name: "Sponsor 5",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
     description:
-      "Perry’s Cards is your one-stop shop for all your Pokémon collectibles and other trading card games.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
   },
   {
-    name: "Mystic Mixtures Potion Bar",
-    logo: "/images/sponsors/mysticmix.png",
-    website: "https://mysticmixturespotionbar.com/",
+    name: "Sponsor 6",
+    logo: "/images/sponsorDefault.png",
+    website: "https://www.google.com",
     description:
-      "Each potion is made by hand with simple ingredients and can be enjoyed by combining with spirits or with a bit of water for a delicious non-alcoholic beverage.",
-  },
-  {
-    name: "Tekko",
-    logo: "/images/sponsors/tekko.png",
-    website: "https://tekko.us/",
-    description:
-       "Haven't gotten enough anime and gaming with ScottyCon? Check out Tekko, Pennsylvania's largest anime convention! With a whole weekend packed full of anime, gaming, and pop culture fun, Tekko has something for everyone.",
-  },
-  {
-    name: "Kei-Mart",
-    logo: "/images/sponsors/keimart.png",
-    website: "https://www.instagram.com/keimartshop",
-    description:
-      "From poofy petticoats to whimsical washi tape, Kei-mart offers unique new and gently used lolita fashion and Japanese novelties! We aim to celebrate beginners and established fashionistas!",
-  },
-  {
-    name: "Megaroad Toys & Entertainment",
-    logo: "/images/sponsors/megaroad.png",
-    website: "http://www.megaroad.com/",
-    description:
-      "Welcome to Megaroad Toys and Entertainment, a family toy and hobby store with an emphasis on Japan and anime-related toys, stationery, and gifts.",
-  },
-  {
-    name: "Secret Manga Shop",
-    logo: "/images/sponsors/secretmanga.png",
-    website: "https://www.secretmangashop.com/",
-    description:
-      "Secret Manga Shop offers a curated collection of Manga, Awesome Pokemon + Anime + Manga Plush & Figures, Cool Japanese Stationary & Kitchenware, Apparel, and Hard-to-Find Art Supplies for Creating Manga. All make great gifts!!! Open Wednesday through Sunday.",
-  },
-  {
-    
-    name: "Ebisu Life Store",
-    logo: "/images/sponsors/ebisu.png",
-    website: "https://www.instagram.com/ebisupgh/",
-    description:
-      "Ebisu provides high-quality Japanese items and Asian Boutique.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
   },
 ];
 
