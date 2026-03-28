@@ -594,6 +594,17 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     description:
       "Want to take a break with a good story? Visit Our Manga Library with over 400 volumes of manga to choose from.",
   },
+  {
+    id: 41,
+    title: "J-Pop Band Performance",
+    host: "Arthur and Friends",
+    startTime: "20:35",
+    endTime: "21:00",
+    room: { name: "Rangos Auditorium", floor: 2 },
+    genre: "Performance",
+    description:
+      "Arthur and Friends have been covering J-Pop ranging from the 70s to the 00s.",
+  },
 ];
 
 // Artist Alley
