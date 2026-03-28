@@ -1,3 +1,5 @@
+export const scottyconDate = "2026-03-28"
+
 export const notices = [
   {
     title: "Wi-Fi",

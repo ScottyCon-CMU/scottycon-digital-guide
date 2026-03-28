@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { events } from "@/lib/data";
+import { scottyconDate, events } from "@/lib/data";
 
 export default function UpcomingEvents() {
   // Track which event ID is currently expanded
@@ -13,8 +13,8 @@ export default function UpcomingEvents() {
   const upcomingEvents = events
     .map((event) => ({
       ...event,
-      startTime: new Date(`2026-03-10T${event.startTime}:00`),
-      endTime: new Date(`2026-03-10T${event.endTime}:00`),
+      startTime: new Date(`${scottyconDate}T${event.startTime}:00`),
+      endTime: new Date(`${scottyconDate}T${event.endTime}:00`),
     }))
     .filter((event) => {
       // Show events that haven't ended yet AND start before 1 hour from now
