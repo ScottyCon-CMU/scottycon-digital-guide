@@ -598,8 +598,8 @@ Kenji is a shy, part-time moderator for OZ, the virtual reality world that power
     id: 41,
     title: "J-Pop Band Performance",
     host: "Arthur and Friends",
-    startTime: "20:35",
-    endTime: "21:00",
+    startTime: "20:10",
+    endTime: "20:40",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
     description:
