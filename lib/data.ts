@@ -1244,4 +1244,7 @@ export const members = [
   {
     name: "Sirui Huang",
   },
+  {
+    name: "Amalia Kutin"
+  }
 ];
