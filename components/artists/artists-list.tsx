@@ -86,7 +86,7 @@ function ArtistTableCard({
                 <span>{table.description}</span>
               ) : (
                 <span className="opacity-50 italic">
-                  No details yet — check back soon!
+                  Exciting things planned!
                 </span>
               )}
             </div>

@@ -54,7 +54,7 @@ export default function ArtistTableDetail({ table }: ArtistTableDetailProps) {
           </p>
         ) : (
           <p className="text-sm text-foreground/40 italic mb-4">
-            No details yet — check back soon!
+            Exciting things planned!
           </p>
         )}
 
