@@ -2,11 +2,6 @@ export const scottyconDate = "2026-03-28"
 
 export const notices = [
   {
-    title: "Wi-Fi",
-    message:
-      "ScottyCon 2026 has free Wi-Fi! Connect to 'CMU-GUEST' with your email and ANYDVDFD as the password.",
-  },
-  {
     title: "Lost & Found",
     message:
       "The Lost & Found is located at the UC Info Desk. If you've lost or found an item, please check there!",
@@ -94,7 +89,7 @@ export const events: Event[] = [
     room: { name: "Connan Room", floor: 1 },
     genre: "Panel",
     description:
-      "Have you ever wanted to wear lolita fashion but struggle to start? Join us for an fun and inclusive introduction to the fashion where we go over the basics including the history, substyles, and where to find the perfect items to add to your closet!",
+      "Have you ever wanted to wear lolita fashion but struggle to start? Join us for a fun and inclusive introduction to the fashion where we go over the basics including the history, substyles, and where to find the perfect items to add to your closet!",
   },
   {
     id: 2,
@@ -210,7 +205,7 @@ export const events: Event[] = [
   },
   {
     id: 12,
-    title: 'Made in the 1900\'s: "Old" Anime Worth the Watch',
+    title: 'Made in the 1900s: "Old" Anime Worth the Watch',
     host: "Kawaii Neko Productions",
     startTime: "14:00",
     endTime: "15:00",
@@ -358,7 +353,7 @@ At ScottyCon's masquerade, all entries will participate in a walk-on á la fashi
     endTime: "18:30",
     room: { name: "Rangos Auditorium", floor: 2 },
     genre: "Performance",
-    description: `The most sterotypical ETC students bring you the most incredible girl band anime music!
+    description: `The most stereotypical ETC students bring you the most incredible girl band anime music!
 
 Setlist:
 1. 天使にふれたよ! - 放課後ティータイム
@@ -380,7 +375,7 @@ Setlist:
 2. Sadness and Sorrow from Naruto
 3. Duck Tales Moon Theme
 4. Halo Theme
-5. Corridors of time from ChronoTrigger
+5. Corridors of time from Chrono Trigger
 6. Attack on Titan Theme
 7. Legend of Zelda Tears of the Kingdom Theme
 8. Novigrad Set from The Witcher 3
@@ -445,7 +440,7 @@ List of Cabinets:
     room: { name: "Danforth Lounge", floor: 2 },
     genre: "Crafts",
     description:
-      "Come decorate photocards with our supplies! (Photocards not provided.) Take a break from the rest of the con and use our wide array of stickers and sleeves to deck out your cards <3. At all times, the lounge will be home to Scottycon's cherry blossom photobooth. Make sure to snap a commemorative photo with friends with the Sakura backdrop~",
+      "Come decorate photocards with our supplies! (Photocards not provided.) Take a break from the rest of the con and use our wide array of stickers and sleeves to deck out your cards <3. At all times, the lounge will be home to ScottyCon's cherry blossom photobooth. Make sure to snap a commemorative photo with friends with the Sakura backdrop~",
   },
   {
     id: 28,
@@ -1133,7 +1128,7 @@ export const sponsors = [
     logo: "/images/vendors/vendor5.avif",
     website: "https://www.cmu.edu/dietrich/lcal/",
     description:
-      "At the Department of Languages, Cultures & Applied Linguitics (LCAL), we prepare students to engage with the world’s complexity through language, culture and communication. By studying Arabic, Chinese, French, German, Italian, Japanese, Korean, Russian and Spanish, students develop the intercultural fluency and critical insight needed to navigate a globally connected, technologically evolving future.",
+      "At the Department of Languages, Cultures & Applied Linguistics (LCAL), we prepare students to engage with the world's complexity through language, culture and communication. By studying Arabic, Chinese, French, German, Italian, Japanese, Korean, Russian and Spanish, students develop the intercultural fluency and critical insight needed to navigate a globally connected, technologically evolving future.",
   },
   {
     name: "Bakery Square",
